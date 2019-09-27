@@ -1,4 +1,4 @@
-package src.ie.ul.hbs2.booking;
+package ie.ul.hbs2.booking;
 
 public abstract class Command {
     public Button click;

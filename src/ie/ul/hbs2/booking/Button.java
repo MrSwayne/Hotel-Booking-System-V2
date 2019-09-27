@@ -1,6 +1,6 @@
-package src.ie.ul.hbs2.booking;
+package ie.ul.hbs2.booking;
 
-import src.ie.ul.hbs2.booking.*;
+import ie.ul.hbs2.booking.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class Button {
     public String clipboard;
     
     public void init() {
-    JFrame frame = new JFrame("Text editor (type & use buttons, Luke!)");
+    JFrame frame = new JFrame("Booking");
     JPanel content = new JPanel();
     frame.setContentPane(content);
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -30,11 +30,19 @@ public class Button {
     booking.addActionListener(new ActionListener() {
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	    executeCommand(new BookingCommand(button));
+	    executeCommand(new CancelBookingCommand(button));
 	}
     });
     
+    cancelBooking.addActionListener(new ActionListener() {
+    	@Override
+    	public void actionPerformed(ActionEvent e) {
+    	    executeCommand(new CancelBookingCommand(button));
+    	}
+        });
+    
     buttons.add(booking);
+    buttons.add(cancelBooking);
     content.add(buttons);
     frame.setSize(450, 200);
     frame.setLocationRelativeTo(null);

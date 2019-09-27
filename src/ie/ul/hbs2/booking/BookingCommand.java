@@ -1,6 +1,6 @@
-package src.ie.ul.hbs2.booking;
+package ie.ul.hbs2.booking;
 
-import src.ie.ul.hbs2.booking.Command;
+import ie.ul.hbs2.booking.Command;
 
 public class BookingCommand extends Command{
     public BookingCommand(Button button) 
