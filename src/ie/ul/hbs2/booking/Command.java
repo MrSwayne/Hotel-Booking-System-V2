@@ -1,9 +1,9 @@
 package ie.ul.hbs2.booking;
 
 public abstract class Command {
-    public Button click;
+    public BookingView click;
     
-    Command(Button click){
+    Command(BookingView click){
 	this.click = click;
     }
     
