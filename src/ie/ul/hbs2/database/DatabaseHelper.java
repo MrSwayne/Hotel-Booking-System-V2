@@ -22,7 +22,7 @@ public class DatabaseHelper {
 	private final String username = "root";
 	private final String password = "";
 	
-	private String url = "jdbc:mysql://" + host + "/" + database + "?" + "user=" + username + "&password=" + password;
+	private String url = "jdbc:mysql://" + host + "/" + database + "?" + "zeroDateTimeBehavior=convertToNull&" + "user=" + username + "&password=" + password;
 	
 	
 	private String uName;
