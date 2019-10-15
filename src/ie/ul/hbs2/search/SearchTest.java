@@ -8,7 +8,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTable;
 import ie.ul.hbs2.database.*;
-import net.proteanit.sql.DbUtils;
+//import net.proteanit.sql.DbUtils;
 
 import javax.swing.JComboBox;
 import java.awt.event.KeyAdapter;
