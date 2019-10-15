@@ -12,6 +12,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		PaymentSystem system = new PaypalPayment();
 		system.processPayment(null);
+		System.out.println("hello");
 	}
 
 }
