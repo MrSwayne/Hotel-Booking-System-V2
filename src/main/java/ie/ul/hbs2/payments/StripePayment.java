@@ -13,7 +13,7 @@ public class StripePayment extends PaymentSystem {
 	private static final String END_POINT = "https://api.stripe.com";
 
 	public StripePayment() {
-		this.API_KEY = "sk_test_CApIbp79HFiF1ExApeMB4JV500G3IBszYN";
+		this.API_KEY = "sk_test_meYhvHhybHNsxm333qeyl0GT004lhPmsV5";
 	}
 
 	@Override
