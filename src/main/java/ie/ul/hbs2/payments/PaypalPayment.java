@@ -16,13 +16,12 @@ import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
 import com.paypal.api.payments.Links;
 
-public class PaypalPayment extends PaymentSystem {
+public class PaypalPayment extends PaymentMethod {
     String CLIENT_ID;
     String SECRET_CLIENT_ID;
     public PaypalPayment() {
-        this.API_KEY = "access_token$sandbox$qmy7f2xw992srssx$ebe2ea9ef5b56dd250249aa055a19f66";
-        this.CLIENT_ID = "Ab6qd1SQ146nxfKiGtG5CNn-AmBct17AHTCFGU7ksr8krkxnDdQsTndF_3tyPqkPyZauX6k_M-fpx9XC";
-        this.SECRET_CLIENT_ID = "ENc29OTn99JxD4t-4QJ1m6TaFEs3EgTRrIs-l5Ycn3fP34e5tYBoE29MK1LFs3E6xB3EVja3pS8itxV_";
+        this.CLIENT_ID = "Ad0eT8cs3sGB-mORwb4QpazaLNVI3TnClTNVflp_U0HPeAMSMBIhAVFPC0dj5CFWeqNF4iEZF4nbMV_1";
+        this.SECRET_CLIENT_ID = "EK1nFHIllpZ2b1Hm22sTITu8nrEM2OmRPJ6MsBMvBJFExUNtKQj0GOo7Bm0cbhDFuCpsltNFsIOoaix3";
 
     }
     @Override

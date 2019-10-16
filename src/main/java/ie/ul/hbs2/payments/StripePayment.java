@@ -8,12 +8,12 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.net.RequestOptions;
 
-public class StripePayment extends PaymentSystem {
+public class StripePayment extends PaymentMethod {
 
 	private static final String END_POINT = "https://api.stripe.com";
 
 	public StripePayment() {
-		this.API_KEY = "sk_test_CApIbp79HFiF1ExApeMB4JV500G3IBszYN";
+		this.API_KEY = "sk_test_meYhvHhybHNsxm333qeyl0GT004lhPmsV5";
 	}
 
 	@Override
