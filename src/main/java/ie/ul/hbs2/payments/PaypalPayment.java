@@ -16,7 +16,7 @@ import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
 import com.paypal.api.payments.Links;
 
-public class PaypalPayment extends PaymentSystem {
+public class PaypalPayment extends PaymentMethod {
     String CLIENT_ID;
     String SECRET_CLIENT_ID;
     public PaypalPayment() {

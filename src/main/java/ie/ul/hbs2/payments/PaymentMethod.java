@@ -1,6 +1,6 @@
 package ie.ul.hbs2.payments;
 
-public abstract class PaymentSystem {
+public abstract class PaymentMethod {
 
     String API_KEY;
 

@@ -8,7 +8,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.net.RequestOptions;
 
-public class StripePayment extends PaymentSystem {
+public class StripePayment extends PaymentMethod {
 
 	private static final String END_POINT = "https://api.stripe.com";
 
