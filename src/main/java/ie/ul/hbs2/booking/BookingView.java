@@ -105,7 +105,7 @@ public class BookingView {
 	frame.pack();
 	frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	
-	BookingView button = this;
+	final BookingView button = this;
     
     
     //all the buttons you want to add.
