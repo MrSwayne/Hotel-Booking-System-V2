@@ -4,119 +4,115 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class MainBookingView {
-    private JButton Reservation;
-    private JButton CancelReservation;
+    public JTextArea textField;
+    public String clipboard;
+
+    //Booking View and Cancel View buttons and text fields
     private JTextField fnameField;
     private JTextField lnameField;
     private JTextField dateInField;
     private JTextField dateOutField;
     private JTextField roomsBooked;
     private JTextField type;
+    private JButton submitBtn;
+    private JButton cancelBtn;
     private JButton nextBtn;
     private JButton backBtn;
-    public MainBookingView()
-    {
-        JFrame frame = new JFrame("Booking Main Menu");
-        JPanel control = new JPanel();
-        Reservation = new JButton("Reservation");
-        CancelReservation = new JButton("Cancel Reservation");
-        control.add(Reservation);
-        control.add(CancelReservation);
-        frame.add(control);
-        frame.setVisible(true);
-        frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    private JTextField cancelField;
+    //private JPasswordField passwordField;
 
-        final MainBookingView button = this;
+    public void init() {
 
-        Reservation.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeCommand(new ReservationCommand(button));
-            }
-        });
+        JPanel mainPanel = new JPanel();
+        JFrame frame = new JFrame("Booking");
 
-        CancelReservation.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeCommand(new CancelReservationCommand(button));
-            }
-        });
+        mainPanel = new JPanel(new GridLayout(3,1));
 
-    }
-
-    public void ReserveViewWindow1()
-    {
-        JPanel firstWindow = new JPanel();
-        JFrame frame = new JFrame("Reservation");
-        //JPanel fName = new JPanel();
+        // Label and Field
+        JPanel fName = new JPanel();
         JLabel fnameLabel = new JLabel("First Name: ",JLabel.CENTER);
         fnameField = new JTextField("",10);
-        firstWindow.add(fnameLabel);
-        firstWindow.add(fnameField);
+        fName.add(fnameLabel);
+        fName.add(fnameField);
 
-        //JPanel lName = new JPanel();
+        // Label and Field
+        JPanel lName = new JPanel();
         JLabel lnameLabel = new JLabel("Last Name: ",JLabel.CENTER);
         lnameField = new JTextField("",10);
-        firstWindow.add(lnameLabel);
-        firstWindow.add(lnameField);
+        lName.add(lnameLabel);
+        lName.add(lnameField);
 
-        nextBtn = new JButton("Next");
-        firstWindow.add(nextBtn);
-
-        backBtn = new JButton("Back");
-        firstWindow.add(backBtn);
-
-        final MainBookingView button = this;
-
-        frame.add(firstWindow);
-        frame.setVisible(true);
-        frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        nextBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeCommand(new NextCommand(button));
-            }
-        });
-
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeCommand(new BackCommand(button));
-            }
-        });
-    }
-
-    public void ReserveViewWindow2()
-    {
-        JPanel secondWindow = new JPanel();
-        JFrame frame = new JFrame("Reservation");
+        // Label and Field
+        JPanel dateInPanel = new JPanel();
         JLabel dateInLabel = new JLabel("Date in: ",JLabel.CENTER);
         dateInField = new JTextField("",10);
-        secondWindow.add(dateInLabel);
-        secondWindow.add(dateInField);
+        dateInPanel.add(dateInLabel);
+        dateInPanel.add(dateInField);
 
+        // Label and Field
+        JPanel dateOutPanel = new JPanel();
         JLabel dateOutLabel = new JLabel("Date out: ",JLabel.CENTER);
         dateOutField = new JTextField("",10);
-        secondWindow.add(dateOutLabel);
-        secondWindow.add(dateOutField);
+        dateOutPanel.add(dateOutLabel);
+        dateOutPanel.add(dateOutField);
 
+        // Label and Field
+        JPanel roomsPanel = new JPanel();
+        JLabel roomLabel = new JLabel("Rooms: ",JLabel.CENTER);
+        roomsBooked= new JTextField("",10);
+        roomsPanel.add(roomLabel);
+        roomsPanel.add(roomsBooked);
+
+        // Label and Field
+        JPanel typePanel = new JPanel();
+        JLabel typeLabel = new JLabel("Type: ",JLabel.CENTER);
+        type = new JTextField("",10);
+        typePanel.setVisible(true);
+        typePanel.add(typeLabel);
+        typePanel.add(type);
+
+        // Label and Field
+        JPanel cancelID = new JPanel();
+        JLabel cancelLabel = new JLabel("Booking ID: ",JLabel.CENTER);
+        cancelField = new JTextField("",10);
+        cancelID.add(cancelLabel);
+        cancelID.add(cancelField);
+
+        //SubmitButton
+        JPanel control = new JPanel();
         nextBtn = new JButton("Next");
-        secondWindow.add(nextBtn);
+        control.add(nextBtn);
 
+        //CancelButton
         backBtn = new JButton("Back");
-        secondWindow.add(backBtn);
+        control.add(backBtn);
 
-        final MainBookingView button = this;
+        //Adding to main panel
+        mainPanel.add(fName);
+        mainPanel.add(lName);
+        mainPanel.add(dateInPanel);
+        mainPanel.add(dateOutPanel);
+        mainPanel.add(typePanel);
+        mainPanel.add(roomsPanel);
+        mainPanel.add(cancelID);
+        mainPanel.add(control);
 
-        frame.add(secondWindow);
+        //display the panel
+        frame.add(mainPanel);
         frame.setVisible(true);
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        final MainBookingView button = this;
+
+
+        //all the buttons you want to add.
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,21 +120,35 @@ public class MainBookingView {
             }
         });
 
-        backBtn.addActionListener(new ActionListener() {
+        nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 executeCommand(new BackCommand(button));
             }
         });
+
     }
-
-    //maybe to have less duplicated code?
-    //private void action(){
-
-   // }
     private void executeCommand(Command command) {
         command.execute();
     }
 
+    public String getFirstName() {
+        return fnameField.getText();
+    }
+    public String getLastName() {
+        return lnameField.getText();
+    }
+    public String getDateIn() {
+        return dateInField.getText();
+    }
+    public String getDateOut() {
+        return dateOutField.getText();
+    }
+    public String getRoomType() {
+        return type.getText();
+    }
+    public String getRoomAmount() {
+        return roomsBooked.getText();
+    }
 }
 
