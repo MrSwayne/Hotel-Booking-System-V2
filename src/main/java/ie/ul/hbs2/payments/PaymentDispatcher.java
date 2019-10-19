@@ -15,11 +15,19 @@ public class PaymentDispatcher {
         this.methods.remove(method);
     }
 
-    public void processPayment() {
-
+    public boolean processPayment() {
+        for(PaymentMethod method: this.methods) {
+            if (method == this.charge.getPaymentMethod())
+                return method.processPayment(this.charge);
+        }
+        return false;
     }
 
-    public void setTarget(BookingCharge charge) {
+    public Iterable<PaymentMethod> getMethods() {
+        return this.methods;
+    }
+
+    public void setCharge(BookingCharge charge) {
         this.charge = charge;
     }
 }

@@ -18,12 +18,14 @@ public class Frame extends JFrame {
     }
 
     public void add(String name, View view) {
+        name = name.toUpperCase();
         views.put(name, view);
         if(currentView == null)
             this.show(view);
     }
 
     public void show(String name) {
+        name = name.toUpperCase();
         View view = views.get(name);
         if (view != null)
             this.show(view);
@@ -33,15 +35,17 @@ public class Frame extends JFrame {
 
     public void show(JPanel view) {
 
-        if (this.currentView != null)
+        if (this.currentView != null) {
             this.remove(currentView);
+            this.currentView.setVisible(false);
+        }
         this.add(new JButton("OK"), BorderLayout.SOUTH);
         this.add(view, BorderLayout.CENTER);
+
         this.currentView = (View) view;
         this.currentView.setVisible(true);
         this.validate();
         this.repaint();
-
     }
 
     public void next() {

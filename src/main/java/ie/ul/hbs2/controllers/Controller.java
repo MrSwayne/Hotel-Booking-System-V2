@@ -13,9 +13,12 @@ public abstract class Controller {
     }
 
 
-    public abstract void addObserver(View view);
+    public void addObserver(View view) {
+        this.observers.add(view);
+    }
 
-    public abstract void removeObserver(View view);
+    public void removeObserver(View view) {
+        this.observers.remove(view);
+    }
 
-    public abstract void notifyObservers();
 }

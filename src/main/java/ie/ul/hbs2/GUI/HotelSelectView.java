@@ -14,6 +14,8 @@ public class HotelSelectView extends View {
         this.add(hotelList, BorderLayout.NORTH);
         this.add(new JButton("hsss"), BorderLayout.SOUTH);
         this.setVisible(true);
+        this.revalidate();
+        this.repaint();
     }
 
     @Override

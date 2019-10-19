@@ -22,10 +22,6 @@ public abstract class View extends JPanel{
         this.parent.add(name, this);
     }
 
-    View(Frame parent, View previous, View next) {
-
-    }
-
     public void setController(Controller controller) {
         this.controller = controller;
     }
