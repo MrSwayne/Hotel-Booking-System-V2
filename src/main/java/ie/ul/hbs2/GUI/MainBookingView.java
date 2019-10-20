@@ -1,13 +1,15 @@
-package ie.ul.hbs2.booking;
+package ie.ul.hbs2.GUI;
+
+import ie.ul.hbs2.booking.BackCommand;
+import ie.ul.hbs2.booking.Booking;
+import ie.ul.hbs2.booking.Command;
+import ie.ul.hbs2.booking.NextCommand;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainBookingView {
     public JTextArea textField;
@@ -84,12 +86,12 @@ public class MainBookingView {
         cancelID.add(cancelLabel);
         cancelID.add(cancelField);
 
-        //SubmitButton
+        //nextButton
         JPanel control = new JPanel();
         nextBtn = new JButton("Next");
         control.add(nextBtn);
 
-        //CancelButton
+        //backButton
         backBtn = new JButton("Back");
         control.add(backBtn);
 
@@ -116,11 +118,21 @@ public class MainBookingView {
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                executeCommand(new NextCommand(button));
+                Booking book = new Booking();
+
+                if(book.checkBooking(getFirstName(),getLastName(),getDateIn(),getDateOut(),
+                        getRoomAmount(),getRoomType()))
+                {
+                    executeCommand(new NextCommand(button));
+                }
+                else{
+                    //do something
+                    System.out.println("Error");
+                }
             }
         });
 
-        nextBtn.addActionListener(new ActionListener() {
+        backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 executeCommand(new BackCommand(button));
@@ -151,4 +163,5 @@ public class MainBookingView {
         return roomsBooked.getText();
     }
 }
+
 
