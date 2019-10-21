@@ -33,13 +33,15 @@ public class DatabaseHelper {
 	
 	private DatabaseHelper() {
 	}
-	
+
+	//Singleton
 	public static DatabaseHelper getInstance() {
 		if(instance == null)
 			instance = new DatabaseHelper();
 		return instance;
 	}
-	
+
+	//Create connection using JDBC driver
 	private Connection conn() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -58,8 +60,9 @@ public class DatabaseHelper {
 		}
 		return conn;
 	}
-	
+
 	//Gets data from database and returns as a hbs.database.Query
+	//NOT SANITISED BEWARE
 	public synchronized Query executeQuery(String sql) {
 		System.out.println("Executing " + sql);
 		try(
@@ -87,7 +90,8 @@ public class DatabaseHelper {
 		System.err.println("Nothing found");
 		return null;
 	}
-	
+
+	//Copys data from resultset so the connection to the database can be closed
 	private Query resultSetToQuery(ResultSet resultSet) {
 		Query query = new Query();
 		ResultSetMetaData metaData;
