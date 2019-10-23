@@ -1,8 +1,13 @@
 package ie.ul.hbs2.rewards;
 
-public class NoneReward extends Reward {
+public class NoneReward implements IReward {
 
-	public NoneReward() {
-		super(0);
+	NoneReward() {
+
+	}
+
+	@Override
+	public float get_discount() {
+		return 0;
 	}
 }

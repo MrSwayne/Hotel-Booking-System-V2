@@ -1,8 +1,13 @@
 package ie.ul.hbs2.rewards;
 
-public class BronzeReward extends Reward {
+public class BronzeReward implements IReward {
 
-	public BronzeReward() {
-		super(5);
+	BronzeReward() {
+
+	}
+
+	@Override
+	public float get_discount() {
+		return 5;
 	}
 }

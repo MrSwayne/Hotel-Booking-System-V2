@@ -1,9 +1,14 @@
 package ie.ul.hbs2.rewards;
 
-public class GoldReward extends Reward {
+public class GoldReward implements IReward {
 	
-	public GoldReward() {
-		super(15);
+	GoldReward() {
+
 	}
 
+	@Override
+	public float get_discount() {
+
+		return 15;
+	}
 }
