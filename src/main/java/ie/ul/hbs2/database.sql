@@ -1,3 +1,7 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- noinspection SqlDialectInspectionForFile
+
 -- Table: hotels
 CREATE TABLE IF NOT EXISTS hotels (
     Hid int  NOT NULL AUTO_INCREMENT,
@@ -290,5 +294,9 @@ INSERT INTO guests VALUES (default, 'Elizabeth','Joseph','28/10/2018', default, 
 INSERT INTO guests VALUES (default, 'Stacy','Gray','28/10/2018', default, default);
 INSERT INTO guests VALUES (default, 'Germane','Gilmore','26/10/2018', default, default);
 
-INSERT INTO rooms VALUES(default, 50, 'single', default, 500, 1);
-INSERT INTO rooms VALUES (default, 2, 'Single', default, 200, 2);
+INSERT INTO rooms VALUES (default, 1, 'Single', default, 50, 1);
+INSERT INTO rooms VALUES (default, 2, 'Double', default, 100, 1);
+INSERT INTO rooms VALUES (default, 3, 'King', default, 150, 1);
+INSERT INTO rooms VALUES (default, 1, 'Single', default, 50, 2);
+INSERT INTO rooms VALUES (default, 2, 'Double', default, 100, 2);
+INSERT INTO rooms VALUES (default, 3, 'King', default, 150, 2);
