@@ -9,7 +9,7 @@ public class HotelManager implements IEmployee {
     private int managementLevel = 1;
     private String password;
     private int wages;
-    private List<Employee> employeeList = new ArrayList<>();
+    private List<IEmployee> employeeList = new ArrayList<>();
 
     public HotelManager(String firstName, String lastName, String password, int wages) {
         this.firstName = firstName;
@@ -28,7 +28,7 @@ public class HotelManager implements IEmployee {
 
     @Override
     public void showEmployeeDetails() {
-        for (Employee e : employeeList){
+        for (IEmployee e : employeeList){
             e.showEmployeeDetails();
         }
     }
