@@ -1,3 +1,7 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- noinspection SqlDialectInspectionForFile
+
 -- Table: hotels
 CREATE TABLE IF NOT EXISTS hotels (
     Hid int  NOT NULL AUTO_INCREMENT,
@@ -60,7 +64,7 @@ CREATE TABLE IF NOT EXISTS users (
     Uid int  NOT NULL AUTO_INCREMENT,
     FirstName varchar(40)  NOT NULL,
     LastName varchar(40)  NOT NULL,
-    IsManager boolean  NOT NULL,
+    ManagementLevel int  NOT NULL,
     Password varchar(40)  NOT NULL,
 	Wages int NOT NULL,
     PRIMARY KEY (Uid)
@@ -83,11 +87,11 @@ INSERT INTO hotels VALUES (default, 'Atlantic Hotel','Portugal','Lisbon',60);
 INSERT INTO hotels VALUES (default, 'Drizzle Hotel','USA','New York',500);
 
 
-INSERT INTO users VALUES (default, 'Caolan','McDonagh',TRUE,'nana',100000);
-INSERT INTO users VALUES (default, 'Ian','Duggan',FALSE,'devops',20000);
-INSERT INTO users VALUES (default, 'Adam','Swayne',TRUE,'Apple1',50000);
-INSERT INTO users VALUES (default, 'Sabina','Taddei',FALSE,'MIA',35000);
-INSERT INTO users VALUES (default, 'Patryk','Marczak',FALSE,'easy',40000);
+INSERT INTO users VALUES (default, 'Caolan','McDonagh',1,'nana',100000);
+INSERT INTO users VALUES (default, 'Ian','Duggan',2,'devops',20000);
+INSERT INTO users VALUES (default, 'Adam','Swayne',1,'Apple1',50000);
+INSERT INTO users VALUES (default, 'Sabina','Taddei',3,'MIA',35000);
+INSERT INTO users VALUES (default, 'Patryk','Marczak',2,'easy',40000);
 
 INSERT INTO guests VALUES (default, 'Vera','Irwin','29/10/2018', default, default);
 INSERT INTO guests VALUES (default, 'Erica','Valenzuela','30/10/2018', default, default);
@@ -290,5 +294,9 @@ INSERT INTO guests VALUES (default, 'Elizabeth','Joseph','28/10/2018', default, 
 INSERT INTO guests VALUES (default, 'Stacy','Gray','28/10/2018', default, default);
 INSERT INTO guests VALUES (default, 'Germane','Gilmore','26/10/2018', default, default);
 
-INSERT INTO rooms VALUES(default, 50, 'single', default, 500, 1);
-INSERT INTO rooms VALUES (default, 2, 'Single', default, 200, 2);
+INSERT INTO rooms VALUES (default, 1, 'Single', default, 50, 1);
+INSERT INTO rooms VALUES (default, 2, 'Double', default, 100, 1);
+INSERT INTO rooms VALUES (default, 3, 'King', default, 150, 1);
+INSERT INTO rooms VALUES (default, 1, 'Single', default, 50, 2);
+INSERT INTO rooms VALUES (default, 2, 'Double', default, 100, 2);
+INSERT INTO rooms VALUES (default, 3, 'King', default, 150, 2);

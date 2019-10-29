@@ -1,8 +1,13 @@
 package ie.ul.hbs2.rewards;
 
-public class VIPReward extends Reward {
+public class VIPReward implements IReward {
 
-	public VIPReward() {
-		super(25);
+	VIPReward() {
+
+	}
+
+	@Override
+	public float get_discount() {
+		return 25;
 	}
 }

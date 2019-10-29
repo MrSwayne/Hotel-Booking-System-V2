@@ -1,9 +1,6 @@
 package ie.ul.hbs2;
 
-import ie.ul.hbs2.GUI.Frame;
-import ie.ul.hbs2.GUI.HotelSelectView;
-import ie.ul.hbs2.GUI.PaymentView;
-import ie.ul.hbs2.GUI.View;
+import ie.ul.hbs2.GUI.*;
 import ie.ul.hbs2.payments.BookingCharge;
 import ie.ul.hbs2.payments.PaymentDispatcher;
 import ie.ul.hbs2.payments.PaymentMethod;
@@ -28,6 +25,7 @@ public class HotelBookingSystem {
         //Start the GUI
         HotelSelectView hotelSelect = new HotelSelectView("hotelSelect", frame);
         PaymentView payments = new PaymentView("payments", frame);
+        ManagementView management = new ManagementView("management", frame);
 
         //Select whatever gui already defined above ^^
         this.frame.show("payments");

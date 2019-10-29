@@ -5,19 +5,19 @@ import java.util.Map;
 
 public abstract class RewardFactory {
 	
-	private static Map<String, Reward> rewardMap;
-	private static Reward nullReward = new NoneReward();
+	private static Map<String, IReward> rewardMap;
+	private static IReward nullReward = new NoneReward();
 	
-	public static Reward getReward(String reward) {
+	public static IReward getReward(String reward) {
 		reward = reward.toUpperCase();
 		if(rewardMap == null)
 			rewardMap = new HashMap<>();
 		
-		Reward rew = rewardMap.get(reward);
+		IReward rew = rewardMap.get(reward);
 		if(rew != null)
 			return rew;
 		
-		Reward newReward;
+		IReward newReward;
 		switch(reward) {
 			case "BRONZE": 
 				newReward = new BronzeReward();
