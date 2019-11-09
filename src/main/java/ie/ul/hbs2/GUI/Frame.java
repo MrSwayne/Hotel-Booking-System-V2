@@ -39,7 +39,6 @@ public class Frame extends JFrame {
             this.remove(currentView);
             this.currentView.setVisible(false);
         }
-        this.add(new JButton("OK"), BorderLayout.SOUTH);
         this.add(view, BorderLayout.CENTER);
 
         this.currentView = (View) view;

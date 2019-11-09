@@ -1,6 +1,4 @@
--- noinspection SqlNoDataSourceInspectionForFile
-
--- noinspection SqlDialectInspectionForFile
+# noinspection SqlNoDataSourceInspectionForFile
 
 -- Table: hotels
 CREATE TABLE IF NOT EXISTS hotels (
@@ -64,13 +62,13 @@ CREATE TABLE IF NOT EXISTS users (
     Uid int  NOT NULL AUTO_INCREMENT,
     FirstName varchar(40)  NOT NULL,
     LastName varchar(40)  NOT NULL,
-    ManagementLevel int  NOT NULL,
+    ManagementLevel int NOT NULL,
     Password varchar(40)  NOT NULL,
 	Wages int NOT NULL,
     PRIMARY KEY (Uid)
-
-
 );
+
+# noinspection SqlResolve
 
 UPDATE table SET datefield = NULL WHERE datefield = '0000-00-00 00:00:00';
 
@@ -92,6 +90,10 @@ INSERT INTO users VALUES (default, 'Ian','Duggan',2,'devops',20000);
 INSERT INTO users VALUES (default, 'Adam','Swayne',1,'Apple1',50000);
 INSERT INTO users VALUES (default, 'Sabina','Taddei',3,'MIA',35000);
 INSERT INTO users VALUES (default, 'Patryk','Marczak',2,'easy',40000);
+INSERT INTO users VALUES (default, 'Colin','Boyle',3,'abceasyas123',10000);
+INSERT INTO users VALUES (default, 'Rebecca','Hyland',3,'pass987',15000);
+INSERT INTO users VALUES (default, 'Oliver','Barnes',3,'money$$$',25000);
+INSERT INTO users VALUES (default, 'Eimear','Scanlan',3,'helpmepls',5000);
 
 INSERT INTO guests VALUES (default, 'Vera','Irwin','29/10/2018', default, default);
 INSERT INTO guests VALUES (default, 'Erica','Valenzuela','30/10/2018', default, default);

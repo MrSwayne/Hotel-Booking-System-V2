@@ -28,7 +28,7 @@ public class HotelBookingSystem {
         ManagementView management = new ManagementView("management", frame);
 
         //Select whatever gui already defined above ^^
-        this.frame.show("payments");
+        this.frame.show("management");
     }
 
     //Intercept any payments

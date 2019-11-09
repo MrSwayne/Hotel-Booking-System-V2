@@ -1,5 +1,7 @@
 package ie.ul.hbs2.management;
 
+import java.util.List;
+
 public class Employee implements IEmployee {
     private String firstName;
     private String lastName;
@@ -15,7 +17,39 @@ public class Employee implements IEmployee {
     }
 
     @Override
-    public void showEmployeeDetails() {
-        System.out.println("Name: " + firstName + " " + lastName + "\nWages: " + wages);
+    public int accept(TotalWagesVisitor visitor) {
+        return 0;
+    }
+
+    @Override
+    public List<IEmployee> accept(EmployeeListVisitor visitor) {
+        return null;
+    }
+
+    @Override
+    public void addEmployee(IEmployee e) {
+
+    }
+
+    @Override
+    public void removeEmployee(IEmployee e) {
+
+    }
+
+    public int getManagementLevel() {
+        return managementLevel;
+    }
+
+    @Override
+    public int getWages() {
+        return wages;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

@@ -18,18 +18,42 @@ public class HotelManager implements IEmployee {
         this.wages = wages;
     }
 
-    public void addEmployee(Employee e){
+    public void addEmployee(IEmployee e){
         employeeList.add(e);
     }
 
-    public void removeEmployee(Employee e){
+    public void removeEmployee(IEmployee e){
         employeeList.remove(e);
     }
 
     @Override
-    public void showEmployeeDetails() {
-        for (IEmployee e : employeeList){
-            e.showEmployeeDetails();
-        }
+    public int accept(TotalWagesVisitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public List<IEmployee> accept(EmployeeListVisitor visitor) {
+        return visitor.visit(this);
+    }
+
+    public int getManagementLevel() {
+        return managementLevel;
+    }
+
+    public List<IEmployee> getEmployeeList() {
+        return employeeList;
+    }
+
+    @Override
+    public int getWages() {
+        return wages;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

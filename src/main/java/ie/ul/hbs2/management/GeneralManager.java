@@ -17,18 +17,46 @@ public class GeneralManager implements IEmployee {
         this.wages = wages;
     }
 
-    public void addEmployee(Employee e){
-        employeeList.add(e);
+    public void addEmployee(IEmployee e){
+        if(e.getManagementLevel() > this.getManagementLevel()){
+            employeeList.add(e);
+        } else {
+            System.out.println("Cannot add employee with higher management level to employee list.");
+        }
     }
 
-    public void removeEmployee(Employee e){
+    public void removeEmployee(IEmployee e){
         employeeList.remove(e);
     }
 
     @Override
-    public void showEmployeeDetails() {
-        for (IEmployee e : employeeList){
-            e.showEmployeeDetails();
-        }
+    public int accept(TotalWagesVisitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public List<IEmployee> accept(EmployeeListVisitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public int getWages() {
+        return wages;
+    }
+
+    public int getManagementLevel() {
+        return managementLevel;
+    }
+
+    public List<IEmployee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }
