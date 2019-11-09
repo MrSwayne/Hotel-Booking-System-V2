@@ -1,20 +1,20 @@
 package ie.ul.hbs2.rooms;
 
-class Room {
+abstract class Room {
     private int roomNumber;
-    private RoomType roomType;
     private boolean available = true;
     private double price = 0.0;
     private int hotelId;
 
-    Room(int roomNumber, RoomType roomType, boolean available, int hotelId) {
+    Room(int roomNumber, RoomType roomType, boolean available, double price, int hotelId) {
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.available = available;
-        this.price = this.roomType.price();
+        this.price = price;
         this.hotelId = hotelId;
     }
 
+    RoomType roomType = null;
 
     public boolean isAvailable() {
         return available;

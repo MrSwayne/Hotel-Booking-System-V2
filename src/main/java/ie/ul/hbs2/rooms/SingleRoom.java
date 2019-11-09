@@ -1,14 +1,9 @@
 package ie.ul.hbs2.rooms;
 
-public class SingleRoom extends RoomType {
 
-    @Override
-    public String name() {
-        return "Single";
-    }
+public class SingleRoom extends Room {
 
-    @Override
-    public double price() {
-        return 50.00;
+    SingleRoom(int roomNumber, boolean available, double price, int hotelId) {
+        super(roomNumber, RoomType.SINGLE, available, price, hotelId);
     }
 }
