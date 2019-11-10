@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 import java.awt.*;
 
-public class MainBookingView {
+public class MainBookingView extends View {
     public JTextArea textField;
     public String clipboard;
 
@@ -27,14 +27,11 @@ public class MainBookingView {
     private JButton nextBtn;
     private JButton backBtn;
     private JTextField cancelField;
-    //private JPasswordField passwordField;
 
-    public void init() {
+    public MainBookingView(String name, Frame parent) {
+        super(name, parent);
 
         JPanel mainPanel = new JPanel();
-        JFrame frame = new JFrame("Booking");
-
-        mainPanel = new JPanel(new GridLayout(3,1));
 
         // Label and Field
         JPanel fName = new JPanel();
@@ -105,11 +102,7 @@ public class MainBookingView {
         mainPanel.add(cancelID);
         mainPanel.add(control);
 
-        //display the panel
-        frame.add(mainPanel);
-        frame.setVisible(true);
-        frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.add(mainPanel);
 
         final MainBookingView button = this;
 
@@ -124,6 +117,7 @@ public class MainBookingView {
                         getRoomAmount(),getRoomType()))
                 {
                     executeCommand(new NextCommand(button));
+
                 }
                 else{
                     //do something
@@ -140,6 +134,7 @@ public class MainBookingView {
         });
 
     }
+
     private void executeCommand(Command command) {
         command.execute();
     }
@@ -161,6 +156,11 @@ public class MainBookingView {
     }
     public String getRoomAmount() {
         return roomsBooked.getText();
+    }
+
+    @Override
+    public void setMessage(String message) {
+
     }
 }
 

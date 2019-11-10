@@ -26,9 +26,10 @@ public class HotelBookingSystem {
         HotelSelectView hotelSelect = new HotelSelectView("hotelSelect", frame);
         PaymentView payments = new PaymentView("payments", frame);
         ManagementView management = new ManagementView("management", frame);
+        MainBookingView booking = new MainBookingView("booking", frame);
 
         //Select whatever gui already defined above ^^
-        this.frame.show("management");
+        this.frame.show("booking");
     }
 
     //Intercept any payments
