@@ -1,6 +1,8 @@
 package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.booking.*;
+import ie.ul.hbs2.booking.memento.CareTaker;
+import ie.ul.hbs2.booking.memento.Memento;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,6 +106,13 @@ public class BookingSummaryView extends View implements ActionListener {
 
             executeCommand(new SubmitCommand(this));
         } else if(button == cancelBtn) {
+            CareTaker c = new CareTaker();
+            Memento m = c.get(0);
+            Frame frame = new Frame();
+            frame.show("booking");
+            frame.getContentPane().removeAll();
+            frame.repaint();
+
             executeCommand(new CancelCommand(this));
         }
     }
