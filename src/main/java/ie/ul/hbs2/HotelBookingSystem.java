@@ -1,9 +1,11 @@
 package ie.ul.hbs2;
 
 import ie.ul.hbs2.GUI.*;
+import ie.ul.hbs2.controllers.PaymentController;
 import ie.ul.hbs2.payments.BookingCharge;
+import ie.ul.hbs2.payments.IPaymentMethod;
 import ie.ul.hbs2.payments.PaymentDispatcher;
-import ie.ul.hbs2.payments.PaymentMethod;
+import ie.ul.hbs2.payments.IPaymentMethod;
 
 import javax.swing.*;
 
@@ -24,21 +26,23 @@ public class HotelBookingSystem {
     public void run() {
         //Start the GUI
         HotelSelectView hotelSelect = new HotelSelectView("hotelSelect", frame);
+
         PaymentView payments = new PaymentView("payments", frame);
+        payments.attachDispatcher(this.paymentDispatcher);
+
         ManagementView management = new ManagementView("management", frame);
         MainBookingView booking = new MainBookingView("booking", frame);
 
+        BookingSummaryView bs = new BookingSummaryView("Booking Summary", frame);
+
         //Select whatever gui already defined above ^^
-        this.frame.show("booking");
+
+        //Price test
+        bs.summary("john", "travolta", "25/09/2019", "17/10/2019", "3", "double", 15, 1000);
+        this.frame.show(bs);
     }
 
-    //Intercept any payments
-    public boolean processPayment(BookingCharge charge) {
-        this.paymentDispatcher.setCharge(charge);
-        return this.paymentDispatcher.processPayment();
-    }
-
-    public void addPaymentMethod(PaymentMethod method) {
+    public void addPaymentMethod(IPaymentMethod method) {
         this.paymentDispatcher.addPaymentMethod(method);
     }
 }

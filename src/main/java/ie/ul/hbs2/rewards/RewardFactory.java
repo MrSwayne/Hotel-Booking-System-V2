@@ -5,11 +5,10 @@ import java.util.Map;
 
 public abstract class RewardFactory {
 	
-	private static Map<String, IReward> rewardMap;
+	private static Map<Integer, IReward> rewardMap;
 	private static IReward nullReward = new NoneReward();
 	
-	public static IReward getReward(String reward) {
-		reward = reward.toUpperCase();
+	public static IReward getReward(int reward) {
 		if(rewardMap == null)
 			rewardMap = new HashMap<>();
 		
@@ -19,24 +18,23 @@ public abstract class RewardFactory {
 		
 		IReward newReward;
 		switch(reward) {
-			case "BRONZE": 
+			case 1:
 				newReward = new BronzeReward();
 			break;
 			
-			case "SILVER": 
+			case 2:
 				newReward = new SilverReward();
 			break;
-			case "GOLD": 
+			case 3:
 				newReward = new GoldReward();
 			break;
 			
-			case "PLATINUM": 
+			case 4:
 				newReward = new PlatinumReward();
 			break;
 			
-			case "VIP": 
+			case 5:
 				newReward = new VIPReward();
-			
 			break;
 			
 			default: return nullReward;

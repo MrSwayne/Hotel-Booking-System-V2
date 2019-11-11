@@ -34,5 +34,4 @@ public abstract class View extends JPanel{
         this.prev = view;
     }
 
-    public abstract void setMessage(String message);
 }

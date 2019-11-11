@@ -12,8 +12,9 @@ public class Frame extends JFrame {
 
     public Frame() {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(null);//setting to the center of the screen
         this.setSize(1280, 720);
+        this.setLocationRelativeTo(null);//setting to the center of the screen
+
         this.setVisible(true);
     }
 
@@ -24,6 +25,10 @@ public class Frame extends JFrame {
             this.show(view);
     }
 
+    public View getCurrentView() {
+        return currentView;
+    }
+
     public void show(String name) {
         name = name.toUpperCase();
         View view = views.get(name);
@@ -31,6 +36,11 @@ public class Frame extends JFrame {
             this.show(view);
         else
             System.out.println("Invalid view: " + name);
+    }
+
+    public View get(String name) {
+        name = name.toUpperCase();
+        return this.views.get(name);
     }
 
     public void show(JPanel view) {

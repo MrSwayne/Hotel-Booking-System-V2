@@ -242,9 +242,4 @@ public class ManagementView extends View {
         this.revalidate();
         this.repaint();
     }
-
-    @Override
-    public void setMessage(String message) {
-
-    }
 }

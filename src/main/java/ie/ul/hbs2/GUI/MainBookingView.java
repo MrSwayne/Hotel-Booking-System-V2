@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 import java.awt.*;
 
-public class MainBookingView extends View {
+public class MainBookingView extends View implements ActionListener{
     public JTextArea textField;
     public String clipboard;
 
@@ -104,35 +104,30 @@ public class MainBookingView extends View {
 
         this.add(mainPanel);
 
-        final MainBookingView button = this;
-
-
         //all the buttons you want to add.
-        nextBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Booking book = new Booking();
+        nextBtn.addActionListener(this );
+        backBtn.addActionListener(this);
+    }
 
-                if(book.checkBooking(getFirstName(),getLastName(),getDateIn(),getDateOut(),
-                        getRoomAmount(),getRoomType()))
-                {
-                    executeCommand(new NextCommand(button));
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
-                }
-                else{
-                    //do something
-                    System.out.println("Error");
-                }
+        JButton button = (JButton)e.getSource();
+
+        if (button == nextBtn) {
+            Booking book = new Booking();
+
+            if (book.checkBooking(this.parent, getFirstName(), getLastName(), getDateIn(), getDateOut(),
+                    getRoomAmount(), getRoomType())) {
+                executeCommand(new NextCommand(this));
+
+            } else {
+                //do something
+                System.out.println("Error");
             }
-        });
-
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeCommand(new BackCommand(button));
-            }
-        });
-
+        }  else if(button == backBtn) {
+            executeCommand(new BackCommand(this));
+        }
     }
 
     private void executeCommand(Command command) {
@@ -158,10 +153,6 @@ public class MainBookingView extends View {
         return roomsBooked.getText();
     }
 
-    @Override
-    public void setMessage(String message) {
-
-    }
 }
 
 
