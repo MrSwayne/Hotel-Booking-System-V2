@@ -285,6 +285,7 @@ public class SearchTest extends javax.swing.JFrame
 
 	private void jButton_SearchActionPerformed(java.awt.event.ActionEvent evt)
 	{
+		//ignore
 		if(jComboBox_Switch.getSelectedIndex()==0)
 		{
 			findUsers();
