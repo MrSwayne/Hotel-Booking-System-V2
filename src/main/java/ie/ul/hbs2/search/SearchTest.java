@@ -1,21 +1,27 @@
 package ie.ul.hbs2.search;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class SearchTest extends javax.swing.JFrame
 {
 	private javax.swing.JButton jButton_Search;
+	private javax.swing.JComboBox jComboBox_Switch;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTable jTable_Users;
 	private javax.swing.JTextField jText_Search;
-
-	public static void main(String args[]) {
+	public static void main(String args[])
+	{
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
 			{
@@ -51,22 +57,69 @@ public class SearchTest extends javax.swing.JFrame
 	public SearchTest()
 	{
 		initComponents();
+		//Defaults the search pages as to not show blank
 		findUsers();
 	}
 
 	public Connection getConnection()
 	{
+		String hotel = "";
+
+
+		//Strategy DB switch -Hotel1Strategy, Hotel2Strategy... HotelNStrategy
+		//Temporary until UI integrated for Hotel selection
+		SearchStrategy searchStrategy = new Hotel1Strategy();
+		hotel = searchStrategy.hotelChoice(hotel);
+
+
 		Connection con = null;
 		try
 		{
-			con = DriverManager.getConnection("jdbc:mysql://localhost/hbs", "root", "");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/"+hotel, "root", "");
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 		return con;
 	}
 
-	public ArrayList<User> ListUsers(String ValToSearch)
+	public void findUsers()
+	{
+		ArrayList<User> users = usersList(jText_Search.getText());
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new Object[]{"Gid", "firstname", "lastname", "memberSince","totalSpent","membershipLevel"});
+		Object[] row = new Object[6];
+		for (int i = 0; i < users.size(); i++)
+		{
+			row[0] = users.get(i).getGid();
+			row[1] = users.get(i).getfirstname();
+			row[2] = users.get(i).getlastname();
+			row[3] = users.get(i).getmemberSince();
+			row[4] = users.get(i).gettotalSpent();
+			row[5] = users.get(i).getmembershipLevel();
+			model.addRow(row);
+		}
+		jTable_Users.setModel(model);
+	}
+
+	public void findBookings()
+	{
+		ArrayList<Booking> bookings = bookingsList(jText_Search.getText());
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new Object[]{"Bid", "DateIn", "DateOut", "Gid","Rid"});
+		Object[] row = new Object[5];
+		for (int i = 0; i < bookings.size(); i++)
+		{
+			row[0] = bookings.get(i).getBid();
+			row[1] = bookings.get(i).getdateIn();
+			row[2] = bookings.get(i).getdateOut();
+			row[3] = bookings.get(i).getGid();
+			row[4] = bookings.get(i).getRid();
+			model.addRow(row);
+		}
+		jTable_Users.setModel(model);
+	}
+
+	public ArrayList<User> usersList(String ValToSearch)
 	{
 		ArrayList<User> usersList = new ArrayList<User>();
 
@@ -78,6 +131,7 @@ public class SearchTest extends javax.swing.JFrame
 			Connection con = getConnection();
 			st = con.createStatement();
 			String searchQuery = "SELECT * FROM `guests` WHERE CONCAT(`Gid`, `firstname`, `lastname`, `memberSince`, `totalSpent`, `membershipLevel`) LIKE '%" + ValToSearch + "%'";
+
 			rs = st.executeQuery(searchQuery);
 
 			User user;
@@ -102,29 +156,46 @@ public class SearchTest extends javax.swing.JFrame
 		return usersList;
 	}
 
-	public void findUsers()
+	public ArrayList<Booking> bookingsList(String ValToSearch)
 	{
-		ArrayList<User> users = ListUsers(jText_Search.getText());
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new Object[]{"Gid", "firstname", "lastname", "memberSince","totalSpent","membershipLevel"});
-		Object[] row = new Object[6];
-		for (int i = 0; i < users.size(); i++)
+		ArrayList<Booking> bookingsList = new ArrayList<>();
+
+		Statement st;
+		ResultSet rs;
+
+		try
 		{
-			row[0] = users.get(i).getGid();
-			row[1] = users.get(i).getfirstname();
-			row[2] = users.get(i).getlastname();
-			row[3] = users.get(i).getmemberSince();
-			row[4] = users.get(i).gettotalSpent();
-			row[5] = users.get(i).getmembershipLevel();
-			model.addRow(row);
+			Connection con = getConnection();
+			st = con.createStatement();
+			String searchQuery = "SELECT * FROM `bookings` WHERE CONCAT(`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) LIKE '%" + ValToSearch + "%'";
+			rs = st.executeQuery(searchQuery);
+
+			Booking booking;
+
+			while (rs.next())
+			{
+				booking = new Booking(
+						rs.getInt("Bid"),
+						rs.getInt("dateIn"),
+						rs.getInt("dateOut"),
+						rs.getInt("Gid"),
+						rs.getInt("Rid")
+				);
+				bookingsList.add(booking);
+			}
+		} catch (Exception ex)
+		{
+			System.out.println(ex.getMessage());
 		}
-		jTable_Users.setModel(model);
+		return bookingsList;
 	}
 
 	private void initComponents()
 	{
 		jPanel2 = new javax.swing.JPanel();
 		jButton_Search = new javax.swing.JButton();
+		String[] tableSwitch={"Guests","Bookings"};
+		jComboBox_Switch = new javax.swing.JComboBox<>(tableSwitch);
 		jText_Search = new javax.swing.JTextField();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTable_Users = new javax.swing.JTable();
@@ -140,23 +211,31 @@ public class SearchTest extends javax.swing.JFrame
 			}
 		});
 
+		//Default combo box to "Guests"
+		jComboBox_Switch.setSelectedIndex(0);
+
+		//Combobox Check (Guest or Booking)
+		jComboBox_Switch.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent event)
+			{
+				JComboBox jComboBoxSwitch = (JComboBox) event.getSource();
+
+				Object item = event.getItem();
+
+				if(event.getItem()=="Guests")
+				{
+					findUsers();
+				}
+				else findBookings();
+
+			}
+		});
+
 		jText_Search.setFont(new java.awt.Font("Tahoma", 1, 18));
 		jTable_Users.setFont(new java.awt.Font("Tahoma", 1, 14));
-		jTable_Users.setModel(new javax.swing.table.DefaultTableModel(
-				new Object [][]
-						{
-						{null, null, null, null},
-						{null, null, null, null},
-						{null, null, null, null},
-						{null, null, null, null},
-						{null, null, null, null},
-						{null, null, null, null}
-				},
-				new String []
-						{
-						"Title 1", "Title 2", "Title 3", "Title 4","Title 5","Title 6"
-				}
-		));
+
 		jScrollPane1.setViewportView(jTable_Users);
 		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
@@ -165,6 +244,11 @@ public class SearchTest extends javax.swing.JFrame
 						.addGroup(jPanel2Layout.createSequentialGroup()
 								.addContainerGap(22, Short.MAX_VALUE)
 								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+												.addComponent(jComboBox_Switch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addGap(18, 18, 18)
+												.addComponent(jComboBox_Switch)
+												.addGap(136, 136, 136))
 										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
 												.addComponent(jText_Search, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addGap(18, 18, 18)
@@ -179,6 +263,7 @@ public class SearchTest extends javax.swing.JFrame
 						.addGroup(jPanel2Layout.createSequentialGroup()
 								.addGap(31, 31, 31)
 								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+										.addComponent(jComboBox_Switch)
 										.addComponent(jButton_Search)
 										.addComponent(jText_Search, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(28, 28, 28)
