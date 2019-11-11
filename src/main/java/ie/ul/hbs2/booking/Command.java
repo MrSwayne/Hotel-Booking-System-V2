@@ -10,5 +10,8 @@ public abstract class Command {
         this.click = click;
     }
 
-    public abstract boolean execute();
+    public Command() {
+    }
+
+    public abstract void execute();
 }

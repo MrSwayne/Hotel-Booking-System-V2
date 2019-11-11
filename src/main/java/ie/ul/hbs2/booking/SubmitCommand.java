@@ -9,9 +9,8 @@ public class SubmitCommand extends CommandSummary {
         super(button);
     }
     @Override
-    public boolean execute() {
+    public void execute() {
         //Go to charge??
         System.out.println("Going to Charge Screen!");
-        return false;
     }
 }

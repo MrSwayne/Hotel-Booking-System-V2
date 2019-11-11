@@ -2,6 +2,10 @@ package ie.ul.hbs2.booking;
 
 
 import ie.ul.hbs2.GUI.BookingSummaryView;
+import ie.ul.hbs2.booking.memento.CareTaker;
+import ie.ul.hbs2.booking.memento.Memento;
+
+import javax.swing.*;
 
 public class CancelCommand extends CommandSummary {
     public CancelCommand(BookingSummaryView button)
@@ -9,9 +13,10 @@ public class CancelCommand extends CommandSummary {
         super(button);
     }
     @Override
-    public boolean execute() {
-        //Go back to Booking screen
-        System.out.println("Going back to Booking Screen!");
-        return false;
+    public void execute() {
+
+
+
+
     }
 }

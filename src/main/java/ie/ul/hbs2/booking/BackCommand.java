@@ -9,8 +9,7 @@ public class BackCommand extends Command{
         super(button);
     }
     @Override
-    public boolean execute() {
+    public void execute() {
         System.out.println("Back View");
-        return false;
     }
 }

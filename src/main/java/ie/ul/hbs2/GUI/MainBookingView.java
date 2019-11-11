@@ -4,10 +4,14 @@ import ie.ul.hbs2.booking.BackCommand;
 import ie.ul.hbs2.booking.Booking;
 import ie.ul.hbs2.booking.Command;
 import ie.ul.hbs2.booking.NextCommand;
+import ie.ul.hbs2.booking.memento.CareTaker;
+import ie.ul.hbs2.booking.memento.Memento;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
+import java.io.*;
 
 import java.awt.*;
 
@@ -16,6 +20,7 @@ public class MainBookingView extends View implements ActionListener{
     public String clipboard;
 
     //Booking View and Cancel View buttons and text fields
+    public JPanel mainPanel;
     private JTextField fnameField;
     private JTextField lnameField;
     private JTextField dateInField;
@@ -28,10 +33,11 @@ public class MainBookingView extends View implements ActionListener{
     private JButton backBtn;
     private JTextField cancelField;
 
+
     public MainBookingView(String name, Frame parent) {
         super(name, parent);
 
-        JPanel mainPanel = new JPanel();
+         mainPanel = new JPanel();
 
         // Label and Field
         JPanel fName = new JPanel();
@@ -76,12 +82,6 @@ public class MainBookingView extends View implements ActionListener{
         typePanel.add(typeLabel);
         typePanel.add(type);
 
-        // Label and Field
-        JPanel cancelID = new JPanel();
-        JLabel cancelLabel = new JLabel("Booking ID: ",JLabel.CENTER);
-        cancelField = new JTextField("",10);
-        cancelID.add(cancelLabel);
-        cancelID.add(cancelField);
 
         //nextButton
         JPanel control = new JPanel();
@@ -99,7 +99,6 @@ public class MainBookingView extends View implements ActionListener{
         mainPanel.add(dateOutPanel);
         mainPanel.add(typePanel);
         mainPanel.add(roomsPanel);
-        mainPanel.add(cancelID);
         mainPanel.add(control);
 
         this.add(mainPanel);
@@ -131,8 +130,13 @@ public class MainBookingView extends View implements ActionListener{
     }
 
     private void executeCommand(Command command) {
+        CareTaker c = new CareTaker();
+        Memento m = new Memento(mainPanel);
+        c.add(m);
         command.execute();
     }
+
+
 
     public String getFirstName() {
         return fnameField.getText();

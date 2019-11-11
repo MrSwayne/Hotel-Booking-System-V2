@@ -11,10 +11,9 @@ public class NextCommand extends Command {
         super(button);
     }
     @Override
-    public boolean execute() {
+    public void execute() {
 
 
-        return false;
     }
 
 }
