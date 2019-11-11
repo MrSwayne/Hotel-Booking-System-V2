@@ -1,6 +1,7 @@
 package ie.ul.hbs2.booking;
 
 import ie.ul.hbs2.GUI.BookingSummaryView;
+import ie.ul.hbs2.GUI.Frame;
 import ie.ul.hbs2.database.*;
 import ie.ul.hbs2.rewards.RewardFactory;
 
@@ -13,14 +14,14 @@ public class Booking {
     int nights;
 
     //I need information of how the rooms are getting done and Discounts, can go forward if I have them.
-    public boolean checkBooking(String firstName, String lastName, String dateIn, String dateOut, String roomAmount,
+    public boolean checkBooking(Frame frame, String firstName, String lastName, String dateIn, String dateOut, String roomAmount,
                                 String roomType) {
 
         //check if the name correspond to any in the db otherwise set everything as a new customer.
         if (dateValidation(dateIn, dateOut)) {
             System.out.println("Hurray,dates are valid");
             if (roomsAvailable(roomAmount, roomType)) {
-                bookingApp(firstName, lastName, dateIn, dateOut, roomAmount, roomType);
+                bookingApp(frame, firstName, lastName, dateIn, dateOut, roomAmount, roomType);
                 return true;
             }
         }
@@ -86,40 +87,18 @@ public class Booking {
 
     //Calculating the spent - discount will do this later
    public double calculateTotalSpent(String firstName, String lastName, String dateIn, String dateOut, String roomAmount,String roomType) {
-
         int rmBooked = Integer.parseInt(roomAmount);
         int memLVL = getCustomerInformation(firstName,lastName);
         double totalSpent = 0 ;
         int roomCost =  getRoomCost(roomType);
-        RewardFactory factory = new RewardFactory() {};
         float discount;
-       if(memLVL == 1) // Bronze reward
-        {
-            discount = factory.getReward("Bronze").get_discount() / 100;
-            totalSpent = ((roomCost * nights) * rmBooked) * discount;
-        }else if(memLVL == 2) // silver
-        {
-            discount = factory.getReward("Silver").get_discount() / 100;
-            totalSpent = ((roomCost * nights) * rmBooked) * discount;
 
-        }
-        else if(memLVL == 3) // gold
-        {
-            discount = factory.getReward("Gold").get_discount() / 100;
-            totalSpent = ((roomCost * nights) * rmBooked) * discount;
-        }
-        else if(memLVL==4) // platinum
-       {
-           discount = factory.getReward("Platinum").get_discount() / 100;
-           totalSpent = ((roomCost * nights) * rmBooked) * discount;
-       }
-        else if (memLVL == 5) // VIP
-       {
-           discount = factory.getReward("VIP").get_discount() / 100;
-           totalSpent = ((roomCost * nights) * rmBooked) * discount;
-       }else {
-            totalSpent = ((roomCost * nights) * rmBooked);
-        }
+       discount = RewardFactory.getReward(memLVL).get_discount() / 100;
+       totalSpent = ((roomCost * nights) * rmBooked);
+
+       //subtract discount
+       totalSpent *= 1 - discount;
+
         return totalSpent;
     }
 
@@ -145,12 +124,12 @@ public class Booking {
         return level;
     }
 
-    public void bookingApp(String firstName, String lastName, String dateIn, String dateOut, String roomAmount, String roomType) {
+    public void bookingApp(Frame frame, String firstName, String lastName, String dateIn, String dateOut, String roomAmount, String roomType) {
         double totalSpent = calculateTotalSpent(firstName, lastName, dateIn, dateOut, roomAmount, roomType);
         int BID = getBID();
         System.out.println(BID);
-        BookingSummaryView view = new BookingSummaryView();
-        view.summary(firstName, lastName, dateIn, dateOut, roomAmount, roomType, BID, totalSpent);
+          BookingSummaryView view = new BookingSummaryView("Booking Summary", frame);
+          view.summary(firstName, lastName, dateIn, dateOut, roomAmount, roomType, BID, totalSpent);
 
         System.out.println("You have booked a reservation with BID" + BID + " total cost = " + totalSpent);
     }

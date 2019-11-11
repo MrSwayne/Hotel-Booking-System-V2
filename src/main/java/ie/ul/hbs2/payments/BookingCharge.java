@@ -1,23 +1,36 @@
 package ie.ul.hbs2.payments;
 
-import ie.ul.hbs2.booking.Booking;
+import java.util.UUID;
 
 public class BookingCharge {
 
-    Booking[] bookings;
-    PaymentMethod paymentMethod;
+    public double amount;
+    public String ID;
 
-    public BookingCharge(PaymentMethod m, Booking ... bookings ) {
-        this.bookings = bookings;
-        this.paymentMethod = m;
+    private String receipt;
+
+    public BookingCharge(double amount ) {
+        this.amount = amount;
+        this.ID = generateKey();
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return this.paymentMethod;
+    public static String generateKey() {
+        return UUID.randomUUID().toString();
     }
 
 
-    public void setReceipt() {
+    public void setReceipt(String receipt) {
 
     }
+
+    public float get_cost() {
+        int price = 0;
+
+        return price;
+    }
+
+    public String getReceipt() {
+        return this.receipt;
+    }
+
 }

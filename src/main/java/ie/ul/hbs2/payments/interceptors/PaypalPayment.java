@@ -1,7 +1,10 @@
-package ie.ul.hbs2.payments;
+package ie.ul.hbs2.payments.interceptors;
 
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+
+import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,17 +18,26 @@ import com.paypal.api.payments.PaymentExecution;
 import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
 import com.paypal.api.payments.Links;
+import ie.ul.hbs2.payments.BookingCharge;
+import ie.ul.hbs2.payments.IPaymentCallback;
+import ie.ul.hbs2.payments.IPaymentMethod;
 
-public class PaypalPayment extends PaymentMethod {
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+public class PaypalPayment implements IPaymentMethod {
     String CLIENT_ID;
     String SECRET_CLIENT_ID;
+
+    private BookingCharge context;
+
     public PaypalPayment() {
         this.CLIENT_ID = "Ad0eT8cs3sGB-mORwb4QpazaLNVI3TnClTNVflp_U0HPeAMSMBIhAVFPC0dj5CFWeqNF4iEZF4nbMV_1";
         this.SECRET_CLIENT_ID = "EK1nFHIllpZ2b1Hm22sTITu8nrEM2OmRPJ6MsBMvBJFExUNtKQj0GOo7Bm0cbhDFuCpsltNFsIOoaix3";
 
     }
     @Override
-    public boolean processPayment(BookingCharge bookingCharge) {
+    public boolean processPayment() {
         APIContext context = new APIContext(this.CLIENT_ID, this.SECRET_CLIENT_ID, "sandbox");
 
         Payer payer = new Payer();
@@ -45,7 +57,7 @@ public class PaypalPayment extends PaymentMethod {
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        transaction.setDescription("Receipt from Shambles Hotel Group");
+        transaction.setDescription("ReceiptBuilder from Shambles Hotel Group");
 
         List<Transaction> transactions = new ArrayList<Transaction>();
         transactions.add(transaction);
@@ -85,5 +97,27 @@ public class PaypalPayment extends PaymentMethod {
         }
 
         return true;
+    }
+
+    @Override
+    public ImageIcon getIcon() throws IOException {
+       // Image img = ImageIO.read(getClass().getResource("res/Paypal.png"));
+        ImageIcon icon = new ImageIcon("res/Paypal.png");
+        return icon;
+    }
+
+    @Override
+    public JPanel getContentPanel(IPaymentCallback callback) {
+        return null;
+    }
+
+    @Override
+    public JPanel getReceiptPanel() {
+        return null;
+    }
+
+    @Override
+    public void setContextObject(BookingCharge charge) {
+        this.context = charge;
     }
 }

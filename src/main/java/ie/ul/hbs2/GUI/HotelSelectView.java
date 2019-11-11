@@ -17,9 +17,4 @@ public class HotelSelectView extends View {
         this.revalidate();
         this.repaint();
     }
-
-    @Override
-    public void setMessage(String message) {
-
-    }
 }
