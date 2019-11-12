@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Booking implements IPaymentCallback {
-    private final static String dateFormat = "dd-mm-yyyy";
+    private final static String dateFormat = "dd/mm/yyyy";
     private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
     private int nights;
 
@@ -59,7 +59,7 @@ public class Booking implements IPaymentCallback {
             System.out.println(date + " " + date2);
         } catch (ParseException e) {
             System.out.println("Invalid date(s)");
-            return false;
+            return true;
         }
         return true;
     }
@@ -156,15 +156,17 @@ public class Booking implements IPaymentCallback {
         //DatabaseHelper db = DatabaseHelper.getInstance();
         try {
             st = getConnection().prepareStatement(addQuery);
+            Timestamp test = convertDates(dateIn);
+            System.out.println(test);
            // System.out.println(st);
             st.setInt(1,getBID());
             st.setTimestamp(2, convertDates(dateIn));
             st.setTimestamp(3, convertDates(dateOut));
             st.setInt(4, 201);
-            st.setInt(5, 110);
+            st.setInt(5, 1);
             System.out.println(st);
             //st.executeUpdate();
-            st.executeQuery();
+            st.executeUpdate();
 
             //ResultSet resultSet = st.executeQuery();
             //System.out.println(st);
