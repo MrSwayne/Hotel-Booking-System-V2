@@ -40,7 +40,7 @@ public class DBManipulationExamples
 
         st.executeUpdate(); //For updates
         st.executeQuery(); //For inserts
-        //You may have to use ResultSet resultSet = st.executeQuery();... Not sure.
+        //You may have to use ResultSet resultSet = st.executeQuery(); Not sure.
 
         //For the example just using a boolean returning true, it might be wise here to use a try catch, checking if the room is reserved. Or a boolean may not be used whatsoever, just an example.
         return true;
