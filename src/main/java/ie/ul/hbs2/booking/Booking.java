@@ -12,9 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Booking implements IPaymentCallback {
-    private final static String dateFormat = "dd/mm/yyyy";
+    private final static String dateFormat = "dd/MM/yy";
     private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
-    private int nights;
+    private long nights;
 
     public Booking() {
     }
@@ -30,7 +30,7 @@ public class Booking implements IPaymentCallback {
 
     //I need information of how the rooms are getting done and Discounts, can go forward if I have them.
     public boolean checkBooking(Frame frame, Booking book) {
-        System.out.println(dateIn);
+        //System.out.println(dateIn);
         //check if the name correspond to any in the db otherwise set everything as a new customer.
         if (dateValidation(dateIn, dateOut)) {
             System.out.println("Hurray,dates are valid");
@@ -43,8 +43,10 @@ public class Booking implements IPaymentCallback {
     }
 
     private boolean dateValidation(String dateIn, String dateOut) {
-
+       // System.out.println(dateIn);
+       // System.out.println(dateOut);
         if (dateIn == null || dateOut == null) {
+            System.out.println("Null Dates");
             return false;
         }
 
@@ -52,11 +54,11 @@ public class Booking implements IPaymentCallback {
         sdf.setLenient(false);
 
         try {
+            System.out.println(dateIn);
             Date date = sdf.parse(dateIn);
             Date date2 = sdf.parse(dateOut);
-            long diff = date2.getTime() - date.getTime();
-            nights = (int) (diff / (1000 * 60 * 60 * 24));
-            System.out.println(date + " " + date2);
+            long diff = Math.abs(date2.getTime() - date.getTime());
+            nights =  (diff / (1000 * 60 * 60 * 24));
         } catch (ParseException e) {
             System.out.println("Invalid date(s)");
             return true;
@@ -114,7 +116,8 @@ public class Booking implements IPaymentCallback {
         double totalSpent = 0 ;
         int roomCost =  getRoomCost(roomType);
         float discount;
-
+        System.out.println("roomcost"+roomCost);
+        System.out.println("nights;"+nights);
        discount = RewardFactory.getReward(memLVL).get_discount() / 100;
        totalSpent = ((roomCost * nights) * rmBooked);
        System.out.println(totalSpent);
@@ -163,7 +166,7 @@ public class Booking implements IPaymentCallback {
             st.setTimestamp(2, convertDates(dateIn));
             st.setTimestamp(3, convertDates(dateOut));
             st.setInt(4, 201);
-            st.setInt(5, 1);
+            st.setInt(5, 4);
             System.out.println(st);
             //st.executeUpdate();
             st.executeUpdate();
