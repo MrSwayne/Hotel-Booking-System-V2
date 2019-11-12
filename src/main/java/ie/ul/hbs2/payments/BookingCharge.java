@@ -20,7 +20,7 @@ public class BookingCharge {
 
 
     public void setReceipt(String receipt) {
-
+        this.receipt = receipt;
     }
 
     public float get_cost() {

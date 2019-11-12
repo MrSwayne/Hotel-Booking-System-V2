@@ -38,7 +38,7 @@ public class HotelBookingSystem {
         //Select whatever gui already defined above ^^
 
         //Price test
-        bs.summary("john", "travolta", "25/09/2019", "17/10/2019", "3", "double", 15, 1000);
+        bs.summary("test", "123", "25/09/2019", "17/10/2019", "3", "double", 15, 1000);
         this.frame.show(bs);
     }
 

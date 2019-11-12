@@ -83,8 +83,12 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void workDone(boolean successful) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
         JButton button = (JButton) e.getSource();
 

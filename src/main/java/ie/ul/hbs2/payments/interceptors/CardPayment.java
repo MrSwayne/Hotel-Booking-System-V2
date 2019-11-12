@@ -78,10 +78,6 @@ public class CardPayment implements IPaymentMethod {
         return panel;
     }
 
-    @Override
-    public JPanel getReceiptPanel() {
-        return null;
-    }
 
     @Override
     public void setContextObject(BookingCharge charge) {

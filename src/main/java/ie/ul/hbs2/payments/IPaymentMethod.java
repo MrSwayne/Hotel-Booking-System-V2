@@ -10,6 +10,5 @@ public interface IPaymentMethod {
     boolean processPayment();
     ImageIcon getIcon() throws IOException;
     JPanel getContentPanel(IPaymentCallback callback);
-    JPanel getReceiptPanel();
     void setContextObject(BookingCharge charge);
 }
