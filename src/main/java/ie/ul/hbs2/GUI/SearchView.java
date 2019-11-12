@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.Arrays;
 
 public class SearchView extends View
 {
@@ -26,6 +28,8 @@ public class SearchView extends View
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTable jTable_Users;
 	private javax.swing.JTextField jText_Search;
+
+	public int[] selection;
 
 	public SearchView(String name, Frame parent)
 	{
@@ -270,6 +274,19 @@ public class SearchView extends View
 		jText_Search.setFont(new java.awt.Font("Tahoma", 1, 18));
 		jTable_Users.setFont(new java.awt.Font("Tahoma", 1, 14));
 
+		//Listens for Rows Clicked (Ctrl + Left MB / Shift + Left MB), adding them to a array, storing First Column data.
+		jTable_Users.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			public void mouseClicked(java.awt.event.MouseEvent evt)
+			{
+				selection = jTable_Users.getSelectedRows();
+
+				for (int i=0; i<selection.length; i++)
+				{
+					System.out.println(jTable_Users.getValueAt(selection[i], 0).toString());
+				}
+			}
+		});
 		jScrollPane1.setViewportView(jTable_Users);
 
 		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -329,7 +346,7 @@ public class SearchView extends View
 		int lastIndex= e.getLastIndex();
 		boolean isAdjusting =e.getValueIsAdjusting();
 
-		System.out.println("event for indexs "+ firstIndex+ " - "+ isAdjusting + "; selected indexes");
+		System.out.println("event for indexes "+ firstIndex+ " - "+ isAdjusting + "; selected indexes");
 
 		if(lsm.isSelectionEmpty())
 		{
