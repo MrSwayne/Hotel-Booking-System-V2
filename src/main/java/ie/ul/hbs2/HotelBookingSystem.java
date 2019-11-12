@@ -1,13 +1,9 @@
 package ie.ul.hbs2;
 
 import ie.ul.hbs2.GUI.*;
-import ie.ul.hbs2.controllers.PaymentController;
-import ie.ul.hbs2.payments.BookingCharge;
 import ie.ul.hbs2.payments.IPaymentMethod;
 import ie.ul.hbs2.payments.PaymentDispatcher;
-import ie.ul.hbs2.payments.IPaymentMethod;
-
-import javax.swing.*;
+import ie.ul.hbs2.GUI.SearchView;
 
 public class HotelBookingSystem {
 
@@ -35,10 +31,12 @@ public class HotelBookingSystem {
 
         BookingSummaryView bs = new BookingSummaryView("Booking Summary", frame);
 
+        SearchView search = new SearchView("Search", frame);
 
         //payment test
         //bs.summary("test", "123", "25/09/2019", "17/10/2019", "3", "double", 15, 1000);
-        this.frame.show(booking);
+        //this.frame.show(booking);
+          this.frame.show(search);
     }
 
     public void addPaymentMethod(IPaymentMethod method) {

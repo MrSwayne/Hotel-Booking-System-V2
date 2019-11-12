@@ -1,5 +1,10 @@
-package ie.ul.hbs2.search;
+package ie.ul.hbs2.GUI;
 
+import ie.ul.hbs2.GUI.Frame;
+import ie.ul.hbs2.GUI.View;
+import ie.ul.hbs2.search.*;
+
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
@@ -8,11 +13,12 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
-public class SearchTest extends javax.swing.JFrame
+public class SearchView extends View
 {
 	private javax.swing.JButton jButton_Search;
 	private javax.swing.JComboBox jComboBox_Switch;
@@ -20,45 +26,11 @@ public class SearchTest extends javax.swing.JFrame
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTable jTable_Users;
 	private javax.swing.JTextField jText_Search;
-	public static void main(String args[])
-	{
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-			{
-				if ("Nimbus".equals(info.getName()))
-				{
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex)
-		{
-			java.util.logging.Logger.getLogger(SearchTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex)
-		{
-			java.util.logging.Logger.getLogger(SearchTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex)
-		{
-			java.util.logging.Logger.getLogger(SearchTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex)
-		{
-			java.util.logging.Logger.getLogger(SearchTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
 
-		java.awt.EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				new SearchTest().setVisible(true);
-			}
-		});
-	}
-
-	public SearchTest()
+	public SearchView(String name, Frame parent)
 	{
+		super(name, parent);
 		initComponents();
-		//Defaults the search pages as to not show blank
-		findUsers();
 	}
 
 	public Connection getConnection()
@@ -96,6 +68,25 @@ public class SearchTest extends javax.swing.JFrame
 			row[3] = users.get(i).getmemberSince();
 			row[4] = users.get(i).gettotalSpent();
 			row[5] = users.get(i).getmembershipLevel();
+			model.addRow(row);
+		}
+		jTable_Users.setModel(model);
+	}
+
+	public void findRooms()
+	{
+		ArrayList<Rooms> rooms = roomsList(jText_Search.getText());
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new Object[]{"Gid", "firstname", "lastname", "memberSince","totalSpent","membershipLevel"});
+		Object[] row = new Object[6];
+		for (int i = 0; i < rooms.size(); i++)
+		{
+			row[0] = rooms.get(i).getRid();
+			row[1] = rooms.get(i).getRnumber();
+			row[2] = rooms.get(i).getType();
+			row[3] = rooms.get(i).getAvailable();
+			row[4] = rooms.get(i).getPrice();
+			row[5] = rooms.get(i).getHid();
 			model.addRow(row);
 		}
 		jTable_Users.setModel(model);
@@ -156,6 +147,43 @@ public class SearchTest extends javax.swing.JFrame
 		return usersList;
 	}
 
+	public ArrayList<Rooms> roomsList(String ValToSearch)
+	{
+		ArrayList<Rooms> roomsList = new ArrayList<Rooms>();
+
+		Statement st;
+		ResultSet rs;
+
+		try
+		{
+			Connection con = getConnection();
+			st = con.createStatement();
+			String searchQuery = "SELECT * FROM `rooms` WHERE CONCAT(`Rid`, `Rnumber`, `Type`, `available`, `Price`, `Hid`) LIKE '%" + ValToSearch + "%'";
+
+			rs = st.executeQuery(searchQuery);
+
+			Rooms rooms;
+
+			while (rs.next())
+			{
+				rooms = new Rooms(
+						rs.getInt("Rid"),
+						rs.getInt("Rnumber"),
+						rs.getString("Type"),
+						rs.getBoolean("available"),
+						rs.getInt("Price"),
+						rs.getInt("Hid")
+				);
+				roomsList.add(rooms);
+			}
+
+		} catch (Exception ex)
+		{
+			System.out.println(ex.getMessage());
+		}
+		return roomsList;
+	}
+
 	public ArrayList<Booking> bookingsList(String ValToSearch)
 	{
 		ArrayList<Booking> bookingsList = new ArrayList<>();
@@ -193,14 +221,16 @@ public class SearchTest extends javax.swing.JFrame
 	private void initComponents()
 	{
 		jPanel2 = new javax.swing.JPanel();
+
 		jButton_Search = new javax.swing.JButton();
-		String[] tableSwitch={"Guests","Bookings"};
+		String[] tableSwitch={"Guests","Bookings","Rooms"};
 		jComboBox_Switch = new javax.swing.JComboBox<>(tableSwitch);
 		jText_Search = new javax.swing.JTextField();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTable_Users = new javax.swing.JTable();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		jTable_Users.setRowSelectionAllowed(true);
+		jTable_Users.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		jButton_Search.setText("Search");
 		jButton_Search.addActionListener(new java.awt.event.ActionListener()
@@ -228,8 +258,12 @@ public class SearchTest extends javax.swing.JFrame
 				{
 					findUsers();
 				}
-				else findBookings();
-
+				else
+					if (event.getItem()=="Bookings")
+					{
+					findBookings();
+					}
+					else findRooms();
 			}
 		});
 
@@ -237,6 +271,7 @@ public class SearchTest extends javax.swing.JFrame
 		jTable_Users.setFont(new java.awt.Font("Tahoma", 1, 14));
 
 		jScrollPane1.setViewportView(jTable_Users);
+
 		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
 		jPanel2Layout.setHorizontalGroup(
@@ -270,8 +305,8 @@ public class SearchTest extends javax.swing.JFrame
 								.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addContainerGap(41, Short.MAX_VALUE))
 		);
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(parent.getContentPane());
+		parent.getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -280,7 +315,35 @@ public class SearchTest extends javax.swing.JFrame
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 		);
-		pack();
+		//parent.pack();
+		this.add(jPanel2);
+
+	}
+
+	public void valueChanged(ListSelectionEvent e)
+	{
+		System.out.println("test");
+		ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+
+		int firstIndex= e.getFirstIndex();
+		int lastIndex= e.getLastIndex();
+		boolean isAdjusting =e.getValueIsAdjusting();
+
+		System.out.println("event for indexs "+ firstIndex+ " - "+ isAdjusting + "; selected indexes");
+
+		if(lsm.isSelectionEmpty())
+		{
+			System.out.println(" <none>");
+		}else
+		{
+			int minIndex=lsm.getMinSelectionIndex();
+			int maxIndex=lsm.getMaxSelectionIndex();
+
+			for(int i=minIndex; i<=maxIndex; i++)
+			{
+				System.out.print(" "+i);
+			}
+		}
 	}
 
 	private void jButton_SearchActionPerformed(java.awt.event.ActionEvent evt)
@@ -290,6 +353,14 @@ public class SearchTest extends javax.swing.JFrame
 			findUsers();
 		}
 		else
-			findBookings();
+			if (jComboBox_Switch.getSelectedIndex()==1)
+			{
+				findBookings();
+			}
+			else
+		if (jComboBox_Switch.getSelectedIndex()==2)
+		{
+			findRooms();
+		}
 	}
 }
