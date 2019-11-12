@@ -35,9 +35,8 @@ public class HotelBookingSystem {
 
         BookingSummaryView bs = new BookingSummaryView("Booking Summary", frame);
 
-        //Select whatever gui already defined above ^^
 
-        //Price test
+        //payment test
         bs.summary("test", "123", "25/09/2019", "17/10/2019", "3", "double", 15, 1000);
         this.frame.show(bs);
     }
