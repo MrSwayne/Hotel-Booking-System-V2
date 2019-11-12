@@ -2,26 +2,38 @@ package ie.ul.hbs2.booking;
 
 import ie.ul.hbs2.GUI.BookingSummaryView;
 import ie.ul.hbs2.GUI.Frame;
+import ie.ul.hbs2.GUI.MainBookingView;
 import ie.ul.hbs2.database.*;
+import ie.ul.hbs2.payments.IPaymentCallback;
 import ie.ul.hbs2.rewards.RewardFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Booking {
-    final static String dateFormat = "dd/MM/yy";
-    int nights;
+public class Booking implements IPaymentCallback {
+    private final static String dateFormat = "dd/MM/yy";
+    private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
+    private int nights;
+
+    public Booking(String firstName, String lastName, String dateIn, String dateOut, String roomType, String roomAmount) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateIn = dateIn;
+        this.dateOut = dateOut;
+        this.roomType = roomType;
+        this.roomAmount = roomAmount;
+
+    }
 
     //I need information of how the rooms are getting done and Discounts, can go forward if I have them.
-    public boolean checkBooking(Frame frame, String firstName, String lastName, String dateIn, String dateOut, String roomAmount,
-                                String roomType) {
-
+    public boolean checkBooking(Frame frame, Booking book) {
+        System.out.println(dateIn);
         //check if the name correspond to any in the db otherwise set everything as a new customer.
         if (dateValidation(dateIn, dateOut)) {
             System.out.println("Hurray,dates are valid");
-            if (roomsAvailable(roomAmount, roomType)) {
-                bookingApp(frame, firstName, lastName, dateIn, dateOut, roomAmount, roomType);
+            if (roomsAvailable(roomAmount,roomType)) {
+                bookingApp(frame, book);
                 return true;
             }
         }
@@ -54,6 +66,7 @@ public class Booking {
         return true;
     }
 
+    // not needed after search is done.
     public boolean roomsAvailable(String roomAmount, String roomType) {
         if (roomAmount != null || roomType != null) {
             if (roomAmount.matches("[0-9]+")) {
@@ -85,8 +98,8 @@ public class Booking {
         return false;
     }
 
-    //Calculating the spent - discount will do this later
-   public double calculateTotalSpent(String firstName, String lastName, String dateIn, String dateOut, String roomAmount,String roomType) {
+    //Calculating the spent - discount
+   public double calculateTotalSpent() {
         int rmBooked = Integer.parseInt(roomAmount);
         int memLVL = getCustomerInformation(firstName,lastName);
         double totalSpent = 0 ;
@@ -95,6 +108,8 @@ public class Booking {
 
        discount = RewardFactory.getReward(memLVL).get_discount() / 100;
        totalSpent = ((roomCost * nights) * rmBooked);
+       System.out.println(totalSpent);
+       System.out.println(memLVL);
 
        //subtract discount
        totalSpent *= 1 - discount;
@@ -124,14 +139,15 @@ public class Booking {
         return level;
     }
 
-    public void bookingApp(Frame frame, String firstName, String lastName, String dateIn, String dateOut, String roomAmount, String roomType) {
-        double totalSpent = calculateTotalSpent(firstName, lastName, dateIn, dateOut, roomAmount, roomType);
+    public void bookingApp(Frame frame, Booking book) {
+        //totalSpent = calculateTotalSpent();
         int BID = getBID();
-        System.out.println(BID);
-          BookingSummaryView view = new BookingSummaryView("Booking Summary", frame);
-          view.summary(firstName, lastName, dateIn, dateOut, roomAmount, roomType, BID, totalSpent);
+        //System.out.println(BID);
+        BookingSummaryView view = new BookingSummaryView("Booking Summary", frame);
+        view.summary(book, this);
+        frame.show(view);
 
-        System.out.println("You have booked a reservation with BID" + BID + " total cost = " + totalSpent);
+        //System.out.println("You have booked a reservation with BID" + BID + " total cost = " + totalSpent);
     }
 
     public int getBID(){
@@ -146,4 +162,36 @@ public class Booking {
         return BID + 1;
 
     }
+
+    public String getFirstName(){
+        return firstName;
+    }
+
+    public String getLastName(){
+        return lastName;
+    }
+
+    public String getDateIn(){
+        return dateIn;
+    }
+    public String getDateOut(){
+        return dateOut;
+    }
+    public String getRoomType(){
+        return roomType;
+    }
+    public String getRoomAmount(){
+        return roomAmount;
+    }
+
+    @Override
+    public void doWork() {
+
+    }
+
+    @Override
+    public void workDone(boolean successful) {
+
+    }
 }
+

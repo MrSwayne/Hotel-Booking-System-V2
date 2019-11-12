@@ -6,6 +6,7 @@ import ie.ul.hbs2.booking.Command;
 import ie.ul.hbs2.booking.NextCommand;
 import ie.ul.hbs2.booking.memento.CareTaker;
 import ie.ul.hbs2.booking.memento.Memento;
+import ie.ul.hbs2.rooms.RoomType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ import java.awt.*;
 public class MainBookingView extends View implements ActionListener{
     public JTextArea textField;
     public String clipboard;
+    MainBookingView bookview;
 
     //Booking View and Cancel View buttons and text fields
     public JPanel mainPanel;
@@ -27,11 +29,9 @@ public class MainBookingView extends View implements ActionListener{
     private JTextField dateOutField;
     private JTextField roomsBooked;
     private JTextField type;
-    private JButton submitBtn;
-    private JButton cancelBtn;
     private JButton nextBtn;
     private JButton backBtn;
-    private JTextField cancelField;
+
 
 
     public MainBookingView(String name, Frame parent) {
@@ -67,20 +67,21 @@ public class MainBookingView extends View implements ActionListener{
         dateOutPanel.add(dateOutLabel);
         dateOutPanel.add(dateOutField);
 
-        // Label and Field
+        // Label and Field -- delete after search is done
         JPanel roomsPanel = new JPanel();
         JLabel roomLabel = new JLabel("Rooms: ",JLabel.CENTER);
         roomsBooked= new JTextField("",10);
         roomsPanel.add(roomLabel);
         roomsPanel.add(roomsBooked);
 
-        // Label and Field
+        // Label and Field -- delete after search is done
         JPanel typePanel = new JPanel();
         JLabel typeLabel = new JLabel("Type: ",JLabel.CENTER);
         type = new JTextField("",10);
         typePanel.setVisible(true);
         typePanel.add(typeLabel);
         typePanel.add(type);
+
 
 
         //nextButton
@@ -110,17 +111,16 @@ public class MainBookingView extends View implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         JButton button = (JButton)e.getSource();
 
         if (button == nextBtn) {
-            Booking book = new Booking();
+            Booking book = new Booking(fnameField.getText(),lnameField.getText(),
+                    dateInField.getText(),dateOutField.getText(),type.getText(),roomsBooked.getText());
+                                                                //last two need to be modified when search is done
 
-            if (book.checkBooking(this.parent, getFirstName(), getLastName(), getDateIn(), getDateOut(),
-                    getRoomAmount(), getRoomType())) {
+            if (book.checkBooking(this.parent, book)) {
                 executeCommand(new NextCommand(this));
-
-            } else {
+            }else {
                 //do something
                 System.out.println("Error");
             }
@@ -136,26 +136,10 @@ public class MainBookingView extends View implements ActionListener{
         command.execute();
     }
 
+    //placeholder for object form Caolan.
+    //public void getRoomsBooked(RoomType object){
 
-
-    public String getFirstName() {
-        return fnameField.getText();
-    }
-    public String getLastName() {
-        return lnameField.getText();
-    }
-    public String getDateIn() {
-        return dateInField.getText();
-    }
-    public String getDateOut() {
-        return dateOutField.getText();
-    }
-    public String getRoomType() {
-        return type.getText();
-    }
-    public String getRoomAmount() {
-        return roomsBooked.getText();
-    }
+    //}
 
 }
 
