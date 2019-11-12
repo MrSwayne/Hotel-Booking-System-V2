@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
@@ -106,7 +107,11 @@ public class BookingSummaryView extends View implements ActionListener {
             System.out.println("Processing payment now");
             //Code to call Adam's method in payment view
             Booking book = new Booking();
-            book.addBooking(dateIn,dateOut);
+            try {
+                book.addBooking(dateIn,dateOut);
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
             PaymentView paymentView = (PaymentView) parent.get("payments");
            paymentView.showPaymentScreen(this.callback, totalSpent); // pass book here now?
             System.out.println(totalSpent);

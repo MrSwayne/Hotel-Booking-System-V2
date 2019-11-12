@@ -7,13 +7,12 @@ import ie.ul.hbs2.payments.IPaymentCallback;
 import ie.ul.hbs2.rewards.RewardFactory;
 
 import java.sql.*;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Booking implements IPaymentCallback {
-    private final static String dateFormat = "dd/MM/yyyy";
+    private final static String dateFormat = "dd-mm-yyyy";
     private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
     private int nights;
 
@@ -148,7 +147,7 @@ public class Booking implements IPaymentCallback {
         return level;
     }
 
-    public void addBooking(String dateIn, String dateOut){
+    public void addBooking(String dateIn, String dateOut) throws ParseException {
         System.out.println(convertDates(dateIn));
         System.out.println(convertDates(dateOut));
         PreparedStatement st;
@@ -159,8 +158,8 @@ public class Booking implements IPaymentCallback {
             st = getConnection().prepareStatement(addQuery);
            // System.out.println(st);
             st.setInt(1,getBID());
-            st.setTimestamp(2,convertDates(dateIn));
-            st.setTimestamp(3,convertDates(dateOut));
+            st.setTimestamp(2, convertDates(dateIn));
+            st.setTimestamp(3, convertDates(dateOut));
             st.setInt(4, 201);
             st.setInt(5, 110);
             System.out.println(st);
@@ -219,14 +218,14 @@ public class Booking implements IPaymentCallback {
     }
 
 
-    private Timestamp convertDates(String date){
+    private Timestamp convertDates(String date) throws ParseException {
+
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
-        Timestamp ts;
-        try {
-            
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Date parsedDate = df.parse(date);
+        System.out.println(parsedDate);
+        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+        System.out.println(timestamp);
+        return timestamp;
     }
 
     public Connection getConnection()
