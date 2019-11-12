@@ -281,6 +281,7 @@ public class SearchView extends View
 			{
 				selection = jTable_Users.getSelectedRows();
 
+				//To be updated to allow calling from outside
 				for (int i=0; i<selection.length; i++)
 				{
 					System.out.println(jTable_Users.getValueAt(selection[i], 0).toString());
