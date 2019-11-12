@@ -11,6 +11,7 @@ public class SubmitCommand extends CommandSummary {
     @Override
     public void execute() {
         //Go to charge??
+
         System.out.println("Going to Charge Screen!");
     }
 }

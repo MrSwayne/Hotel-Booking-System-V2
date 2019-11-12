@@ -18,6 +18,7 @@ public class BookingSummaryView extends View implements ActionListener {
     JButton submitBtn = null;
     JButton cancelBtn = null;
     double totalSpent;
+    String dateIn,dateOut;
 
     public BookingSummaryView(String name, Frame parent) {
         super(name, parent);
@@ -54,6 +55,9 @@ public class BookingSummaryView extends View implements ActionListener {
 
         final JLabel totalAmount = new JLabel("Total Amount: ",JLabel.CENTER);
         JLabel totalLabel = new JLabel(String.valueOf(totalSpent),JLabel.CENTER);
+
+        dateIn = book.getDateIn();
+        dateOut = book.getDateOut();
 
         //SubmitButton
         JPanel control = new JPanel();
@@ -101,7 +105,8 @@ public class BookingSummaryView extends View implements ActionListener {
         if(button == submitBtn) {
             System.out.println("Processing payment now");
             //Code to call Adam's method in payment view
-
+            Booking book = new Booking();
+            book.addBooking(dateIn,dateOut);
             PaymentView paymentView = (PaymentView) parent.get("payments");
            paymentView.showPaymentScreen(this.callback, totalSpent); // pass book here now?
             System.out.println(totalSpent);

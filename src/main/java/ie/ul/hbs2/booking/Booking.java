@@ -2,20 +2,23 @@ package ie.ul.hbs2.booking;
 
 import ie.ul.hbs2.GUI.BookingSummaryView;
 import ie.ul.hbs2.GUI.Frame;
-import ie.ul.hbs2.GUI.MainBookingView;
 import ie.ul.hbs2.database.*;
 import ie.ul.hbs2.payments.IPaymentCallback;
 import ie.ul.hbs2.rewards.RewardFactory;
 
+import java.sql.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Booking implements IPaymentCallback {
-    private final static String dateFormat = "dd/MM/yy";
+    private final static String dateFormat = "dd/MM/yyyy";
     private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
     private int nights;
 
+    public Booking() {
+    }
     public Booking(String firstName, String lastName, String dateIn, String dateOut, String roomType, String roomAmount) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -40,7 +43,7 @@ public class Booking implements IPaymentCallback {
         return false;
     }
 
-    public boolean dateValidation(String dateIn, String dateOut) {
+    private boolean dateValidation(String dateIn, String dateOut) {
 
         if (dateIn == null || dateOut == null) {
             return false;
@@ -50,14 +53,10 @@ public class Booking implements IPaymentCallback {
         sdf.setLenient(false);
 
         try {
-            //if not valid, it will throw ParseException
             Date date = sdf.parse(dateIn);
             Date date2 = sdf.parse(dateOut);
-            // bookingM.setDateIn(dateIn);
-            // bookingM.setDateOut(dateOut);
             long diff = date2.getTime() - date.getTime();
             nights = (int) (diff / (1000 * 60 * 60 * 24));
-            //bookingM.setAmountOfNights(nights);
             System.out.println(date + " " + date2);
         } catch (ParseException e) {
             System.out.println("Invalid date(s)");
@@ -67,7 +66,7 @@ public class Booking implements IPaymentCallback {
     }
 
     // not needed after search is done.
-    public boolean roomsAvailable(String roomAmount, String roomType) {
+    private boolean roomsAvailable(String roomAmount, String roomType) {
         if (roomAmount != null || roomType != null) {
             if (roomAmount.matches("[0-9]+")) {
                 int rmNumber = Integer.parseInt(roomAmount);
@@ -98,6 +97,17 @@ public class Booking implements IPaymentCallback {
         return false;
     }
 
+    private void bookingApp(Frame frame, Booking book) {
+        //totalSpent = calculateTotalSpent();
+        int BID = getBID();
+        //System.out.println(BID);
+        BookingSummaryView view = new BookingSummaryView("Booking Summary", frame);
+        view.summary(book, this);
+        frame.show(view);
+
+        //System.out.println("You have booked a reservation with BID" + BID + " total cost = " + totalSpent);
+    }
+
     //Calculating the spent - discount
    public double calculateTotalSpent() {
         int rmBooked = Integer.parseInt(roomAmount);
@@ -121,8 +131,8 @@ public class Booking implements IPaymentCallback {
         DatabaseHelper db = DatabaseHelper.getInstance();
         Query query = db.executeQuery("SELECT Price FROM `rooms` WHERE type = '"+ rmType +"' and Hid = 1");
         int cost = 0;
-        for (int i = 0 ; i < query.size();i++){
-            cost = Integer.parseInt(query.get(i).get("Price"));
+        for (Row row : query) {
+            cost = Integer.parseInt(row.get("Price"));
         }
         return cost;
     }
@@ -131,23 +141,37 @@ public class Booking implements IPaymentCallback {
         DatabaseHelper db = DatabaseHelper.getInstance();
         Query query = db.executeQuery("SELECT membershipLevel FROM `guests` WHERE firstName = '"+ firstName +"' AND lastName = '"+ lastName + "'");
         int level = 0;
-        for (int i =0 ; i < query.size();i++)
-        {
-            level = Integer.parseInt(query.get(i).get("membershipLevel"));
+        for (Row row : query) {
+            level = Integer.parseInt(row.get("membershipLevel"));
         }
 
         return level;
     }
 
-    public void bookingApp(Frame frame, Booking book) {
-        //totalSpent = calculateTotalSpent();
-        int BID = getBID();
-        //System.out.println(BID);
-        BookingSummaryView view = new BookingSummaryView("Booking Summary", frame);
-        view.summary(book, this);
-        frame.show(view);
+    public void addBooking(String dateIn, String dateOut){
+        System.out.println(convertDates(dateIn));
+        System.out.println(convertDates(dateOut));
+        PreparedStatement st;
+        String addQuery = "INSERT INTO `bookings`(`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) VALUES (?,?,?,?,?)";
 
-        //System.out.println("You have booked a reservation with BID" + BID + " total cost = " + totalSpent);
+        //DatabaseHelper db = DatabaseHelper.getInstance();
+        try {
+            st = getConnection().prepareStatement(addQuery);
+           // System.out.println(st);
+            st.setInt(1,getBID());
+            st.setTimestamp(2,convertDates(dateIn));
+            st.setTimestamp(3,convertDates(dateOut));
+            st.setInt(4, 201);
+            st.setInt(5, 110);
+            System.out.println(st);
+            //st.executeUpdate();
+            st.executeQuery();
+
+            //ResultSet resultSet = st.executeQuery();
+            //System.out.println(st);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getBID(){
@@ -193,5 +217,29 @@ public class Booking implements IPaymentCallback {
     public void workDone(boolean successful) {
 
     }
+
+
+    private Timestamp convertDates(String date){
+        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+        Timestamp ts;
+        try {
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Connection getConnection()
+    {
+        Connection con = null;
+        try
+        {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/hbs", "root", "");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return con;
+    }
+
 }
 
