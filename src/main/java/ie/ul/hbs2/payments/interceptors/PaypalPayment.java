@@ -4,7 +4,13 @@ import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,7 +44,7 @@ public class PaypalPayment implements IPaymentMethod {
     }
     @Override
     public boolean processPayment() {
-        APIContext context = new APIContext(this.CLIENT_ID, this.SECRET_CLIENT_ID, "sandbox");
+        final APIContext APIcontext = new APIContext(this.CLIENT_ID, this.SECRET_CLIENT_ID, "sandbox");
 
         Payer payer = new Payer();
         payer.setPaymentMethod("paypal");
@@ -50,52 +56,94 @@ public class PaypalPayment implements IPaymentMethod {
         Details details = new Details();
 
         Amount amount = new Amount();
-        amount.setCurrency("USD");
-        amount.setTotal("5000");
+        amount.setCurrency("EUR");
+        amount.setTotal("" + this.context.amount);
 
         amount.setDetails(details);
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        transaction.setDescription("ReceiptBuilder from Shambles Hotel Group");
+        transaction.setDescription("Receipt from Shambles Hotel Group");
 
         List<Transaction> transactions = new ArrayList<Transaction>();
         transactions.add(transaction);
 
-        Payment payment = new Payment();
+        final Payment payment = new Payment();
         payment.setIntent("sale");
         payment.setPayer(payer);
         payment.setRedirectUrls(redirectUrls);
         payment.setTransactions(transactions);
 
         try {
-            Payment createdPayment = payment.create(context);
+            final Payment createdPayment = payment.create(APIcontext);
 
             Iterator links = createdPayment.getLinks().iterator();
             while (links.hasNext()) {
                 Links link = (Links) links.next();
                 if (link.getRel().equalsIgnoreCase("approval_url")) {
-                    // Redirect the customer to link.getHref()
-                    System.out.println(link.getHref());
 
+                    Desktop desktop = java.awt.Desktop.getDesktop();
+                    URI oURL = new URI(link.getHref());
+                    desktop.browse(oURL);
+
+                    JFrame f = new JFrame("paypal");
+                    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    f.addWindowListener(new WindowListener() {
+                        @Override
+                        public void windowOpened(WindowEvent e) {
+
+                        }
+
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            PaymentExecution paymentExecution = new PaymentExecution();
+                            paymentExecution.setPayerId("DXQLLRSHDPTCG");
+                            try {
+                                payment.setId(createdPayment.getId());
+                                System.out.println(createdPayment.getPayer().getPayerInfo());
+                                Payment createdPayment = payment.execute(APIcontext, paymentExecution);
+                                System.out.println(createdPayment);
+                                String orderId = createdPayment.getTransactions().get(0)
+                                        .getRelatedResources().get(0).getOrder().getId();
+                            } catch (PayPalRESTException ex) {
+                                System.err.println(ex.getDetails());
+                            }
+                        }
+
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+
+                        }
+
+                        @Override
+                        public void windowIconified(WindowEvent e) {
+
+                        }
+
+                        @Override
+                        public void windowDeiconified(WindowEvent e) {
+
+                        }
+
+                        @Override
+                        public void windowActivated(WindowEvent e) {
+
+                        }
+
+                        @Override
+                        public void windowDeactivated(WindowEvent e) {
+
+                        }
+                    });
+
+                    f.setPreferredSize(new Dimension(1280, 720));
+                    f.setVisible(true);
                 }
             }
-        } catch (PayPalRESTException e) {
-            System.err.println(e.getDetails());
-        }
 
-        payment.setId("PAYID-LWS2KOY1NM13603X9286800W");
-        PaymentExecution paymentExecution = new PaymentExecution();
-        paymentExecution.setPayerId("YT9HXWPCYMP6J");
-        try {
-            Payment createdPayment = payment.execute(context, paymentExecution);
-            System.out.println(createdPayment);
-            String orderId = createdPayment.getTransactions().get(0)
-                    .getRelatedResources().get(0).getOrder().getId();
-        } catch (PayPalRESTException e) {
-            System.err.println(e.getDetails());
+        } catch (PayPalRESTException | URISyntaxException | IOException e) {
+            e.printStackTrace();
         }
-
         return true;
     }
 
@@ -107,14 +155,19 @@ public class PaypalPayment implements IPaymentMethod {
     }
 
     @Override
-    public JPanel getContentPanel(IPaymentCallback callback) {
-        return null;
+    public JPanel getContentPanel(final IPaymentCallback callback) {
+        JPanel panel = new JPanel();
+        JButton button = new JButton("Pay With Paypal");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                callback.doWork();
+            }
+        });
+        panel.add(button);
+        return panel;
     }
 
-    @Override
-    public JPanel getReceiptPanel() {
-        return null;
-    }
 
     @Override
     public void setContextObject(BookingCharge charge) {

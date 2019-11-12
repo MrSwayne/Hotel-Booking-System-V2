@@ -1,7 +1,6 @@
 package ie.ul.hbs2.booking.memento;
 
 import ie.ul.hbs2.booking.Command;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

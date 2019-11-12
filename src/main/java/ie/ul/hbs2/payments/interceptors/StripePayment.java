@@ -71,10 +71,6 @@ public class StripePayment implements IPaymentMethod {
 		return null;
 	}
 
-	@Override
-	public JPanel getReceiptPanel() {
-		return null;
-	}
 
 	@Override
 	public void setContextObject(BookingCharge charge) {

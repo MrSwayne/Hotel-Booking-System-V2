@@ -47,7 +47,7 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
         return resizedImg;
     }
 
-    public void showPaymentScreen(double amount) {
+    public void showPaymentScreen(IPaymentCallback callback, double amount) {
         View oldView = parent.currentView;
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         this.charge = new BookingCharge(amount);
@@ -83,8 +83,12 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void workDone(boolean successful) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
         JButton button = (JButton) e.getSource();
 
