@@ -6,15 +6,11 @@ import ie.ul.hbs2.booking.Command;
 import ie.ul.hbs2.booking.NextCommand;
 import ie.ul.hbs2.booking.memento.CareTaker;
 import ie.ul.hbs2.booking.memento.Memento;
-import ie.ul.hbs2.rooms.RoomType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.io.*;
-
-import java.awt.*;
 
 public class MainBookingView extends View implements ActionListener{
     public JTextArea textField;
@@ -33,6 +29,9 @@ public class MainBookingView extends View implements ActionListener{
     private JButton backBtn;
 
 
+    public void showBooking(){
+        System.out.println("Test2");
+    }
 
     public MainBookingView(String name, Frame parent) {
         super(name, parent);
@@ -136,10 +135,11 @@ public class MainBookingView extends View implements ActionListener{
         command.execute();
     }
 
-    //placeholder for object form Caolan.
-    //public void getRoomsBooked(RoomType object){
-
-    //}
+        //placeholder for object form Caolan.
+        public ArrayList getRoomsBooked(ArrayList object)
+        {
+            return object;
+    }
 
 }
 

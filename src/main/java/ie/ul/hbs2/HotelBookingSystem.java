@@ -27,8 +27,8 @@ public class HotelBookingSystem {
         payments.attachDispatcher(this.paymentDispatcher);
 
         ManagementView management = new ManagementView("management", frame);
-        MainBookingView booking = new MainBookingView("booking", frame);
 
+        MainBookingView booking = new MainBookingView("booking", frame);
         BookingSummaryView bs = new BookingSummaryView("Booking Summary", frame);
 
         SearchView search = new SearchView("Search", frame);

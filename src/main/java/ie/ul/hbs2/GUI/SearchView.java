@@ -2,9 +2,7 @@ package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.search.*;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,14 +16,14 @@ import javax.swing.table.DefaultTableModel;
 public class SearchView extends View
 {
 	private javax.swing.JButton jButton_Search;
+	private javax.swing.JButton jButton_Next;
 	private javax.swing.JComboBox jComboBox_Switch;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTable jTable_Users;
 	private javax.swing.JTextField jText_Search;
 
-	public int selection;
-	public static ArrayList<Object[]> selectedData = new ArrayList<Object[]>();;
+	protected static ArrayList<Object[]> selectedData = new ArrayList<Object[]>();;
 
 
 	public SearchView(String name, Frame parent)
@@ -224,6 +222,7 @@ public class SearchView extends View
 		jPanel2 = new javax.swing.JPanel();
 
 		jButton_Search = new javax.swing.JButton();
+		jButton_Next = new javax.swing.JButton();
 		String[] tableSwitch={"Guests","Bookings","Rooms"};
 		jComboBox_Switch = new javax.swing.JComboBox<>(tableSwitch);
 		jText_Search = new javax.swing.JTextField();
@@ -268,6 +267,17 @@ public class SearchView extends View
 			}
 		});
 
+		jButton_Next.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				MainBookingView bookingView = (MainBookingView) parent.get("booking");
+				bookingView.getRoomsBooked(selectedData);
+				bookingView.showBooking();
+			}
+		});
+
 		jText_Search.setFont(new java.awt.Font("Tahoma", 1, 18));
 		jTable_Users.setFont(new java.awt.Font("Tahoma", 1, 14));
 
@@ -275,7 +285,8 @@ public class SearchView extends View
 		{
 			public void mouseClicked(java.awt.event.MouseEvent evt)
 			{
-				selection = jTable_Users.getSelectedRow();
+
+				int selection = jTable_Users.getSelectedRow();
 				Object[] rowData = new Object[jTable_Users.getColumnCount()];
 
 				for (int i = 0; i < jTable_Users.getColumnCount(); i++)
@@ -306,7 +317,8 @@ public class SearchView extends View
 												.addComponent(jText_Search, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addGap(18, 18, 18)
 												.addComponent(jButton_Search)
-												.addGap(136, 136, 136))
+												.addGap(136, 136, 136)
+												.addComponent(jButton_Next))
 										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
 												.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addGap(29, 29, 29))))
@@ -318,6 +330,7 @@ public class SearchView extends View
 								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 										.addComponent(jComboBox_Switch)
 										.addComponent(jButton_Search)
+										.addComponent(jButton_Next)
 										.addComponent(jText_Search, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(28, 28, 28)
 								.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,4 +394,11 @@ public class SearchView extends View
 			findRooms();
 		}
 	}
+
+	public ArrayList getSelectedData()
+	{
+		return selectedData;
+	}
+
+
 }
