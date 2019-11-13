@@ -15,6 +15,7 @@ public class Booking implements IPaymentCallback {
     private final static String dateFormat = "dd/MM/yy";
     private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
     private long nights;
+    private final DatabaseHelper db = DatabaseHelper.getInstance();
 
     public Booking() {
     }
@@ -100,19 +101,18 @@ public class Booking implements IPaymentCallback {
 
     private void bookingApp(Frame frame, Booking book) {
         //totalSpent = calculateTotalSpent();
-        int BID = getBID();
-        //System.out.println(BID);
+        int BID = getNewBID();
+        System.out.println("BID" + BID);
         BookingSummaryView view = new BookingSummaryView("Booking Summary", frame);
         view.summary(book, this);
         frame.show(view);
 
-        //System.out.println("You have booked a reservation with BID" + BID + " total cost = " + totalSpent);
     }
 
     //Calculating the spent - discount
    public double calculateTotalSpent() {
         int rmBooked = Integer.parseInt(roomAmount);
-        int memLVL = getCustomerInformation(firstName,lastName);
+        int memLVL = getGuestMemberLVL(firstName,lastName);
         double totalSpent = 0 ;
         int roomCost =  getRoomCost(roomType);
         float discount;
@@ -130,7 +130,6 @@ public class Booking implements IPaymentCallback {
     }
 
     private int getRoomCost(String rmType) {
-        DatabaseHelper db = DatabaseHelper.getInstance();
         Query query = db.executeQuery("SELECT Price FROM `rooms` WHERE type = '"+ rmType +"' and Hid = 1");
         int cost = 0;
         for (Row row : query) {
@@ -139,8 +138,7 @@ public class Booking implements IPaymentCallback {
         return cost;
     }
 
-    private int getCustomerInformation(String firstName, String lastName) {
-        DatabaseHelper db = DatabaseHelper.getInstance();
+    public int getGuestMemberLVL(String firstName, String lastName) {
         Query query = db.executeQuery("SELECT membershipLevel FROM `guests` WHERE firstName = '"+ firstName +"' AND lastName = '"+ lastName + "'");
         int level = 0;
         for (Row row : query) {
@@ -151,8 +149,6 @@ public class Booking implements IPaymentCallback {
     }
 
     public void addBooking(String dateIn, String dateOut) throws ParseException {
-        System.out.println(convertDates(dateIn));
-        System.out.println(convertDates(dateOut));
         PreparedStatement st;
         String addQuery = "INSERT INTO `bookings`(`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) VALUES (?,?,?,?,?)";
 
@@ -160,14 +156,12 @@ public class Booking implements IPaymentCallback {
         try {
             st = getConnection().prepareStatement(addQuery);
             Timestamp test = convertDates(dateIn);
-            System.out.println(test);
            // System.out.println(st);
-            st.setInt(1,getBID());
+            st.setInt(1,getNewBID());
             st.setTimestamp(2, convertDates(dateIn));
             st.setTimestamp(3, convertDates(dateOut));
             st.setInt(4, 201);
             st.setInt(5, 4);
-            System.out.println(st);
             //st.executeUpdate();
             st.executeUpdate();
 
@@ -178,8 +172,59 @@ public class Booking implements IPaymentCallback {
         }
     }
 
-    public int getBID(){
-        DatabaseHelper db = DatabaseHelper.getInstance();
+    public void updateGuest(String firstName,String lastName,double totalSpent,int membershipLvl) throws ParseException{
+        PreparedStatement st;
+        String addQuery = "UPDATE `guests` SET (`totalSpent` = ?, membershipLevel = ?) WHERE (`Gid` = ?) VALUES (?,?,?)";
+        int GID = getSpecificGID(firstName,lastName);
+
+            try {
+                st = getConnection().prepareStatement(addQuery);
+                st.setDouble(1,totalSpent);
+                st.setInt(2,membershipLvl);
+                st.setInt(3,GID);
+                st.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+    }
+    public void addGuest(String firstName,String lastName, String memberSince) throws ParseException {
+        PreparedStatement st;
+        String addQuery = "INSERT INTO `guests`(`Gid`, `firstName`, `lastName`, `memberSince`, `totalSpent`,membershipLevel) VALUES (?,?,?,?,?,?)";
+        if(checkGuest(firstName,lastName))
+        {
+            try {
+                st = getConnection().prepareStatement(addQuery);
+                // System.out.println(st);
+                st.setInt(1,getNewGID() + 1);
+                st.setString(2,firstName);
+                st.setString(3,lastName);
+                st.setString(4, memberSince);
+                st.setInt(5,0 );
+                st.setInt(6,0);
+                st.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            System.out.println("guest exists in the database");
+        }
+
+    }
+
+    private boolean checkGuest(String firstName, String lastName){
+        Query query = db.executeQuery("SELECT * FROM `guests` WHERE firstName = '"+ firstName +"' AND lastName = '"+ lastName + "'");
+        if(query.size() == 0){
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public int getNewBID(){
         Query query = db.executeQuery("SELECT * FROM bookings ORDER BY BID DESC LIMIT 1");
         int BID =0;
         for (int i =0 ; i < query.size();i++)
@@ -191,14 +236,36 @@ public class Booking implements IPaymentCallback {
 
     }
 
+    public int getNewGID(){
+        Query query = db.executeQuery("SELECT * FROM guests ORDER BY GID DESC LIMIT 1");
+        int GID =0;
+        for (int i =0 ; i < query.size();i++)
+        {
+            GID = Integer.parseInt(query.get(i).get("Gid"));
+        }
+
+        return GID + 1;
+    }
+
+
+    public int getSpecificGID(String firstName,String lastName){
+        Query query = db.executeQuery("SELECT Gid FROM `guests` WHERE firstName = '"+ firstName +"' AND lastName = '"+ lastName + "'");
+        int GID = 0;
+        for (int i =0 ; i < query.size();i++)
+        {
+            GID = Integer.parseInt(query.get(i).get("Gid"));
+        }
+
+        return GID;
+    }
+
+
     public String getFirstName(){
         return firstName;
     }
-
     public String getLastName(){
         return lastName;
     }
-
     public String getDateIn(){
         return dateIn;
     }
@@ -227,12 +294,11 @@ public class Booking implements IPaymentCallback {
 
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
         Date parsedDate = df.parse(date);
-        System.out.println(parsedDate);
         Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-        System.out.println(timestamp);
         return timestamp;
     }
 
+    //second connection for adding/updating to database
     public Connection getConnection()
     {
         Connection con = null;
