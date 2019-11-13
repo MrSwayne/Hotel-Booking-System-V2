@@ -28,15 +28,10 @@ public class MainBookingView extends View implements ActionListener{
     private JButton nextBtn;
     private JButton backBtn;
 
-
-    public void showBooking(){
-        System.out.println("Test2");
-    }
-
     public MainBookingView(String name, Frame parent) {
         super(name, parent);
 
-         mainPanel = new JPanel();
+        mainPanel = new JPanel();
 
         // Label and Field
         JPanel fName = new JPanel();
@@ -77,7 +72,6 @@ public class MainBookingView extends View implements ActionListener{
         JPanel typePanel = new JPanel();
         JLabel typeLabel = new JLabel("Type: ",JLabel.CENTER);
         type = new JTextField("",10);
-        typePanel.setVisible(true);
         typePanel.add(typeLabel);
         typePanel.add(type);
 
@@ -102,11 +96,18 @@ public class MainBookingView extends View implements ActionListener{
         mainPanel.add(control);
 
         this.add(mainPanel);
+        this.setVisible(true);
+       // parent.show(this);
 
         //all the buttons you want to add.
         nextBtn.addActionListener(this );
         backBtn.addActionListener(this);
     }
+
+    public void showBooking(){
+        System.out.println("Test2");
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -136,8 +137,15 @@ public class MainBookingView extends View implements ActionListener{
     }
 
         //placeholder for object form Caolan.
-        public ArrayList getRoomsBooked(ArrayList object)
+        public ArrayList<Object[]> getRoomsBooked(ArrayList<Object[]> object)
         {
+            System.out.println("getrooms");
+
+            for(int i=0;i<object.size();i++)
+            {
+                System.out.println(Arrays.toString(object.get(i)));
+
+            }
             return object;
     }
 

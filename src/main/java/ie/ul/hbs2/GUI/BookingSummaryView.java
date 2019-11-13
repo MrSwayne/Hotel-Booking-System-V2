@@ -16,10 +16,10 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 public class BookingSummaryView extends View implements ActionListener {
 
     private IPaymentCallback callback;
-    JButton submitBtn = null;
-    JButton cancelBtn = null;
-    double totalSpent;
-    String dateIn,dateOut;
+    private JButton submitBtn = null;
+    private JButton cancelBtn = null;
+    private double totalSpent;
+    private String dateIn,dateOut;
 
     public BookingSummaryView(String name, Frame parent) {
         super(name, parent);

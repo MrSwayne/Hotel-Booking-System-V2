@@ -272,9 +272,10 @@ public class SearchView extends View
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				MainBookingView bookingView = (MainBookingView) parent.get("booking");
+
+				MainBookingView bookingView = new MainBookingView("booking",parent);
 				bookingView.getRoomsBooked(selectedData);
-				bookingView.showBooking();
+				parent.show(bookingView);
 			}
 		});
 
