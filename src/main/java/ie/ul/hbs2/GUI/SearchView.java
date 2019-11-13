@@ -271,42 +271,20 @@ public class SearchView extends View
 		jText_Search.setFont(new java.awt.Font("Tahoma", 1, 18));
 		jTable_Users.setFont(new java.awt.Font("Tahoma", 1, 14));
 
-		//Listens for Rows Clicked (Ctrl + Left MB / Shift + Left MB), adding them to a array, storing First Column data.
 		jTable_Users.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseClicked(java.awt.event.MouseEvent evt)
 			{
-
 				selection = jTable_Users.getSelectedRow();
-				//selectedData = new ArrayList<Object[]>();
-
 				Object[] rowData = new Object[jTable_Users.getColumnCount()];
 
-				Object source = evt.getSource();
-
-
-					for (int i = 0; i < jTable_Users.getColumnCount(); i++) {
-						rowData[i] = jTable_Users.getValueAt(selection, i);
-					}
-					selectedData.add(rowData);
-					//System.out.println(selectedData);
-
-
-				for(int i = 0; i < selectedData.size(); i++) {
-					System.out.println(Arrays.deepToString(selectedData.toArray()));
-				}
-
-
-
-				//System.out.println(Arrays.toString(selectedData.toArray()));
-/*
-				selection = jTable_Users.getSelectedRows();
-				for (int i=0; i<selection.length; i++)
+				for (int i = 0; i < jTable_Users.getColumnCount(); i++)
 				{
-					System.out.println(jTable_Users.getValueAt(selection[i],0).toString());
+					rowData[i] = jTable_Users.getValueAt(selection, i);
 				}
-*/
+				selectedData.add(rowData);
 
+				System.out.println(Arrays.deepToString(selectedData.toArray()));
 			}
 		});
 
