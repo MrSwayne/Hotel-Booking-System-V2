@@ -1,24 +1,19 @@
 package ie.ul.hbs2.GUI;
 
-import ie.ul.hbs2.GUI.Frame;
-import ie.ul.hbs2.GUI.View;
 import ie.ul.hbs2.search.*;
 
-import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
-import java.util.Arrays;
 
 public class SearchView extends View
 {
@@ -29,7 +24,9 @@ public class SearchView extends View
 	private javax.swing.JTable jTable_Users;
 	private javax.swing.JTextField jText_Search;
 
-	public int[] selection;
+	public int selection;
+	public static ArrayList<Object[]> selectedData = new ArrayList<Object[]>();;
+
 
 	public SearchView(String name, Frame parent)
 	{
@@ -279,15 +276,40 @@ public class SearchView extends View
 		{
 			public void mouseClicked(java.awt.event.MouseEvent evt)
 			{
-				selection = jTable_Users.getSelectedRows();
 
-				//To be updated to allow calling from outside
+				selection = jTable_Users.getSelectedRow();
+				//selectedData = new ArrayList<Object[]>();
+
+				Object[] rowData = new Object[jTable_Users.getColumnCount()];
+
+				Object source = evt.getSource();
+
+
+					for (int i = 0; i < jTable_Users.getColumnCount(); i++) {
+						rowData[i] = jTable_Users.getValueAt(selection, i);
+					}
+					selectedData.add(rowData);
+					//System.out.println(selectedData);
+
+
+				for(int i = 0; i < selectedData.size(); i++) {
+					System.out.println(Arrays.deepToString(selectedData.toArray()));
+				}
+
+
+
+				//System.out.println(Arrays.toString(selectedData.toArray()));
+/*
+				selection = jTable_Users.getSelectedRows();
 				for (int i=0; i<selection.length; i++)
 				{
-					System.out.println(jTable_Users.getValueAt(selection[i], 0).toString());
+					System.out.println(jTable_Users.getValueAt(selection[i],0).toString());
 				}
+*/
+
 			}
 		});
+
 		jScrollPane1.setViewportView(jTable_Users);
 
 		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
