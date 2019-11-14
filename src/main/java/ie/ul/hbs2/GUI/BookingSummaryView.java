@@ -111,7 +111,7 @@ public class BookingSummaryView extends View implements ActionListener {
                //book.addBooking(book.getDateIn(),book.getDateOut());
                manager.addGuest(book.getFirstName(),book.getLastName(),book.getDateIn());
                //manager.updateGuest(book.getFirstName(),book.getLastName(),book.getTotalSpent(),book.getMemLvl());
-                manager.addPayment(book.getTotalSpent(),book.getBID());
+               // manager.addPayment(book.getTotalSpent(),book.getBID());
 
 
             } catch (ParseException ex) {
