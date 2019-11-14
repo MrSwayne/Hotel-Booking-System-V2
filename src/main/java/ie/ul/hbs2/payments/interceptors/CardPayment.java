@@ -4,12 +4,10 @@ import ie.ul.hbs2.payments.BookingCharge;
 import ie.ul.hbs2.payments.IPaymentCallback;
 import ie.ul.hbs2.payments.IPaymentMethod;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 public class CardPayment implements IPaymentMethod {
@@ -18,10 +16,10 @@ public class CardPayment implements IPaymentMethod {
     BookingCharge context;
 
     @Override
-    public boolean processPayment() {
+    public void processPayment(final IPaymentCallback callback) {
 
         System.out.println("Processing Card Payment");
-        return false;
+        callback.workDone(false);
     }
 
     @Override

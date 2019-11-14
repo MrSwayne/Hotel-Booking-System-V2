@@ -23,12 +23,10 @@ import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.PaymentExecution;
 import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
-import com.paypal.api.payments.Links;
 import ie.ul.hbs2.payments.BookingCharge;
 import ie.ul.hbs2.payments.IPaymentCallback;
 import ie.ul.hbs2.payments.IPaymentMethod;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class PaypalPayment implements IPaymentMethod {
@@ -43,7 +41,7 @@ public class PaypalPayment implements IPaymentMethod {
 
     }
     @Override
-    public boolean processPayment() {
+    public void processPayment(final IPaymentCallback callback) {
         final APIContext APIcontext = new APIContext(this.CLIENT_ID, this.SECRET_CLIENT_ID, "sandbox");
 
         Payer payer = new Payer();
@@ -57,7 +55,7 @@ public class PaypalPayment implements IPaymentMethod {
 
         Amount amount = new Amount();
         amount.setCurrency("EUR");
-        amount.setTotal("" + this.context.amount);
+        amount.setTotal("" + this.context.getCharge());
 
         amount.setDetails(details);
 
@@ -105,8 +103,10 @@ public class PaypalPayment implements IPaymentMethod {
                                 System.out.println(createdPayment);
                                 String orderId = createdPayment.getTransactions().get(0)
                                         .getRelatedResources().get(0).getOrder().getId();
+                                callback.workDone(true);
                             } catch (PayPalRESTException ex) {
                                 System.err.println(ex.getDetails());
+                                callback.workDone(false);
                             }
                         }
 
@@ -143,8 +143,9 @@ public class PaypalPayment implements IPaymentMethod {
 
         } catch (PayPalRESTException | URISyntaxException | IOException e) {
             e.printStackTrace();
+            callback.workDone(false);
         }
-        return true;
+        callback.workDone(false);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ie.ul.hbs2.GUI;
 
+import ie.ul.hbs2.booking.Booking;
 import ie.ul.hbs2.payments.*;
 import ie.ul.hbs2.payments.interceptors.CardPayment;
 
@@ -15,11 +16,12 @@ import java.util.Map;
 
 public class PaymentView extends View implements ActionListener, IPaymentCallback {
 
+    private IPaymentCallback callback;
     PaymentDispatcher dispatcher = null;
     Map<JButton, IPaymentMethod> buttonMapping;
     private JPanel buttonPanel = new JPanel();
     private JPanel contentPanel = new JPanel();
-    private BookingCharge charge;
+    private Booking booking;
     private IPaymentMethod currentPaymentMethod = null;
 
 
@@ -47,10 +49,11 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
         return resizedImg;
     }
 
-    public void showPaymentScreen(IPaymentCallback callback, double amount) {
+    public void showPaymentScreen(IPaymentCallback callback, Booking booking) {
         View oldView = parent.currentView;
+        this.callback = callback;
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        this.charge = new BookingCharge(amount);
+        this.booking = booking;
         buttonMapping = new HashMap<>();
         for(IPaymentMethod paymentMethod : this.dispatcher.getMethods()) {
             JButton button = new JButton();
@@ -65,7 +68,6 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
             }
             buttonPanel.add(button);
 
-            button.setActionCommand("" + amount);
             button.addActionListener(this);
 
             this.buttonMapping.put(button, paymentMethod);
@@ -79,12 +81,13 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
 
     @Override
     public void doWork() {
-        this.currentPaymentMethod.processPayment();
+        this.currentPaymentMethod.processPayment(this);
     }
 
     @Override
     public void workDone(boolean successful) {
-
+        System.out.println("Booking successful? " + successful);
+        this.booking.workDone(successful);
     }
 
     @Override
@@ -92,9 +95,8 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
 
         JButton button = (JButton) e.getSource();
 
-        System.out.println(button.getActionCommand());
         this.currentPaymentMethod = this.buttonMapping.get(button);
-        this.currentPaymentMethod.setContextObject(this.charge);
+        this.currentPaymentMethod.setContextObject(new BookingCharge(this.booking));
         this.remove(contentPanel);
         contentPanel = this.currentPaymentMethod.getContentPanel(this);
         this.add(contentPanel);

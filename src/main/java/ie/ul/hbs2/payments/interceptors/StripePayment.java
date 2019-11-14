@@ -1,6 +1,5 @@
 package ie.ul.hbs2.payments.interceptors;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +8,7 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.net.RequestOptions;
+import ie.ul.hbs2.booking.Booking;
 import ie.ul.hbs2.payments.BookingCharge;
 import ie.ul.hbs2.payments.IPaymentCallback;
 import ie.ul.hbs2.payments.IPaymentMethod;
@@ -27,13 +27,13 @@ public class StripePayment implements IPaymentMethod {
 	}
 
 	@Override
-	public boolean processPayment()  {
+	public void processPayment(final IPaymentCallback callback)  {
 		Stripe.apiKey = this.API_KEY;
 		
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
-		chargeParams.put("amount", context.amount);
+		chargeParams.put("amount", context.getCharge());
 		chargeParams.put("currency", "eur");
-		chargeParams.put("description", "Charge for jenny.rosen@example.com");
+		chargeParams.put("description", "Charge for " + context.getCustomerName());
 		chargeParams.put("source", "tok_visa");
 		// ^ obtained with Stripe.js
 
@@ -48,14 +48,10 @@ public class StripePayment implements IPaymentMethod {
 		} catch(StripeException e) {
 			//TODO
 		}
-		return true;
 	}
-
-
 
 	@Override
 	public ImageIcon getIcon() throws IOException {
-	//	Image img = ImageIO.read(getClass().getResource("res/Stripe.png"));
 		ImageIcon icon = new ImageIcon("res/Stripe.png");
 		return icon;
 	}
