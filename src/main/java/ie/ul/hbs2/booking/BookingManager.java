@@ -73,6 +73,10 @@ public class BookingManager implements IPaymentCallback {
 
         return totalSpent;
     }
+
+    /////////////UPDATING/INSERTING to DATABASE//////////////////////////////
+
+    //WIP
     public void addBooking(String dateIn, String dateOut) throws ParseException {
         PreparedStatement st;
         String addQuery = "INSERT INTO `bookings`(`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) VALUES (?,?,?,?,?)";
@@ -95,6 +99,7 @@ public class BookingManager implements IPaymentCallback {
         }
     }
 
+    //WIP
     public void updateGuest(String firstName, String lastName, double totalSpent, int membershipLvl) throws ParseException {
         PreparedStatement st;
         String addQuery = "UPDATE `guests` SET (`totalSpent` = ?, membershipLevel = ?) WHERE (`Gid` = ?) VALUES (?,?,?)";
@@ -113,6 +118,7 @@ public class BookingManager implements IPaymentCallback {
 
     }
 
+    //works - adds new guest to the DB
     public void addGuest(String firstName, String lastName, String memberSince) throws ParseException {
         PreparedStatement st;
         String addQuery = "INSERT INTO `guests`(`Gid`, `firstName`, `lastName`, `memberSince`, `totalSpent`,membershipLevel) VALUES (?,?,?,?,?,?)";
@@ -136,6 +142,32 @@ public class BookingManager implements IPaymentCallback {
         }
 
     }
+
+    //WIP
+    public void addPayment(double price,int BID)throws ParseException{
+        PreparedStatement st;
+        String addQuery = "INSERT INTO `payments`(`Pid`, `IsPaid`, `TotalPrice`, `Bid`) VALUES (?,?,?,?)";
+
+            try {
+                st = getConnection().prepareStatement(addQuery);
+                // System.out.println(st);
+                st.setInt(1, getPID(BID));
+                st.setInt(2, 0);
+                st.setDouble(3, price);
+                st.setInt(4,BID);
+                st.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+    }
+
+    //WIP
+    public void updatePayment(int paid,int BID){
+
+    }
+
 
     private boolean checkGuest(String firstName, String lastName) {
         Query query = db.executeQuery("SELECT * FROM `guests` WHERE firstName = '" + firstName + "' AND lastName = '" + lastName + "'");
@@ -184,6 +216,18 @@ public class BookingManager implements IPaymentCallback {
 
         return GID;
     }
+
+    public int getPID(int Bid)
+    {
+        Query query = db.executeQuery("SELECT Pid FROM `payments` WHERE Bid = '" + Bid + "'");
+        int Pid = 0;
+        for (int i = 0; i < query.size(); i++) {
+            Pid = Integer.parseInt(query.get(i).get("Pid"));
+        }
+
+        return Pid;
+    }
+
     private Timestamp convertDates(String date) throws ParseException {
 
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
@@ -191,7 +235,6 @@ public class BookingManager implements IPaymentCallback {
         Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
         return timestamp;
     }
-
     //next two methods not needed when finished.
     public int getRoomCost(String rmType) {
         Query query = db.executeQuery("SELECT Price FROM `rooms` WHERE type = '"+ rmType +"' and Hid = 1");

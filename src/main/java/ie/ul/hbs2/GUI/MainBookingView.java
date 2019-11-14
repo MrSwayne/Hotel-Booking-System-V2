@@ -24,10 +24,10 @@ public class MainBookingView extends View implements ActionListener{
     private JTextField type;
     private JButton nextBtn;
     private JButton backBtn;
+    BookingManager manager = new BookingManager();
 
     public MainBookingView(String name, Frame parent) {
         super(name, parent);
-
         mainPanel = new JPanel();
 
         // Label and Field
@@ -57,7 +57,6 @@ public class MainBookingView extends View implements ActionListener{
         dateOutField = new JTextField("",10);
         dateOutPanel.add(dateOutLabel);
         dateOutPanel.add(dateOutField);
-
         // Label and Field -- delete after search is done
         JPanel roomsPanel = new JPanel();
         JLabel roomLabel = new JLabel("Rooms: ",JLabel.CENTER);
@@ -102,7 +101,6 @@ public class MainBookingView extends View implements ActionListener{
     }
 
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton)e.getSource();
@@ -110,8 +108,8 @@ public class MainBookingView extends View implements ActionListener{
         if (button == nextBtn) {
             Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
                     dateInField.getText(),dateOutField.getText(),type.getText(),roomsBooked.getText());//last one need to be modified when search is done
-            BookingManager temp = new BookingManager();
-            temp.checkBooking(book,this.parent);
+
+            manager.checkBooking(book,this.parent);
             executeCommand(new NextCommand(this));
         }  else if(button == backBtn) {
             executeCommand(new BackCommand(this));
@@ -119,21 +117,15 @@ public class MainBookingView extends View implements ActionListener{
     }
 
     private void executeCommand(Command command) {
-        CareTaker c = new CareTaker();
-        Memento m = new Memento(mainPanel);
-        c.add(m);
         command.execute();
     }
 
         //WIP
-        public void getRoomsBooked(ArrayList<Object[]> object)
+        public void getRoomsBooked(ArrayList<Object[]> object)//continue when I can switch view from search
         {
-            System.out.println("getrooms");
-
             for(int i=0;i<object.size();i++)
             {
                 Object[] temp = object.get(i);
-
                 for(int j =0;j<temp.length;j++){
                     System.out.println(temp[j]);
                 }

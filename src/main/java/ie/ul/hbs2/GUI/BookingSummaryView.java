@@ -51,7 +51,7 @@ public class BookingSummaryView extends View implements ActionListener {
         JLabel dateOutLabel = new JLabel(book.getDateOut(),JLabel.CENTER);
 
         JLabel roomTotal = new JLabel("Room Total: ",JLabel.CENTER);
-        JLabel roomAmountLabel = new JLabel(book.getRoomAmount(),JLabel.CENTER);
+        JLabel roomAmountLabel = new JLabel(String.valueOf(book.getRoomAmount()),JLabel.CENTER);
 
         JLabel roomClass = new JLabel("Room Type: ",JLabel.CENTER);
         JLabel roomTypeLabel = new JLabel(book.getRoomType(),JLabel.CENTER);
@@ -106,29 +106,25 @@ public class BookingSummaryView extends View implements ActionListener {
         if(button == submitBtn) {
             System.out.println("Processing payment now");
             //Code to call Adam's method in payment view
-           // try {
-                /*
-               book.addBooking(book.getDateIn(),book.getDateOut());
-               book.addGuest(book.getFirstName(),book.getLastName(),book.getDateIn());
-               book.updateGuest(book.getFirstName(),book.getLastName(),book.calculateTotalSpent(),book.getGuestMemberLVL(book.getFirstName(),book.getLastName()));
-               */
-          /*
+            try {
+                BookingManager manager = new BookingManager();
+               //book.addBooking(book.getDateIn(),book.getDateOut());
+               manager.addGuest(book.getFirstName(),book.getLastName(),book.getDateIn());
+               //manager.updateGuest(book.getFirstName(),book.getLastName(),book.getTotalSpent(),book.getMemLvl());
+                manager.addPayment(book.getTotalSpent(),book.getBID());
+
+
             } catch (ParseException ex) {
                 ex.printStackTrace();
              }
-          */
+
             PaymentView paymentView = (PaymentView) parent.get("payments");
            paymentView.showPaymentScreen(this.callback, book); // pass book here now?
 
             executeCommand(new SubmitCommand(this));
         } else if(button == cancelBtn) {
             //Still need to work at the memento
-            CareTaker c = new CareTaker();
-            Memento m = c.get(0);
-            Frame frame = new Frame();
-            frame.show("booking");
-            frame.getContentPane().removeAll();
-            frame.repaint();
+
 
             executeCommand(new CancelCommand(this));
         }

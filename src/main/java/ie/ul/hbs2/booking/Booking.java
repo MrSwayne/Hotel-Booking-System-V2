@@ -13,6 +13,7 @@ public class Booking  {
     private final static String dateFormat = "dd/MM/yy";
     private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
     private int memLvl,BID;
+    private double price;
     private long nights;
 
     private double totalSpent;
@@ -67,6 +68,13 @@ public class Booking  {
     }
     public void setBID(int BID){
         this.BID = BID;
+    }
+
+    public void setRoomsTotalPrice(double price){
+        this.price = price;
+    }
+    public double getRoomsPrice(){
+        return this.price;
     }
 
 
