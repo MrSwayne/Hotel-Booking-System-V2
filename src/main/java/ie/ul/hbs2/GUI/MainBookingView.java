@@ -136,17 +136,19 @@ public class MainBookingView extends View implements ActionListener{
         command.execute();
     }
 
-        //placeholder for object form Caolan.
-        public ArrayList<Object[]> getRoomsBooked(ArrayList<Object[]> object)
+        //WIP
+        public void getRoomsBooked(ArrayList<Object[]> object)
         {
             System.out.println("getrooms");
 
             for(int i=0;i<object.size();i++)
             {
-                System.out.println(Arrays.toString(object.get(i)));
+                Object[] temp = object.get(i);
 
+                for(int j =0;j<temp.length;j++){
+                    System.out.println(temp[j]);
+                }
             }
-            return object;
     }
 
 }
