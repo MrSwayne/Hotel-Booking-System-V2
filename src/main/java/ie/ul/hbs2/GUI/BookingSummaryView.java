@@ -20,16 +20,15 @@ public class BookingSummaryView extends View implements ActionListener {
     private JButton cancelBtn = null;
     private double totalSpent;
     private Booking book;
-
     public BookingSummaryView(String name, Frame parent) {
         super(name, parent);
     }
 
     public void summary(Booking book, IPaymentCallback callback)
     {
-        this.book = book;
+       this.book = book;
         this.callback = callback;
-        this.totalSpent = book.calculateTotalSpent();
+        //this.totalSpent = manager.calculateTotalSpent();
         System.out.println("normal" + totalSpent);
         System.out.println("get method" + book.getTotalSpent());
         JPanel mainPanel = new JPanel();

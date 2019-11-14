@@ -1,19 +1,78 @@
 package ie.ul.hbs2.booking;
 
+import ie.ul.hbs2.GUI.BookingSummaryView;
+import ie.ul.hbs2.GUI.Frame;
 import ie.ul.hbs2.database.DatabaseHelper;
 import ie.ul.hbs2.database.Query;
 import ie.ul.hbs2.database.Row;
+import ie.ul.hbs2.payments.IPaymentCallback;
+import ie.ul.hbs2.rewards.RewardFactory;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BookingManager {
+
+public class BookingManager implements IPaymentCallback {
     private final DatabaseHelper db = DatabaseHelper.getInstance();
     private final static String dateFormat = "dd/MM/yy";
-    private Booking book = new Booking();
+    private long nights;
+    private Booking book;
 
+    public void checkBooking(Booking book, Frame frame) {
+        this.book = book;
+        if (dateValidation(book.getDateIn(), book.getDateOut())) {
+            System.out.println("Hurray,dates are valid");
+            book.setTotalSpent(calculateTotalSpent(book));
+            getGuestMemberLVL(book.getFirstName(),book.getLastName());
+            book.setBID(getNewBID());
+            //Booking book = new Booking(this.firstName,this.lastName,this.dateIn,this.dateOut,this.roomType,this.roomAmount);
+            BookingSummaryView view = new BookingSummaryView("Booking Summary", frame);
+            view.summary(book, this);
+            frame.show(view);
+        }
+    }
+
+    private boolean dateValidation(String dateIn, String dateOut) {
+        // System.out.println(dateIn);
+        // System.out.println(dateOut);
+        if (dateIn == null || dateOut == null) {
+            System.out.println("Null Dates");
+            return false;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        sdf.setLenient(false);
+
+        try {
+            Date date = sdf.parse(dateIn);
+            Date date2 = sdf.parse(dateOut);
+            long diff = Math.abs(date2.getTime() - date.getTime());
+            nights =  (diff / (1000 * 60 * 60 * 24));
+        } catch (ParseException e) {
+            System.out.println("Invalid date(s)");
+            return true;
+        }
+        return true;
+    }
+
+    //Calculating the spent - discount
+    public double calculateTotalSpent(Booking book) {
+        int rmBooked = Integer.parseInt(book.getRoomAmount());
+        int memLVL = book.getMemLvl();
+        double totalSpent = 0 ;
+        BookingManager temp = new BookingManager();
+        int roomCost =  getRoomCost(book.getRoomType());
+        float discount;
+        discount = RewardFactory.getReward(memLVL).get_discount() / 100;
+        totalSpent = ((roomCost * nights) * rmBooked);
+
+        //subtract discount
+        totalSpent *= 1 - discount;
+
+        return totalSpent;
+    }
     public void addBooking(String dateIn, String dateOut) throws ParseException {
         PreparedStatement st;
         String addQuery = "INSERT INTO `bookings`(`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) VALUES (?,?,?,?,?)";
@@ -22,7 +81,7 @@ public class BookingManager {
         try {
             st = getConnection().prepareStatement(addQuery);
             Timestamp test = convertDates(dateIn);
-            st.setInt(1, book.getBID());
+            st.setInt(1, getNewBID());
             st.setTimestamp(2, convertDates(dateIn));
             st.setTimestamp(3, convertDates(dateOut));
             st.setInt(4, 201);
@@ -150,5 +209,15 @@ public class BookingManager {
             System.out.println(ex.getMessage());
         }
         return con;
+    }
+
+    @Override
+    public void doWork() {
+
+    }
+
+    @Override
+    public void workDone(boolean successful) {
+
     }
 }

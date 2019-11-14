@@ -1,9 +1,6 @@
 package ie.ul.hbs2.GUI;
 
-import ie.ul.hbs2.booking.BackCommand;
-import ie.ul.hbs2.booking.Booking;
-import ie.ul.hbs2.booking.Command;
-import ie.ul.hbs2.booking.NextCommand;
+import ie.ul.hbs2.booking.*;
 import ie.ul.hbs2.booking.memento.CareTaker;
 import ie.ul.hbs2.booking.memento.Memento;
 
@@ -113,7 +110,8 @@ public class MainBookingView extends View implements ActionListener{
         if (button == nextBtn) {
             Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
                     dateInField.getText(),dateOutField.getText(),type.getText(),roomsBooked.getText());//last one need to be modified when search is done
-            book.checkBooking(book,this.parent);
+            BookingManager temp = new BookingManager();
+            temp.checkBooking(book,this.parent);
             executeCommand(new NextCommand(this));
         }  else if(button == backBtn) {
             executeCommand(new BackCommand(this));
