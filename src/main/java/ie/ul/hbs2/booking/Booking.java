@@ -244,7 +244,7 @@ public class Booking implements IPaymentCallback {
             GID = Integer.parseInt(query.get(i).get("Gid"));
         }
 
-        return GID + 1;
+        return GID;
     }
 
 
