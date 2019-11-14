@@ -296,7 +296,7 @@ public class SearchView extends View
 				}
 				selectedData.add(rowData);
 
-				System.out.println(Arrays.deepToString(selectedData.toArray()));
+					System.out.println(Arrays.deepToString(selectedData.toArray()));
 			}
 		});
 

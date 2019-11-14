@@ -104,9 +104,6 @@ public class MainBookingView extends View implements ActionListener{
         backBtn.addActionListener(this);
     }
 
-    public void showBooking(){
-        System.out.println("Test2");
-    }
 
 
     @Override
@@ -114,16 +111,10 @@ public class MainBookingView extends View implements ActionListener{
         JButton button = (JButton)e.getSource();
 
         if (button == nextBtn) {
-            Booking book = new Booking(fnameField.getText(),lnameField.getText(),
-                    dateInField.getText(),dateOutField.getText(),type.getText(),roomsBooked.getText());
-                                                                //last two need to be modified when search is done
-
-            if (book.checkBooking(this.parent, book)) {
-                executeCommand(new NextCommand(this));
-            }else {
-                //do something
-                System.out.println("Error");
-            }
+            Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
+                    dateInField.getText(),dateOutField.getText(),type.getText(),roomsBooked.getText());//last one need to be modified when search is done
+            book.checkBooking(book,this.parent);
+            executeCommand(new NextCommand(this));
         }  else if(button == backBtn) {
             executeCommand(new BackCommand(this));
         }

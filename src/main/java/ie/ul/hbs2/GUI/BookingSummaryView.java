@@ -30,12 +30,14 @@ public class BookingSummaryView extends View implements ActionListener {
         this.book = book;
         this.callback = callback;
         this.totalSpent = book.calculateTotalSpent();
+        System.out.println("normal" + totalSpent);
+        System.out.println("get method" + book.getTotalSpent());
         JPanel mainPanel = new JPanel();
 
         mainPanel = new JPanel(new GridLayout(3,1));
 
         JLabel bookingID = new JLabel("Booking ID: ",JLabel.CENTER);
-        JLabel bidLabel = new JLabel(String.valueOf(book.getNewBID()),JLabel.CENTER);
+        JLabel bidLabel = new JLabel(String.valueOf(book.getBID()),JLabel.CENTER);
 
         JLabel fNameLabel = new JLabel("First Name: ",JLabel.CENTER);
         JLabel nameLabel = new JLabel(book.getFirstName(),JLabel.CENTER);
@@ -56,7 +58,7 @@ public class BookingSummaryView extends View implements ActionListener {
         JLabel roomTypeLabel = new JLabel(book.getRoomType(),JLabel.CENTER);
 
         final JLabel totalAmount = new JLabel("Total Amount: ",JLabel.CENTER);
-        JLabel totalLabel = new JLabel(String.valueOf(totalSpent),JLabel.CENTER);
+        JLabel totalLabel = new JLabel(String.valueOf(book.getTotalSpent()),JLabel.CENTER);
 
 
         //SubmitButton
@@ -105,15 +107,19 @@ public class BookingSummaryView extends View implements ActionListener {
         if(button == submitBtn) {
             System.out.println("Processing payment now");
             //Code to call Adam's method in payment view
-            try {
-                //book.addBooking(book.getDateIn(),book.getDateOut());
-                book.addGuest(book.getFirstName(),book.getLastName(),book.getDateIn());
-                book.updateGuest(book.getFirstName(),book.getLastName(),book.calculateTotalSpent(),book.getGuestMemberLVL(book.getFirstName(),book.getLastName()));
+           // try {
+                /*
+               book.addBooking(book.getDateIn(),book.getDateOut());
+               book.addGuest(book.getFirstName(),book.getLastName(),book.getDateIn());
+               book.updateGuest(book.getFirstName(),book.getLastName(),book.calculateTotalSpent(),book.getGuestMemberLVL(book.getFirstName(),book.getLastName()));
+               */
+          /*
             } catch (ParseException ex) {
                 ex.printStackTrace();
-            }
+             }
+          */
             PaymentView paymentView = (PaymentView) parent.get("payments");
-           paymentView.showPaymentScreen(this.callback, totalSpent); // pass book here now?
+           paymentView.showPaymentScreen(this.callback, book); // pass book here now?
 
             executeCommand(new SubmitCommand(this));
         } else if(button == cancelBtn) {
