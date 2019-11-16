@@ -55,6 +55,7 @@ public class PaypalPayment implements IPaymentMethod {
 
         Amount amount = new Amount();
         amount.setCurrency("EUR");
+        System.out.println(context.getCharge());
         amount.setTotal("" + this.context.getCharge());
 
         amount.setDetails(details);
@@ -154,21 +155,6 @@ public class PaypalPayment implements IPaymentMethod {
         ImageIcon icon = new ImageIcon("res/Paypal.png");
         return icon;
     }
-
-    @Override
-    public JPanel getContentPanel(final IPaymentCallback callback) {
-        JPanel panel = new JPanel();
-        JButton button = new JButton("Pay With Paypal");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                callback.doWork();
-            }
-        });
-        panel.add(button);
-        return panel;
-    }
-
 
     @Override
     public void setContextObject(BookingCharge charge) {

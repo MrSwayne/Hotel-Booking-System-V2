@@ -261,6 +261,6 @@ public class BookingManager implements IPaymentCallback {
 
     @Override
     public void workDone(boolean successful) {
-
+        System.out.println("Payment was " + successful);
     }
 }

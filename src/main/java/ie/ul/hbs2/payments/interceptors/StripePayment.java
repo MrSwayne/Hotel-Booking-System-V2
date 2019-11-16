@@ -28,10 +28,15 @@ public class StripePayment implements IPaymentMethod {
 
 	@Override
 	public void processPayment(final IPaymentCallback callback)  {
+		JFrame frame = new JFrame("Stripe Payment Screen");
+
+
 		Stripe.apiKey = this.API_KEY;
-		
+		Map<String, Object> params = new HashMap<>();
+		//params.put("customer", )
+
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
-		chargeParams.put("amount", context.getCharge());
+		chargeParams.put("amount", "" + (int)context.getCharge());
 		chargeParams.put("currency", "eur");
 		chargeParams.put("description", "Charge for " + context.getCustomerName());
 		chargeParams.put("source", "tok_visa");
@@ -45,8 +50,10 @@ public class StripePayment implements IPaymentMethod {
 
 		try {
 			Charge charge = Charge.create(chargeParams, options);
+			callback.workDone(true);
 		} catch(StripeException e) {
-			//TODO
+			e.printStackTrace();
+			callback.workDone(false);
 		}
 	}
 
@@ -54,17 +61,6 @@ public class StripePayment implements IPaymentMethod {
 	public ImageIcon getIcon() throws IOException {
 		ImageIcon icon = new ImageIcon("res/Stripe.png");
 		return icon;
-	}
-
-	@Override
-	public JPanel getContentPanel(IPaymentCallback callback) {
-
-		JPanel panel = new JPanel();
-
-		JLabel emailL = new JLabel("Stripe Email");
-	//	JTextField
-
-		return null;
 	}
 
 

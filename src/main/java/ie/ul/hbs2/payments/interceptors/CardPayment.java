@@ -17,21 +17,6 @@ public class CardPayment implements IPaymentMethod {
 
     @Override
     public void processPayment(final IPaymentCallback callback) {
-
-        System.out.println("Processing Card Payment");
-        callback.workDone(false);
-    }
-
-    @Override
-    public ImageIcon getIcon() throws IOException {
-      //  Image img = ImageIO.read(getClass().getResource("res/Visa.png"));
-        ImageIcon icon = new ImageIcon("res/Visa.png");
-
-        return icon;
-    }
-
-    @Override
-    public JPanel getContentPanel(final IPaymentCallback callback) {
         JPanel panel = new JPanel();
 
         JPanel num = new JPanel(new GridLayout(3,1));
@@ -68,14 +53,37 @@ public class CardPayment implements IPaymentMethod {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                callback.doWork();
+                System.out.println("Processing Card Payment");
+                boolean proccessed = validatePayment();
+                callback.workDone(proccessed);
             }
         });
 
         panel.add(controlPanel, 3);
-        return panel;
+        JFrame frame = new JFrame("Visa Card Payment");
+        frame.setPreferredSize(new Dimension(600,400));
+        frame.add(panel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLocationRelativeTo(null);//setting to the center of the screen
+        frame.setVisible(true);
+        frame.pack();
     }
 
+
+    @Override
+    public ImageIcon getIcon() throws IOException {
+      //  Image img = ImageIO.read(getClass().getResource("res/Visa.png"));
+        ImageIcon icon = new ImageIcon("res/Visa.png");
+
+        return icon;
+    }
+
+
+    private boolean validatePayment() {
+        //Process details from terminal
+        //Return True or False depending
+        return true;
+    }
 
     @Override
     public void setContextObject(BookingCharge charge) {

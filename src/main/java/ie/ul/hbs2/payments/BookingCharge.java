@@ -2,17 +2,18 @@ package ie.ul.hbs2.payments;
 
 import ie.ul.hbs2.booking.Booking;
 
+import javax.swing.*;
 import java.util.UUID;
 
 public class BookingCharge {
 
     public String ID;
     public Booking booking;
-
+    private JPanel panel = new JPanel();
     private String receipt;
 
-    public BookingCharge(Booking Booking ) {
-        this.booking = booking;
+    public BookingCharge(Booking book ) {
+        this.booking = book;
         this.ID = generateKey();
     }
 
@@ -21,7 +22,7 @@ public class BookingCharge {
     }
 
     public double getCharge() {
-        return this.booking.calculateTotalSpent();
+        return this.booking.getTotalSpent();
     }
 
     public String getCustomerName() {

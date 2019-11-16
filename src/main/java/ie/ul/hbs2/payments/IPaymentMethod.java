@@ -7,6 +7,5 @@ public interface IPaymentMethod {
 
     void processPayment(final IPaymentCallback callback);
     ImageIcon getIcon() throws IOException;
-    JPanel getContentPanel(final IPaymentCallback callback);
     void setContextObject(BookingCharge charge);
 }

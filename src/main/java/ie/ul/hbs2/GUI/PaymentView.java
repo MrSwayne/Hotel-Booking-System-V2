@@ -14,7 +14,7 @@ import java.util.Map;
 
 //TODO, Still waiting on Booking to be completed before I can progress on this
 
-public class PaymentView extends View implements ActionListener, IPaymentCallback {
+public class PaymentView extends View implements ActionListener {
 
     private IPaymentCallback callback;
     PaymentDispatcher dispatcher = null;
@@ -79,16 +79,6 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
         parent.show(this);
     }
 
-    @Override
-    public void doWork() {
-        this.currentPaymentMethod.processPayment(this);
-    }
-
-    @Override
-    public void workDone(boolean successful) {
-        System.out.println("Booking successful? " + successful);
-        this.booking.workDone(successful);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -96,9 +86,13 @@ public class PaymentView extends View implements ActionListener, IPaymentCallbac
         JButton button = (JButton) e.getSource();
 
         this.currentPaymentMethod = this.buttonMapping.get(button);
-        this.currentPaymentMethod.setContextObject(new BookingCharge(this.booking));
-        this.remove(contentPanel);
-        contentPanel = this.currentPaymentMethod.getContentPanel(this);
+
+        BookingCharge context = new BookingCharge(this.booking);
+
+        this.currentPaymentMethod.setContextObject(context);
+
+        this.currentPaymentMethod.processPayment(this.callback);
+
         this.add(contentPanel);
         this.contentPanel.setVisible(true);
         parent.show(this);
