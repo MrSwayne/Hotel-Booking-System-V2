@@ -3,34 +3,33 @@ package ie.ul.hbs2.GUI;
 import ie.ul.hbs2.booking.*;
 import ie.ul.hbs2.common.BackCommand;
 import ie.ul.hbs2.common.Command;
-import ie.ul.hbs2.common.NextCommand;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
 public class MainBookingView extends View implements ActionListener{
-    public JTextArea textField;
-    public String clipboard;
-    public static JList Rooms;
-    MainBookingView bookview;
+    private static JTextArea roomsTypeList;
 
     //Booking View and Cancel View buttons and text fields
-    public JPanel mainPanel;
+    private JPanel mainPanel = new JPanel(new GridLayout(2,1));
     private JTextField fnameField;
     private JTextField lnameField;
     private JTextField dateInField;
     private JTextField dateOutField;
-    private JTextField roomsBooked;
-    private JTextField type;
+    private JLabel roomsBooked;
+    private JLabel type;
     private JButton nextBtn;
     private JButton backBtn;
     BookingManager manager = new BookingManager();
 
     public MainBookingView(String name, Frame parent) {
         super(name, parent);
-        mainPanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        //mainPanel = new JPanel();
 
         // Label and Field
         JPanel fName = new JPanel();
@@ -59,30 +58,24 @@ public class MainBookingView extends View implements ActionListener{
         dateOutField = new JTextField("",10);
         dateOutPanel.add(dateOutLabel);
         dateOutPanel.add(dateOutField);
-        // Label and Field -- delete after search is done
-        JPanel roomsPanel = new JPanel();
-        JLabel roomLabel = new JLabel("Rooms: ",JLabel.CENTER);
-        roomsBooked= new JTextField("",10);
-        roomsPanel.add(roomLabel);
-        roomsPanel.add(roomsBooked);
 
         // Label and Field -- delete after search is done
         JPanel typePanel = new JPanel();
-        JLabel typeLabel = new JLabel("Type: ",JLabel.CENTER);
-        type = new JTextField("",10);
+        JLabel typeLabel = new JLabel("Rooms Selected: ",JLabel.CENTER);
+        type = new JLabel("",10);
         typePanel.add(typeLabel);
-        typePanel.add(type);
+        //typePanel.add(type);
 
 
 
         //nextButton
         JPanel control = new JPanel();
         nextBtn = new JButton("Next");
-        control.add(nextBtn);
+        buttonPanel.add(nextBtn);
 
         //backButton
         backBtn = new JButton("Back");
-        control.add(backBtn);
+        buttonPanel.add(backBtn);
 
         //Adding to main panel
         mainPanel.add(fName);
@@ -90,10 +83,11 @@ public class MainBookingView extends View implements ActionListener{
         mainPanel.add(dateInPanel);
         mainPanel.add(dateOutPanel);
         mainPanel.add(typePanel);
-        mainPanel.add(roomsPanel);
-        mainPanel.add(control);
+        //mainPanel.add(control);
 
-        this.add(mainPanel);
+
+        this.add(mainPanel,0);
+        this.add(buttonPanel,1);
         this.setVisible(true);
        // parent.show(this);
 
@@ -125,21 +119,25 @@ public class MainBookingView extends View implements ActionListener{
         //WIP
         public void getRoomsBooked(ArrayList<Object[]> object)//continue when I can switch view from search
         {
+
             String rmType = "";
             for(int i=0;i<object.size();i++)
             {
                 Object[] temp = object.get(i);
-                String [] tempRooms = new String[object.size()];
+                Object [] tempRooms = new Object[object.size()];
 
                 for(int j =0;j<temp.length;j++){
                     rmType = temp[2].toString();
-                   ///
+
 
                   //  System.out.println(temp[j]);
                 }
-                tempRooms[i] = String.valueOf(rmType);
+                tempRooms[i] = rmType;
                 System.out.println(tempRooms[i]);
-                Rooms = new JList(tempRooms);
+                roomsTypeList = new JTextArea();
+                roomsTypeList.setText(tempRooms[i].toString());
+                roomsTypeList.setEditable(false);
+                mainPanel.add(roomsTypeList);
             }
     }
 

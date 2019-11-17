@@ -74,6 +74,10 @@ public class BookingManager implements IPaymentCallback {
         return totalSpent;
     }
 
+    public double calculateRoomsCost(){
+        return 0.0;
+    }
+
     /////////////UPDATING/INSERTING to DATABASE//////////////////////////////
 
     //WIP
