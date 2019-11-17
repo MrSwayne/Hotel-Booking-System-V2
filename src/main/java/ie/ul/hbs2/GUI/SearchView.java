@@ -2,6 +2,7 @@ package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.search.*;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,6 +25,7 @@ public class SearchView extends View
 	private javax.swing.JTextField jText_Search;
 
 	protected static ArrayList<Object[]> selectedData = new ArrayList<Object[]>();;
+	private JPanel panel1;
 
 
 	public SearchView(String name, Frame parent)
@@ -226,13 +228,31 @@ public class SearchView extends View
 		String[] tableSwitch={"Guests","Bookings","Rooms"};
 		jComboBox_Switch = new javax.swing.JComboBox<>(tableSwitch);
 		jText_Search = new javax.swing.JTextField();
+		jText_Search.setColumns(30);
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTable_Users = new javax.swing.JTable();
 
 		jTable_Users.setRowSelectionAllowed(true);
 		jTable_Users.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
+		jButton_Next.setText("Next");
+
 		jButton_Search.setText("Search");
+
+		jScrollPane1.setViewportView(jTable_Users);
+
+		//Default combo box to "Guests"
+		jComboBox_Switch.setSelectedIndex(0);
+
+		jPanel2.add(jComboBox_Switch, BorderLayout.NORTH);
+		jPanel2.add(jButton_Search,BorderLayout.NORTH);
+		jPanel2.add(jText_Search,BorderLayout.NORTH);
+		//jPanel2.add(jScrollPane1,BorderLayout.CENTER);
+		jPanel2.add(jButton_Next,BorderLayout.SOUTH);
+
+		this.add(jPanel2);
+		this.add(jScrollPane1);
+
 		jButton_Search.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -241,8 +261,7 @@ public class SearchView extends View
 			}
 		});
 
-		//Default combo box to "Guests"
-		jComboBox_Switch.setSelectedIndex(0);
+
 
 		//Combobox Check (Guest or Booking)
 		jComboBox_Switch.addItemListener(new ItemListener()
@@ -272,10 +291,13 @@ public class SearchView extends View
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-
 				MainBookingView bookingView = new MainBookingView("booking",parent);
+
 				bookingView.getRoomsBooked(selectedData);
+
 				parent.show(bookingView);
+
+				System.out.println("test");
 			}
 		});
 
@@ -299,57 +321,6 @@ public class SearchView extends View
 					System.out.println(Arrays.deepToString(selectedData.toArray()));
 			}
 		});
-
-		jScrollPane1.setViewportView(jTable_Users);
-
-		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-		jPanel2.setLayout(jPanel2Layout);
-		jPanel2Layout.setHorizontalGroup(
-				jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(jPanel2Layout.createSequentialGroup()
-								.addContainerGap(22, Short.MAX_VALUE)
-								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-												.addComponent(jComboBox_Switch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(18, 18, 18)
-												.addComponent(jComboBox_Switch)
-												.addGap(136, 136, 136))
-										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-												.addComponent(jText_Search, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(18, 18, 18)
-												.addComponent(jButton_Search)
-												.addGap(136, 136, 136)
-												.addComponent(jButton_Next))
-										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-												.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(29, 29, 29))))
-		);
-		jPanel2Layout.setVerticalGroup(
-				jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(jPanel2Layout.createSequentialGroup()
-								.addGap(31, 31, 31)
-								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(jComboBox_Switch)
-										.addComponent(jButton_Search)
-										.addComponent(jButton_Next)
-										.addComponent(jText_Search, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGap(28, 28, 28)
-								.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(41, Short.MAX_VALUE))
-		);
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(parent.getContentPane());
-		parent.getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		);
-		//parent.pack();
-		this.add(jPanel2);
-
 	}
 
 	public void valueChanged(ListSelectionEvent e)
