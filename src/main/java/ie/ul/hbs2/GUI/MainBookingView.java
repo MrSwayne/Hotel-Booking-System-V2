@@ -1,8 +1,9 @@
 package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.booking.*;
-import ie.ul.hbs2.booking.memento.CareTaker;
-import ie.ul.hbs2.booking.memento.Memento;
+import ie.ul.hbs2.common.BackCommand;
+import ie.ul.hbs2.common.Command;
+import ie.ul.hbs2.common.NextCommand;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import java.util.*;
 public class MainBookingView extends View implements ActionListener{
     public JTextArea textField;
     public String clipboard;
+    public static JList Rooms;
     MainBookingView bookview;
 
     //Booking View and Cancel View buttons and text fields
@@ -110,7 +112,7 @@ public class MainBookingView extends View implements ActionListener{
                     dateInField.getText(),dateOutField.getText(),type.getText(),roomsBooked.getText());//last one need to be modified when search is done
 
             manager.checkBooking(book,this.parent);
-            executeCommand(new NextCommand(this));
+
         }  else if(button == backBtn) {
             executeCommand(new BackCommand(this));
         }
@@ -123,12 +125,21 @@ public class MainBookingView extends View implements ActionListener{
         //WIP
         public void getRoomsBooked(ArrayList<Object[]> object)//continue when I can switch view from search
         {
+            String rmType = "";
             for(int i=0;i<object.size();i++)
             {
                 Object[] temp = object.get(i);
+                String [] tempRooms = new String[object.size()];
+
                 for(int j =0;j<temp.length;j++){
-                    System.out.println(temp[j]);
+                    rmType = temp[2].toString();
+                   ///
+
+                  //  System.out.println(temp[j]);
                 }
+                tempRooms[i] = String.valueOf(rmType);
+                System.out.println(tempRooms[i]);
+                Rooms = new JList(tempRooms);
             }
     }
 

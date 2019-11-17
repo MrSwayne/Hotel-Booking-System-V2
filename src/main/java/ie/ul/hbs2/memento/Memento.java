@@ -1,6 +1,4 @@
-package ie.ul.hbs2.booking.memento;
-
-import ie.ul.hbs2.GUI.MainBookingView;
+package ie.ul.hbs2.memento;
 
 import javax.swing.*;
 

@@ -1,8 +1,8 @@
 package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.booking.*;
-import ie.ul.hbs2.booking.memento.CareTaker;
-import ie.ul.hbs2.booking.memento.Memento;
+import ie.ul.hbs2.common.Command;
+import ie.ul.hbs2.common.SubmitCommand;
 import ie.ul.hbs2.payments.IPaymentCallback;
 
 import javax.swing.*;
@@ -10,8 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class BookingSummaryView extends View implements ActionListener {
 
@@ -95,7 +93,7 @@ public class BookingSummaryView extends View implements ActionListener {
         cancelBtn.addActionListener(this);
 
     }
-    private void executeCommand(CommandSummary command) {
+    private void executeCommand(Command command) {
         command.execute();
     }
 
@@ -121,12 +119,10 @@ public class BookingSummaryView extends View implements ActionListener {
             PaymentView paymentView = (PaymentView) parent.get("payments");
            paymentView.showPaymentScreen(this.callback, book); // pass book here now?
 
-            executeCommand(new SubmitCommand(this));
+            executeCommand(new SubmitCommand());
         } else if(button == cancelBtn) {
             //Still need to work at the memento
 
-
-            executeCommand(new CancelCommand(this));
         }
     }
 }

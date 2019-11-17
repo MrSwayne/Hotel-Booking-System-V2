@@ -1,12 +1,12 @@
-package ie.ul.hbs2.booking;
+package ie.ul.hbs2.common;
 
 
 import ie.ul.hbs2.GUI.MainBookingView;
 
-public class BackCommand extends Command{
+public class BackCommand implements Command{
     public BackCommand(MainBookingView button)
     {
-        super(button);
+
     }
     @Override
     public void execute() {

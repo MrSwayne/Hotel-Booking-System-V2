@@ -1,12 +1,12 @@
-package ie.ul.hbs2.booking;
+package ie.ul.hbs2.common;
 
 
 import ie.ul.hbs2.GUI.BookingSummaryView;
 
-public class SubmitCommand extends CommandSummary {
-    public SubmitCommand(BookingSummaryView button)
+public class SubmitCommand implements Command {
+    public SubmitCommand()
     {
-        super(button);
+
     }
     @Override
     public void execute() {

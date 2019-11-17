@@ -1,6 +1,4 @@
-package ie.ul.hbs2.booking.memento;
-
-import ie.ul.hbs2.booking.Command;
+package ie.ul.hbs2.memento;
 
 import java.util.ArrayList;
 import java.util.List;
