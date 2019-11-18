@@ -50,11 +50,11 @@ public class BookingManager implements IPaymentCallback {
             Date date2 = sdf.parse(dateOut);
             long diff = Math.abs(date2.getTime() - date.getTime());
             nights =  (diff / (1000 * 60 * 60 * 24));
+            return true;
         } catch (ParseException e) {
             System.out.println("Invalid date(s)");
-            return true;
+            return false;
         }
-        return true;
     }
 
     //Calculating the spent - discount
