@@ -3,6 +3,8 @@ package ie.ul.hbs2.GUI;
 import ie.ul.hbs2.booking.*;
 import ie.ul.hbs2.common.BackCommand;
 import ie.ul.hbs2.common.Command;
+import ie.ul.hbs2.common.DoNothingCommand;
+import ie.ul.hbs2.common.NextCommand;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +15,7 @@ import java.util.*;
 public class MainBookingView extends View implements ActionListener{
     private static JTextArea roomsTypeList;
 
+
     //Booking View and Cancel View buttons and text fields
     private JPanel mainPanel = new JPanel(new GridLayout(2,1));
     private JTextField fnameField;
@@ -21,12 +24,14 @@ public class MainBookingView extends View implements ActionListener{
     private JTextField dateOutField;
     private JLabel roomsBooked;
     private JLabel type;
-    private JButton nextBtn;
-    private JButton backBtn;
+    private CommandJButton nextBtn;
+    private CommandJButton backBtn;
     BookingManager manager = new BookingManager();
 
     public MainBookingView(String name, Frame parent) {
         super(name, parent);
+        nextBtn = new CommandJButton(new DoNothingCommand());
+        backBtn = new CommandJButton(new DoNothingCommand());
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         //mainPanel = new JPanel();
@@ -70,11 +75,11 @@ public class MainBookingView extends View implements ActionListener{
 
         //nextButton
         JPanel control = new JPanel();
-        nextBtn = new JButton("Next");
+        nextBtn.setText("Next");
         buttonPanel.add(nextBtn);
 
         //backButton
-        backBtn = new JButton("Back");
+        backBtn.setText("Back");
         buttonPanel.add(backBtn);
 
         //Adding to main panel
@@ -103,10 +108,10 @@ public class MainBookingView extends View implements ActionListener{
 
         if (button == nextBtn) {
             Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
-                    dateInField.getText(),dateOutField.getText(),type.getText(),roomsBooked.getText());//last one need to be modified when search is done
-
-            manager.checkBooking(book,this.parent);
-
+                    dateInField.getText(),dateOutField.getText());//last one need to be modified when search is done
+            //manager.checkBooking(book,this.parent);
+            nextBtn.setCommand(new NextCommand(book,parent));
+            nextBtn.execute();
         }  else if(button == backBtn) {
             executeCommand(new BackCommand(this));
         }

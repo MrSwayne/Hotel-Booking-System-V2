@@ -18,15 +18,13 @@ public class Booking  {
 
     private double totalSpent;
 
-    public Booking() {
-    }
-    public Booking(String firstName, String lastName, String dateIn, String dateOut, String roomType,String roomAmount) {
+
+    public Booking(String firstName, String lastName, String dateIn, String dateOut) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateIn = dateIn;
         this.dateOut = dateOut;
-        this.roomType = roomType;
-        this.roomAmount = roomAmount;
+
     }
 
     public void setTotalSpent(double spent){
