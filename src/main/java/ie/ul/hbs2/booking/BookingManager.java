@@ -84,7 +84,7 @@ public class BookingManager implements IPaymentCallback {
 
         //DatabaseHelper db = DatabaseHelper.getInstance();
         try {
-            st = getConnection().prepareStatement(addQuery);
+            st = db.conn().prepareStatement(addQuery);
             Timestamp test = convertDates(dateIn);
             st.setInt(1, getNewBID());
             st.setTimestamp(2, convertDates(dateIn));
@@ -107,7 +107,7 @@ public class BookingManager implements IPaymentCallback {
         int GID = getSpecificGID(firstName, lastName);
 
         try {
-            st = getConnection().prepareStatement(addQuery);
+            st = db.conn().prepareStatement(addQuery);
             st.setDouble(1, totalSpent);
             st.setInt(2, membershipLvl);
             st.setInt(3, GID);
@@ -125,7 +125,7 @@ public class BookingManager implements IPaymentCallback {
         String addQuery = "INSERT INTO `guests`(`Gid`, `firstName`, `lastName`, `memberSince`, `totalSpent`,membershipLevel) VALUES (?,?,?,?,?,?)";
         if (checkGuest(firstName, lastName)) {
             try {
-                st = getConnection().prepareStatement(addQuery);
+                st = db.conn().prepareStatement(addQuery);
                 // System.out.println(st);
                 st.setInt(1, getNewGID() + 1);
                 st.setString(2, firstName);
@@ -150,7 +150,7 @@ public class BookingManager implements IPaymentCallback {
         String addQuery = "INSERT INTO `payments`(`Pid`, `IsPaid`, `TotalPrice`, `Bid`) VALUES (?,?,?,?)";
 
             try {
-                st = getConnection().prepareStatement(addQuery);
+                st = db.conn().prepareStatement(addQuery);
                 // System.out.println(st);
                 st.setInt(1, getPID(BID));
                 st.setInt(2, 0);
@@ -244,15 +244,6 @@ public class BookingManager implements IPaymentCallback {
             cost = Integer.parseInt(row.get("Price"));
         }
         return cost;
-    }
-    public Connection getConnection() {
-        Connection con = null;
-        try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost/hbs", "root", "");
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        return con;
     }
 
     @Override

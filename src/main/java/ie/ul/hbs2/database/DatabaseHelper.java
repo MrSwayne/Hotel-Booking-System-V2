@@ -42,7 +42,7 @@ public class DatabaseHelper {
 	}
 
 	//Create connection using JDBC driver
-	private Connection conn() {
+	public Connection conn() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url);
