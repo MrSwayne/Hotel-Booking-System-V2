@@ -1,6 +1,7 @@
 package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.booking.Booking;
+import ie.ul.hbs2.booking.BookingManager;
 import ie.ul.hbs2.payments.*;
 import ie.ul.hbs2.payments.interceptors.CardPayment;
 

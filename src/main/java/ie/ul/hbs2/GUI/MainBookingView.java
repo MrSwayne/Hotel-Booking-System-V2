@@ -14,6 +14,8 @@ import java.util.*;
 
 public class MainBookingView extends View implements ActionListener{
     private static JTextArea roomsTypeList;
+    private Object [] tempRooms;
+    private Object [] costRooms;
 
 
     //Booking View and Cancel View buttons and text fields
@@ -108,7 +110,7 @@ public class MainBookingView extends View implements ActionListener{
 
         if (button == nextBtn) {
             Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
-                    dateInField.getText(),dateOutField.getText());//last one need to be modified when search is done
+                    dateInField.getText(),dateOutField.getText(),costRooms,tempRooms);//last one need to be modified when search is done
             //manager.checkBooking(book,this.parent);
             nextBtn.setCommand(new NextCommand(book,parent));
             nextBtn.execute();
@@ -126,19 +128,24 @@ public class MainBookingView extends View implements ActionListener{
         {
 
             String rmType = "";
+            String cost = "";
+            tempRooms = new Object[object.size()];
+            costRooms = new Object[object.size()];
             for(int i=0;i<object.size();i++)
             {
                 Object[] temp = object.get(i);
-                Object [] tempRooms = new Object[object.size()];
+                System.out.println(temp);
+
 
                 for(int j =0;j<temp.length;j++){
                     rmType = temp[2].toString();
-
+                    cost = temp[4].toString();
 
                   //  System.out.println(temp[j]);
                 }
                 tempRooms[i] = rmType;
-                System.out.println(tempRooms[i]);
+                costRooms[i] = cost;
+
                 roomsTypeList = new JTextArea();
                 roomsTypeList.setText(tempRooms[i].toString());
                 roomsTypeList.setEditable(false);
