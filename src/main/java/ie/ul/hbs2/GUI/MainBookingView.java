@@ -111,19 +111,15 @@ public class MainBookingView extends View implements ActionListener{
         if (button == nextBtn) {
             Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
                     dateInField.getText(),dateOutField.getText(),costRooms,tempRooms);//last one need to be modified when search is done
-            //manager.checkBooking(book,this.parent);
             nextBtn.setCommand(new NextCommand(book,parent));
             nextBtn.execute();
         }  else if(button == backBtn) {
-            executeCommand(new BackCommand(this));
+            backBtn.setCommand(new BackCommand());
+            backBtn.execute();
         }
     }
 
-    private void executeCommand(Command command) {
-        command.execute();
-    }
-
-        //WIP
+        //iterating to get the values.
         public void getRoomsBooked(ArrayList<Object[]> object)//continue when I can switch view from search
         {
 
