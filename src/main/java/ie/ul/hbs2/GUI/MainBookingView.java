@@ -132,7 +132,6 @@ public class MainBookingView extends View implements ActionListener{
         if (button == nextBtn) {
             selectedDateIn = (Date) checkInDatePicker.getModel().getValue();
             selectedDateOut =  (Date) checkOutDatePicker.getModel().getValue();
-
             if(selectedDateIn == null || selectedDateOut == null)
             {
                 dateIn = "";
