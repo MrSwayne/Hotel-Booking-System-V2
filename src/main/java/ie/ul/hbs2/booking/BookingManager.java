@@ -66,7 +66,7 @@ public class BookingManager implements IPaymentCallback {
         double roomCost =  book.getRoomsPrice();
         float discount;
         discount = RewardFactory.getReward(memLVL).get_discount() / 100;
-        totalSpent = ((roomCost * nights) * rmAmount);
+        totalSpent = ((roomCost * nights));
 
         //subtract discount
         totalSpent *= 1 - discount;

@@ -1,5 +1,7 @@
 package ie.ul.hbs2.GUI;
 
+import ie.ul.hbs2.common.DoNothingCommand;
+import ie.ul.hbs2.common.NextCommand;
 import ie.ul.hbs2.search.*;
 
 import java.awt.*;
@@ -17,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 public class SearchView extends View
 {
 	private javax.swing.JButton jButton_Search;
-	private javax.swing.JButton jButton_Next;
+	private CommandJButton jButton_Next;
 	private javax.swing.JComboBox jComboBox_Switch;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JScrollPane jScrollPane1;
@@ -224,7 +226,7 @@ public class SearchView extends View
 		jPanel2 = new javax.swing.JPanel();
 
 		jButton_Search = new javax.swing.JButton();
-		jButton_Next = new javax.swing.JButton();
+		jButton_Next =  new CommandJButton(new DoNothingCommand());
 		String[] tableSwitch={"Guests","Bookings","Rooms"};
 		jComboBox_Switch = new javax.swing.JComboBox<>(tableSwitch);
 		jText_Search = new javax.swing.JTextField();
@@ -291,11 +293,13 @@ public class SearchView extends View
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				MainBookingView bookingView = new MainBookingView("booking",parent);
+				jButton_Next.setCommand(new NextCommand(selectedData,parent));
+				jButton_Next.execute();
+				//MainBookingView bookingView = new MainBookingView("booking",parent);
 
-				bookingView.getRoomsBooked(selectedData);
+				//bookingView.getRoomsBooked(selectedData);
 
-				parent.show(bookingView);
+				//parent.show(bookingView);
 
 				System.out.println("test");
 			}

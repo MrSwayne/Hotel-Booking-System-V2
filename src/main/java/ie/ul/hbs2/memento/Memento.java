@@ -1,15 +1,17 @@
 package ie.ul.hbs2.memento;
 
+import ie.ul.hbs2.booking.Booking;
+
 import javax.swing.*;
 
 public class Memento {
-    private JPanel state;
+    private Booking state;
 
-    public Memento(JPanel state){
+    public Memento(Booking state){
         this.state = state;
     }
 
-    public JPanel getState(){
+    public Booking getState(){
         return state;
     }
 }

@@ -114,7 +114,7 @@ public class MainBookingView extends View implements ActionListener{
             nextBtn.setCommand(new NextCommand(book,parent));
             nextBtn.execute();
         }  else if(button == backBtn) {
-            backBtn.setCommand(new BackCommand());
+            //backBtn.setCommand(new B;
             backBtn.execute();
         }
     }
