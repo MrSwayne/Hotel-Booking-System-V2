@@ -192,6 +192,7 @@ public class ManagementView extends View {
                     if(q.get(0).get("LastName").equals(inputLN)){
                         if(action.equals("Add")) {
                             e.addEmployee(new Employee(inputFN, inputLN, q.get(0).get("Password"), Integer.parseInt(q.get(0).get("Wages"))));
+                            notFound = false;
                             System.out.println("Employee added");
                         }
                         else if(action.equals("Remove")) {
