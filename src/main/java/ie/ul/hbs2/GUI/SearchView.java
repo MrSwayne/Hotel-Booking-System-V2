@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class SearchView extends View
 {
 	private javax.swing.JButton jButton_Search;
+	private javax.swing.JButton jButton_Clear;
 	private CommandJButton jButton_Next;
 	private javax.swing.JComboBox jComboBox_Switch;
 	private javax.swing.JPanel jPanel2;
@@ -228,6 +229,7 @@ public class SearchView extends View
 		jPanel2 = new javax.swing.JPanel();
 
 		jButton_Search = new javax.swing.JButton();
+		jButton_Clear = new javax.swing.JButton();
 		jButton_Next =  new CommandJButton(new DoNothingCommand());
 		String[] tableSwitch={"Guests","Bookings","Rooms"};
 		jComboBox_Switch = new javax.swing.JComboBox<>(tableSwitch);
@@ -239,8 +241,8 @@ public class SearchView extends View
 		jTable_Users.setRowSelectionAllowed(true);
 		jTable_Users.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
+		jButton_Clear.setText("Clear");
 		jButton_Next.setText("Next");
-
 		jButton_Search.setText("Search");
 
 		jScrollPane1.setViewportView(jTable_Users);
@@ -251,11 +253,11 @@ public class SearchView extends View
 		jPanel2.add(jComboBox_Switch, BorderLayout.NORTH);
 		jPanel2.add(jButton_Search,BorderLayout.NORTH);
 		jPanel2.add(jText_Search,BorderLayout.NORTH);
+		jPanel2.add(jButton_Clear,BorderLayout.EAST);
 		jPanel2.add(jScrollPane1,BorderLayout.CENTER);
 		jPanel2.add(jButton_Next,BorderLayout.SOUTH);
 
 		this.add(jPanel2);
-		//this.add(jScrollPane1);
 
 		jButton_Search.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -265,6 +267,13 @@ public class SearchView extends View
 			}
 		});
 
+		jButton_Clear.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				selectedData.clear();
+			}
+		});
 
 
 		//Combobox Check (Guest or Booking)
@@ -298,15 +307,10 @@ public class SearchView extends View
 				CareTaker.getInstance().add(new Memento(jPanel2));
 				jButton_Next.setCommand(new NextCommand(selectedData,parent));
 				jButton_Next.execute();
-				//MainBookingView bookingView = new MainBookingView("booking",parent);
-
-				//bookingView.getRoomsBooked(selectedData);
-
-				//parent.show(bookingView);
-
-				System.out.println("test");
 			}
 		});
+
+
 
 		jText_Search.setFont(new java.awt.Font("Tahoma", 1, 18));
 		jTable_Users.setFont(new java.awt.Font("Tahoma", 1, 14));
