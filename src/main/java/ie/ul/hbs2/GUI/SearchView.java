@@ -41,14 +41,7 @@ public class SearchView extends View
 
 	public Connection getConnection()
 	{
-		String hotel = "";
-
-
-		//Strategy DB switch -Hotel1Strategy, Hotel2Strategy... HotelNStrategy
-		//Temporary until UI integrated for Hotel selection
-		SearchStrategy searchStrategy = new Hotel1Strategy();
-		hotel = searchStrategy.hotelChoice(hotel);
-
+		String hotel = "hbs";
 
 		Connection con = null;
 		try
