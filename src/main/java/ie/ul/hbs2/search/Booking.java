@@ -6,7 +6,7 @@ public class Booking
     private int dateIn;
     private int dateout;
     private int Gid;
-    private int Rid;
+
 
     public int getBid()
     {
@@ -24,17 +24,14 @@ public class Booking
     {
         return Gid;
     }
-    public int getRid()
-    {
-        return Rid;
-    }
 
-    public Booking(int Bid, int dateIn, int dateout, int Gid, int Rid)
+
+    public Booking(int Bid, int dateIn, int dateout, int Gid)
     {
         this.Bid = Bid;
         this.dateIn = dateIn;
         this.dateout = dateout;
         this.Gid = Gid;
-        this.Rid = Rid;
+
     }
 }

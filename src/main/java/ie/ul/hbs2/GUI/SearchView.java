@@ -76,7 +76,7 @@ public class SearchView extends View
 	{
 		ArrayList<Rooms> rooms = roomsList(jText_Search.getText());
 		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new Object[]{"Gid", "firstname", "lastname", "memberSince","totalSpent","membershipLevel"});
+		model.setColumnIdentifiers(new Object[]{"Rid", "Rnumber", "Type", "Available","Price","Hid"});
 		Object[] row = new Object[6];
 		for (int i = 0; i < rooms.size(); i++)
 		{
@@ -95,15 +95,14 @@ public class SearchView extends View
 	{
 		ArrayList<Booking> bookings = bookingsList(jText_Search.getText());
 		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new Object[]{"Bid", "DateIn", "DateOut", "Gid","Rid"});
-		Object[] row = new Object[5];
+		model.setColumnIdentifiers(new Object[]{"Bid", "DateIn", "DateOut", "Gid"});
+		Object[] row = new Object[4];
 		for (int i = 0; i < bookings.size(); i++)
 		{
 			row[0] = bookings.get(i).getBid();
 			row[1] = bookings.get(i).getdateIn();
 			row[2] = bookings.get(i).getdateOut();
 			row[3] = bookings.get(i).getGid();
-			row[4] = bookings.get(i).getRid();
 			model.addRow(row);
 		}
 		jTable_Users.setModel(model);
@@ -194,7 +193,7 @@ public class SearchView extends View
 		{
 			Connection con = getConnection();
 			st = con.createStatement();
-			String searchQuery = "SELECT * FROM `bookings` WHERE CONCAT(`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) LIKE '%" + ValToSearch + "%'";
+			String searchQuery = "SELECT * FROM `bookings` WHERE CONCAT(`Bid`, `dateIn`, `dateOut`, `Gid`) LIKE '%" + ValToSearch + "%'";
 			rs = st.executeQuery(searchQuery);
 
 			Booking booking;
@@ -205,8 +204,7 @@ public class SearchView extends View
 						rs.getInt("Bid"),
 						rs.getInt("dateIn"),
 						rs.getInt("dateOut"),
-						rs.getInt("Gid"),
-						rs.getInt("Rid")
+						rs.getInt("Gid")
 				);
 				bookingsList.add(booking);
 			}
@@ -275,20 +273,24 @@ public class SearchView extends View
 			@Override
 			public void itemStateChanged(ItemEvent event)
 			{
-				JComboBox jComboBoxSwitch = (JComboBox) event.getSource();
+				jComboBox_Switch = (JComboBox) event.getSource();
 
 				Object item = event.getItem();
 
-				if(event.getItem()=="Guests")
+				if(item=="Guests")
 				{
 					findUsers();
 				}
 				else
-					if (event.getItem()=="Bookings")
+					if (item=="Bookings")
 					{
 					findBookings();
 					}
-					else findRooms();
+					else
+						if(item=="Rooms")
+						{
+							findRooms();
+						}
 			}
 		});
 

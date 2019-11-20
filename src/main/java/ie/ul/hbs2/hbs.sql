@@ -32,16 +32,15 @@ CREATE TABLE `bookings` (
   `Bid` int(11) NOT NULL,
   `dateIn` timestamp NOT NULL DEFAULT current_timestamp(),
   `dateOut` timestamp NOT NULL DEFAULT current_timestamp(),
-  `Gid` int(11) NOT NULL,
-  `Rid` int(11) NOT NULL
+  `Gid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) VALUES
-(1, '2019-01-10 00:10:00', '2019-01-11 00:10:00', 201, 1);
+INSERT INTO `bookings` (`Bid`, `dateIn`, `dateOut`, `Gid`) VALUES
+(1, '2019-01-10 00:10:00', '2019-01-11 00:10:00', 201);
 
 -- --------------------------------------------------------
 
@@ -348,14 +347,15 @@ CREATE TABLE `rooms` (
   `Type` varchar(40) NOT NULL,
   `available` tinyint(1) DEFAULT 1,
   `Price` int(11) DEFAULT 0,
-  `Hid` int(11) NOT NULL
+  `Hid` int(11) NOT NULL,
+  `Bid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`Rid`, `Rnumber`, `Type`, `available`, `Price`, `Hid`) VALUES
+INSERT INTO `rooms` (`Rid`, `Rnumber`, `Type`, `available`, `Price`, `Hid`,`Bid`) VALUES
 (1, 1, 'Single', 1, 50, 1),
 (2, 2, 'Double', 1, 100, 1),
 (3, 3, 'King', 1, 150, 1),
