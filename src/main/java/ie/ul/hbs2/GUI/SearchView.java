@@ -2,6 +2,8 @@ package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.common.DoNothingCommand;
 import ie.ul.hbs2.common.NextCommand;
+import ie.ul.hbs2.memento.CareTaker;
+import ie.ul.hbs2.memento.Memento;
 import ie.ul.hbs2.search.*;
 
 import java.awt.*;
@@ -249,11 +251,11 @@ public class SearchView extends View
 		jPanel2.add(jComboBox_Switch, BorderLayout.NORTH);
 		jPanel2.add(jButton_Search,BorderLayout.NORTH);
 		jPanel2.add(jText_Search,BorderLayout.NORTH);
-		//jPanel2.add(jScrollPane1,BorderLayout.CENTER);
+		jPanel2.add(jScrollPane1,BorderLayout.CENTER);
 		jPanel2.add(jButton_Next,BorderLayout.SOUTH);
 
 		this.add(jPanel2);
-		this.add(jScrollPane1);
+		//this.add(jScrollPane1);
 
 		jButton_Search.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -293,6 +295,7 @@ public class SearchView extends View
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				CareTaker.getInstance().add(new Memento(jPanel2));
 				jButton_Next.setCommand(new NextCommand(selectedData,parent));
 				jButton_Next.execute();
 				//MainBookingView bookingView = new MainBookingView("booking",parent);

@@ -31,7 +31,7 @@ public class NextCommand implements Command {
     public void execute() {
         if(type == 1)
         {
-
+            parent.getContentPane().removeAll();
             MainBookingView bookingView = new MainBookingView("booking",parent);
             bookingView.getRoomsBooked(selectedData);
             parent.show(bookingView);
