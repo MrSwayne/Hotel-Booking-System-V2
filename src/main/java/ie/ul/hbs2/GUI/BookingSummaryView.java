@@ -1,8 +1,11 @@
 package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.booking.*;
+import ie.ul.hbs2.common.BackCommand;
 import ie.ul.hbs2.common.Command;
+import ie.ul.hbs2.common.DoNothingCommand;
 import ie.ul.hbs2.common.SubmitCommand;
+import ie.ul.hbs2.memento.CareTaker;
 import ie.ul.hbs2.payments.IPaymentCallback;
 
 import javax.swing.*;
@@ -16,8 +19,8 @@ public class BookingSummaryView extends View implements ActionListener {
     private IPaymentCallback callback;
     private static JTextArea roomsTypeList;
     JPanel mainPanel2 = new JPanel(new GridLayout(2, 1));
-    private JButton submitBtn = null;
-    private JButton cancelBtn = null;
+    private CommandJButton submitBtn;
+    private CommandJButton cancelBtn;
     private double totalSpent;
     private Booking book;
 
@@ -31,8 +34,8 @@ public class BookingSummaryView extends View implements ActionListener {
         JPanel mainPanel = new JPanel(new GridLayout(4, 3));
         JPanel buttonPanel = new JPanel();
         //this.totalSpent = manager.calculateTotalSpent();
-        System.out.println("normal" + totalSpent);
-        System.out.println("get method" + book.getTotalSpent());
+        submitBtn = new CommandJButton(new DoNothingCommand());
+        cancelBtn = new CommandJButton(new DoNothingCommand());
 
         JLabel bookingID = new JLabel("Booking ID: ", JLabel.CENTER);
         JLabel bidLabel = new JLabel(String.valueOf(book.getBID()), JLabel.CENTER);
@@ -61,11 +64,11 @@ public class BookingSummaryView extends View implements ActionListener {
 
         //SubmitButton
         JPanel control = new JPanel();
-        submitBtn = new JButton("Submit");
+        submitBtn.setText("Submit");
         control.add(submitBtn);
 
         //CancelButton
-        cancelBtn = new JButton("Cancel");
+        cancelBtn.setText("Cancel");
         control.add(cancelBtn);
 
         mainPanel.add(bookingID);
@@ -96,9 +99,6 @@ public class BookingSummaryView extends View implements ActionListener {
 
     }
 
-    private void executeCommand(Command command) {
-        command.execute();
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -107,29 +107,17 @@ public class BookingSummaryView extends View implements ActionListener {
         if (button == submitBtn) {
             System.out.println("Processing payment now");
             //Code to call Adam's method in payment view
-            try {
-                BookingManager manager = new BookingManager();
-                //book.addBooking(book.getDateIn(),book.getDateOut());
-                manager.addGuest(book.getFirstName(), book.getLastName(), book.getDateIn());
-                //manager.updateGuest(book.getFirstName(),book.getLastName(),book.getTotalSpent(),book.getMemLvl());
-                // manager.addPayment(book.getTotalSpent(),book.getBID());
+            submitBtn.setCommand(new SubmitCommand(this.callback,book,parent));
+            submitBtn.execute();
 
-
-            } catch (ParseException ex) {
-                ex.printStackTrace();
-            }
-
-            PaymentView paymentView = (PaymentView) parent.get("payments");
-            paymentView.showPaymentScreen(this.callback, book); // pass book here now?
-
-            executeCommand(new SubmitCommand());
         } else if (button == cancelBtn) {
-            //Still need to work at the memento
+            cancelBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1),parent));
+            cancelBtn.execute();
 
         }
     }
 
-    public void getRoomsBooked(Object[] roomsType) {
+    private void getRoomsBooked(Object[] roomsType) {
         String rmType = "";
         for (int i = 0; i < roomsType.length; i++) {
             roomsTypeList = new JTextArea();

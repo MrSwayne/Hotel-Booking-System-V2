@@ -5,13 +5,13 @@ import ie.ul.hbs2.booking.Booking;
 import javax.swing.*;
 
 public class Memento {
-    private Booking state;
+    private JPanel state;
 
-    public Memento(Booking state){
+    public Memento(JPanel state){
         this.state = state;
     }
 
-    public Booking getState(){
+    public JPanel getState(){
         return state;
     }
 }

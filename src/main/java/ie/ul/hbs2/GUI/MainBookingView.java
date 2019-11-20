@@ -2,9 +2,10 @@ package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.booking.*;
 import ie.ul.hbs2.common.BackCommand;
-import ie.ul.hbs2.common.Command;
 import ie.ul.hbs2.common.DoNothingCommand;
 import ie.ul.hbs2.common.NextCommand;
+import ie.ul.hbs2.memento.CareTaker;
+import ie.ul.hbs2.memento.Memento;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ public class MainBookingView extends View implements ActionListener{
     private static JTextArea roomsTypeList;
     private Object [] tempRooms;
     private Object [] costRooms;
-
+    private JPanel mementoPanel = new JPanel(new GridLayout(2,1));
 
     //Booking View and Cancel View buttons and text fields
     private JPanel mainPanel = new JPanel(new GridLayout(2,1));
@@ -91,10 +92,12 @@ public class MainBookingView extends View implements ActionListener{
         mainPanel.add(dateOutPanel);
         mainPanel.add(typePanel);
         //mainPanel.add(control);
+        mementoPanel.add(mainPanel);
+        mementoPanel.add(buttonPanel);
 
-
-        this.add(mainPanel,0);
-        this.add(buttonPanel,1);
+        //this.add(mainPanel,0);
+       // this.add(buttonPanel,1);
+        this.add(mementoPanel);
         this.setVisible(true);
        // parent.show(this);
 
@@ -111,10 +114,11 @@ public class MainBookingView extends View implements ActionListener{
         if (button == nextBtn) {
             Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
                     dateInField.getText(),dateOutField.getText(),costRooms,tempRooms);//last one need to be modified when search is done
+            CareTaker.getInstance().add(new Memento(mementoPanel));
             nextBtn.setCommand(new NextCommand(book,parent));
             nextBtn.execute();
         }  else if(button == backBtn) {
-            //backBtn.setCommand(new B;
+            //backBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
             backBtn.execute();
         }
     }

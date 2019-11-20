@@ -31,10 +31,12 @@ public class NextCommand implements Command {
     public void execute() {
         if(type == 1)
         {
+
             MainBookingView bookingView = new MainBookingView("booking",parent);
             bookingView.getRoomsBooked(selectedData);
             parent.show(bookingView);
         }else if(type==0){
+            parent.getContentPane().removeAll();
             BookingManager manager = new BookingManager();
             manager.checkBooking(book,parent);
         }
