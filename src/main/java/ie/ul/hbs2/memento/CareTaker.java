@@ -19,10 +19,10 @@ public class CareTaker {
 
     public Memento get(int n){
         Memento x;
-        x = mementoList.get(mementoList.size()-n);
-        for (int i = 1;i<n;i++){
-            mementoList.remove(mementoList.size()-i);
-        }
+        int size = mementoList.size();
+        x = mementoList.get(mementoList.size() - n);
+        for (int i = 1;i<size;i++){
+            mementoList.remove(mementoList.size()-i); }
         return (x);
     }
 }
