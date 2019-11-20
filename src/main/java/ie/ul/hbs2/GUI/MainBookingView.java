@@ -127,12 +127,13 @@ public class MainBookingView extends View implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton)e.getSource();
-        selectedDateIn = (Date) checkInDatePicker.getModel().getValue();
-        selectedDateOut =  (Date) checkOutDatePicker.getModel().getValue();
-        dateIn = dateFormat.format(selectedDateIn);
-        dateOut = dateFormat.format(selectedDateOut);
+
 
         if (button == nextBtn) {
+            selectedDateIn = (Date) checkInDatePicker.getModel().getValue();
+            selectedDateOut =  (Date) checkOutDatePicker.getModel().getValue();
+            dateIn = dateFormat.format(selectedDateIn);
+            dateOut = dateFormat.format(selectedDateOut);
             Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
                     dateIn,dateOut,costRooms,tempRooms);//last one need to be modified when search is done
             CareTaker.getInstance().add(new Memento(mementoPanel));
