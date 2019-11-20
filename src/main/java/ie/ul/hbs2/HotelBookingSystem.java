@@ -37,7 +37,7 @@ public class HotelBookingSystem {
         //bs.summary("test", "123", "25/09/2019", "17/10/2019", "3", "double", 15, 1000);
 
         //this.frame.show(booking);
-       this.frame.show(search);
+       this.frame.show(management);
 
     }
 
