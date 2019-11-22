@@ -1,9 +1,5 @@
 package ie.ul.hbs2;
 
-import ie.ul.hbs2.database.DatabaseHelper;
-import ie.ul.hbs2.search.Hotel1Strategy;
-import ie.ul.hbs2.search.SearchStrategy;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

@@ -1,9 +1,14 @@
 package ie.ul.hbs2.GUI;
 
+import ie.ul.hbs2.common.DoNothingCommand;
+import ie.ul.hbs2.common.LogoutCommand;
 import ie.ul.hbs2.database.DatabaseHelper;
 import ie.ul.hbs2.database.Query;
+import ie.ul.hbs2.logging.ContextObject;
+import ie.ul.hbs2.logging.interceptors.LoggingInterceptor;
 import ie.ul.hbs2.management.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +21,8 @@ public class ManagementView extends View {
     private final TotalWagesVisitor totalWagesVisitor = new TotalWagesVisitorImpl();
     private final EmployeeListVisitor employeeListVisitor = new EmployeeListVisitorImpl();
     private final DatabaseHelper db = DatabaseHelper.getInstance();
+    private LoggingInterceptor interceptor = new LoggingInterceptor();
+    private ContextObject context;
 
     public ManagementView(String name, Frame parent) {
         super(name, parent);
@@ -43,7 +50,7 @@ public class ManagementView extends View {
                 Query query = db.executeQuery("select * from users where FirstName='" + inputFN +  "' and LastName='" + inputLN + "';");
                 IEmployee e;
                 System.out.println(query.toString());
-                if(query.get(0).get("Password").equals(inputP)) {
+                if(query.size() > 0 && query.get(0).get("Password").equals(inputP)) {
                     System.out.println("Password matches in database");
                     Iterator<String> o = query.get(0).getColNames();
                     while (o.hasNext()){
@@ -71,10 +78,12 @@ public class ManagementView extends View {
                     }
                     System.out.println("Showing management details.");
                     //details.removeAll();
+                    context = new ContextObject(e.getFirstName(), e.getLastName(), new Timestamp(System.currentTimeMillis()));
+                    System.out.println(context.getLoginTime());
+                    interceptor.preLoginReply(context);
                     showManagementDetails(e);
                 }
                 else {
-                    //details.removeAll();
                     showErrorDetails();
                 }
             }
@@ -105,8 +114,8 @@ public class ManagementView extends View {
 
     private void showManagementDetails(final IEmployee e) {
         this.removeAll();
-        final JPanel managementDetails = new JPanel(new GridLayout(5,2));
-
+        final JPanel managementDetails = new JPanel(new GridLayout(6,2));
+        CommandJButton logout = new CommandJButton(new DoNothingCommand());
 
         if (e.getManagementLevel() < 3) {
             System.out.println("Manager using system");
@@ -138,10 +147,22 @@ public class ManagementView extends View {
                     addRemoveEmployee(e, "Remove");
                 }
             });
+            logout.setText("Logout");
+            logout.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    context.setLogoutTime(new Timestamp(System.currentTimeMillis()));
+                    System.out.println(context.getLogoutTime());
+                    interceptor.postLogoutReply(context);
+                    logout.setCommand(new LogoutCommand(parent));
+                    logout.execute();
+                }
+            });
             managementDetails.add(showEmployees, 0);
             managementDetails.add(showTotalWages, 1);
             managementDetails.add(addEmployee, 2);
             managementDetails.add(removeEmployee, 3);
+            managementDetails.add(logout, 4);
         } else {
             System.out.println("Employee using system");
             JButton showWages = new JButton("Show Wages");
@@ -151,6 +172,7 @@ public class ManagementView extends View {
         this.revalidate();
         this.repaint();
     }
+
 
     private void addRemoveEmployee(final IEmployee e, final String action) {
         this.removeAll();
@@ -164,27 +186,41 @@ public class ManagementView extends View {
             public void actionPerformed(ActionEvent actionEvent) {
                 String inputFN = firstName.getText();
                 String inputLN = lastName.getText();
+                boolean notFound = true;
                 Query q = db.executeQuery("select * from users where FirstName='" + inputFN + "';");
-                if(q.get(0).get("LastName").equals(inputLN)){
-                    if(action.equals("Add")) {
-                        e.addEmployee(new Employee(inputFN, inputLN, q.get(0).get("Password"), Integer.parseInt(q.get(0).get("Wages"))));
-                        System.out.println("Employee added");
-                    }
-                    else if(action.equals("Remove")) {
-                        List<IEmployee> currentEmployeeList = e.accept(employeeListVisitor);
-                        Employee toBeRemoved = null;
-                        boolean notFound = true;
-                        for (int i = 0; i < currentEmployeeList.size() && notFound; i++) {
-                            if (q.get(0).get("FirstName").equals(currentEmployeeList.get(i).getFirstName()) && q.get(0).get("LastName").equals(currentEmployeeList.get(i).getLastName())) {
-                                toBeRemoved = (Employee) currentEmployeeList.get(i);
-                                notFound = false;
+                if(q.size() != 0) {
+                    if(q.get(0).get("LastName").equals(inputLN)){
+                        if(action.equals("Add")) {
+                            e.addEmployee(new Employee(inputFN, inputLN, q.get(0).get("Password"), Integer.parseInt(q.get(0).get("Wages"))));
+                            notFound = false;
+                            System.out.println("Employee added");
+                        }
+                        else if(action.equals("Remove")) {
+                            List<IEmployee> currentEmployeeList = e.accept(employeeListVisitor);
+                            Employee toBeRemoved = null;
+                            for (int i = 0; i < currentEmployeeList.size() && notFound; i++) {
+                                if (q.get(0).get("FirstName").equals(currentEmployeeList.get(i).getFirstName()) && q.get(0).get("LastName").equals(currentEmployeeList.get(i).getLastName())) {
+                                    toBeRemoved = (Employee) currentEmployeeList.get(i);
+                                    notFound = false;
+                                }
+                            }
+                            if (!notFound) {
+                                e.removeEmployee(toBeRemoved);
+                                System.out.println("Employee removed");
                             }
                         }
-                        e.removeEmployee(toBeRemoved);
-                        System.out.println("Employee removed");
+                        if(notFound) {
+                            showErrorDetails();
+                        } else {
+                            showManagementDetails(e);
+                        }
+                    } else {
+                        System.out.println("First name exists but last name does not match");
+                        showErrorDetails();
                     }
-                    showManagementDetails(e);
-                } else {
+                }
+                else {
+                    System.out.println("This employee does not exist in the database");
                     showErrorDetails();
                 }
             }

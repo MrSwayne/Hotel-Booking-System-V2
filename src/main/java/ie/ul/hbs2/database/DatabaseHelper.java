@@ -16,15 +16,15 @@ import java.util.Map;
 public class DatabaseHelper {
 	
 	private Connection conn = null;
-	
+	/*
 	private final String host = "localhost";
 	private final String database = "hbs";
 	private final String username = "root";
 	private final String password = "";
-	
+
 	private String url = "jdbc:mysql://" + host + "/" + database + "?" + "zeroDateTimeBehavior=convertToNull&" + "user=" + username + "&password=" + password;
-	
-	
+	*/
+	private String url;
 	private String uName;
 	private String pWord;
 	private String ip;
@@ -42,14 +42,20 @@ public class DatabaseHelper {
 	}
 
 	//Create connection using JDBC driver
-	private Connection conn() {
+	public Connection conn() throws SQLException {
+		DbStrategy onlineStrategy = new MariaDBStrategy();
+		DbStrategy offlineStrategy = new SQLliteStrategy();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
+			url=onlineStrategy.connectionStrat(url);
 			conn = DriverManager.getConnection(url);
 		} catch(ClassNotFoundException e) {
-			e.printStackTrace();
+
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			url=offlineStrategy.connectionStrat(url);
+			conn = DriverManager.getConnection(url);
 			e.printStackTrace();
 		}
 		

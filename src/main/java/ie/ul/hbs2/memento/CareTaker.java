@@ -1,6 +1,4 @@
-package ie.ul.hbs2.booking.memento;
-
-import ie.ul.hbs2.booking.Command;
+package ie.ul.hbs2.memento;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +19,10 @@ public class CareTaker {
 
     public Memento get(int n){
         Memento x;
-        x = mementoList.get(mementoList.size()-n);
-        for (int i = 1;i<n;i++){
-            mementoList.remove(mementoList.size()-i);
-        }
+        int size = mementoList.size();
+        x = mementoList.get(mementoList.size() - n);
+        for (int i = 1;i<size;i++){
+            mementoList.remove(mementoList.size()-i); }
         return (x);
     }
 }

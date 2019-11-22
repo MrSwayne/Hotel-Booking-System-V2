@@ -11,22 +11,22 @@ import java.util.Date;
 
 public class Booking  {
     private final static String dateFormat = "dd/MM/yy";
-    private String firstName,lastName,dateIn,dateOut,roomType,roomAmount;
+    private String firstName,lastName,dateIn,dateOut;
     private int memLvl,BID;
-    private double price;
-    private long nights;
+    private Object [] rmType;
+    private Object [] rmCost;
 
     private double totalSpent;
 
-    public Booking() {
-    }
-    public Booking(String firstName, String lastName, String dateIn, String dateOut, String roomType,String roomAmount) {
+
+    public Booking(String firstName, String lastName, String dateIn, String dateOut,Object[] rmCost,Object [] rmtype) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateIn = dateIn;
         this.dateOut = dateOut;
-        this.roomType = roomType;
-        this.roomAmount = roomAmount;
+        this.rmCost = rmCost;
+        this.rmType = rmtype;
+
     }
 
     public void setTotalSpent(double spent){
@@ -49,12 +49,6 @@ public class Booking  {
     public String getDateOut(){
         return dateOut;
     }
-    public String getRoomType(){
-        return roomType;
-    }
-    public String getRoomAmount(){
-        return this.roomAmount;
-    }
 
     public void setMemLvl(int memLvl){
         this.memLvl = memLvl;
@@ -70,11 +64,16 @@ public class Booking  {
         this.BID = BID;
     }
 
-    public void setRoomsTotalPrice(double price){
-        this.price = price;
+    public Object[] getRoomsType(){
+        return this.rmType;
     }
     public double getRoomsPrice(){
-        return this.price;
+        double cost = 0;
+        for (int i = 0; i<rmCost.length;i++)
+        {
+            cost = cost  + Double.parseDouble(rmCost[i].toString());
+        }
+        return cost;
     }
 
 
