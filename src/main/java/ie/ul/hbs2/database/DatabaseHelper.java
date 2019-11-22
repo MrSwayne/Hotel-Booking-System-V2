@@ -49,16 +49,12 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			url=onlineStrategy.connectionStrat(url);
 			conn = DriverManager.getConnection(url);
-		} catch(ClassNotFoundException e) {
-
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch(ClassNotFoundException | SQLException e) {
 			url=offlineStrategy.connectionStrat(url);
 			conn = DriverManager.getConnection(url);
-			e.printStackTrace();
+			//DB creation etc.
 		}
-		
+
 		try {
 			conn = DriverManager.getConnection(url, uName, pWord);
 		} catch (SQLException e) {

@@ -2,6 +2,7 @@ package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.common.DoNothingCommand;
 import ie.ul.hbs2.common.NextCommand;
+import ie.ul.hbs2.database.DatabaseHelper;
 import ie.ul.hbs2.memento.CareTaker;
 import ie.ul.hbs2.memento.Memento;
 import ie.ul.hbs2.search.*;
@@ -39,20 +40,6 @@ public class SearchView extends View
 		initComponents();
 	}
 
-	public Connection getConnection()
-	{
-		String hotel = "hbs";
-
-		Connection con = null;
-		try
-		{
-			con = DriverManager.getConnection("jdbc:mysql://localhost/"+hotel, "root", "");
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return con;
-	}
-
 	//The following 3 methods all focus on taking a query, and translating it to an Arraylist, which can in turn be translated to readable english for the user
 	public ArrayList<User> usersList(String ValToSearch)
 	{
@@ -63,7 +50,7 @@ public class SearchView extends View
 
 		try
 		{
-			Connection con = getConnection();
+			Connection con = DatabaseHelper.getInstance().conn();
 			st = con.createStatement();
 			String searchQuery = "SELECT * FROM `guests` WHERE CONCAT(`Gid`, `firstname`, `lastname`, `memberSince`, `totalSpent`, `membershipLevel`) LIKE '%" + ValToSearch + "%'";
 
@@ -100,7 +87,7 @@ public class SearchView extends View
 
 		try
 		{
-			Connection con = getConnection();
+			Connection con = DatabaseHelper.getInstance().conn();
 			st = con.createStatement();
 			String searchQuery = "SELECT * FROM `rooms` WHERE CONCAT(`Rid`, `Rnumber`, `Type`, `available`, `Price`, `Hid`) LIKE '%" + ValToSearch + "%'";
 
@@ -137,7 +124,7 @@ public class SearchView extends View
 
 		try
 		{
-			Connection con = getConnection();
+			Connection con = DatabaseHelper.getInstance().conn();
 			st = con.createStatement();
 			String searchQuery = "SELECT * FROM `bookings` WHERE CONCAT(`Bid`, `dateIn`, `dateOut`, `Gid`) LIKE '%" + ValToSearch + "%'";
 			rs = st.executeQuery(searchQuery);
@@ -245,8 +232,8 @@ public class SearchView extends View
 		jComboBox_Switch.setSelectedIndex(0);
 
 		jPanel2.add(jComboBox_Switch, BorderLayout.NORTH);
-		jPanel2.add(jButton_Search,BorderLayout.NORTH);
 		jPanel2.add(jText_Search,BorderLayout.NORTH);
+		jPanel2.add(jButton_Search,BorderLayout.NORTH);
 		jPanel2.add(jButton_Clear,BorderLayout.EAST);
 		jPanel2.add(jScrollPane1,BorderLayout.CENTER);
 		jPanel2.add(jButton_Next,BorderLayout.SOUTH);
