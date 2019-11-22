@@ -1,12 +1,16 @@
 package ie.ul.hbs2.payments.interceptors;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Account;
 import com.stripe.model.Charge;
+import com.stripe.model.Customer;
 import com.stripe.net.RequestOptions;
 import ie.ul.hbs2.booking.Booking;
 import ie.ul.hbs2.payments.BookingCharge;
@@ -32,11 +36,33 @@ public class StripePayment implements IPaymentMethod {
 
 
 		Stripe.apiKey = this.API_KEY;
-		Map<String, Object> params = new HashMap<>();
+
 		//params.put("customer", )
 
+		List<Object> requestedCapabilities = new ArrayList<Object>();
+		requestedCapabilities.add("card_payments");
+		requestedCapabilities.add("transfers");
+
+		//Map<String, Object> params = new HashMap<>();
+		//params.put("type", "custom");
+		//params.put("country", "IE");
+		//params.put("email", "test@email.ie");
+		//params.put("requested_capabilities", requestedCapabilities);
+	//	params.put("description", "Customer test");
+	//	params.put("name", context.getCustomerName());
+	//	try {
+		//	Account account = Account.create(params);
+		//	System.out.println(account.getId());
+		//	System.out.println(account.getEmail());
+		//	Customer customer = Customer.create(params);
+		//	System.out.println(customer.getId());
+		//	System.out.println(customer.getName());
+	//	} catch (StripeException e) {
+	//		e.printStackTrace();
+		//}
+		Map<String, Object> params = new HashMap<>();
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
-		chargeParams.put("amount", "" + (int)context.getCharge());
+		chargeParams.put("amount", "" + context.getCharge());
 		chargeParams.put("currency", "eur");
 		chargeParams.put("description", "Charge for " + context.getCustomerName());
 		chargeParams.put("source", "tok_visa");
