@@ -53,61 +53,7 @@ public class SearchView extends View
 		return con;
 	}
 
-	public void findUsers()
-	{
-		ArrayList<User> users = usersList(jText_Search.getText());
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new Object[]{"Gid", "firstname", "lastname", "memberSince","totalSpent","membershipLevel"});
-		Object[] row = new Object[6];
-		for (int i = 0; i < users.size(); i++)
-		{
-			row[0] = users.get(i).getGid();
-			row[1] = users.get(i).getfirstname();
-			row[2] = users.get(i).getlastname();
-			row[3] = users.get(i).getmemberSince();
-			row[4] = users.get(i).gettotalSpent();
-			row[5] = users.get(i).getmembershipLevel();
-			model.addRow(row);
-		}
-		jTable_Users.setModel(model);
-	}
-
-	public void findRooms()
-	{
-		ArrayList<Rooms> rooms = roomsList(jText_Search.getText());
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new Object[]{"Rid", "Rnumber", "Type", "Available","Price","Hid"});
-		Object[] row = new Object[6];
-		for (int i = 0; i < rooms.size(); i++)
-		{
-			row[0] = rooms.get(i).getRid();
-			row[1] = rooms.get(i).getRnumber();
-			row[2] = rooms.get(i).getType();
-			row[3] = rooms.get(i).getAvailable();
-			row[4] = rooms.get(i).getPrice();
-			row[5] = rooms.get(i).getHid();
-			model.addRow(row);
-		}
-		jTable_Users.setModel(model);
-	}
-
-	public void findBookings()
-	{
-		ArrayList<Booking> bookings = bookingsList(jText_Search.getText());
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new Object[]{"Bid", "DateIn", "DateOut", "Gid"});
-		Object[] row = new Object[4];
-		for (int i = 0; i < bookings.size(); i++)
-		{
-			row[0] = bookings.get(i).getBid();
-			row[1] = bookings.get(i).getdateIn();
-			row[2] = bookings.get(i).getdateOut();
-			row[3] = bookings.get(i).getGid();
-			model.addRow(row);
-		}
-		jTable_Users.setModel(model);
-	}
-
+	//The following 3 methods all focus on taking a query, and translating it to an Arraylist, which can in turn be translated to readable english for the user
 	public ArrayList<User> usersList(String ValToSearch)
 	{
 		ArrayList<User> usersList = new ArrayList<User>();
@@ -215,10 +161,66 @@ public class SearchView extends View
 		return bookingsList;
 	}
 
+	//The following 3 methods translate the Arraylist into a JTable for easy reading
+	public void findUsers()
+	{
+		ArrayList<User> users = usersList(jText_Search.getText());
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new Object[]{"Gid", "firstname", "lastname", "memberSince","totalSpent","membershipLevel"});
+		Object[] row = new Object[6];
+		for (int i = 0; i < users.size(); i++)
+		{
+			row[0] = users.get(i).getGid();
+			row[1] = users.get(i).getfirstname();
+			row[2] = users.get(i).getlastname();
+			row[3] = users.get(i).getmemberSince();
+			row[4] = users.get(i).gettotalSpent();
+			row[5] = users.get(i).getmembershipLevel();
+			model.addRow(row);
+		}
+		jTable_Users.setModel(model);
+	}
+
+	public void findRooms()
+	{
+		ArrayList<Rooms> rooms = roomsList(jText_Search.getText());
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new Object[]{"Rid", "Rnumber", "Type", "Available","Price","Hid"});
+		Object[] row = new Object[6];
+		for (int i = 0; i < rooms.size(); i++)
+		{
+			row[0] = rooms.get(i).getRid();
+			row[1] = rooms.get(i).getRnumber();
+			row[2] = rooms.get(i).getType();
+			row[3] = rooms.get(i).getAvailable();
+			row[4] = rooms.get(i).getPrice();
+			row[5] = rooms.get(i).getHid();
+			model.addRow(row);
+		}
+		jTable_Users.setModel(model);
+	}
+
+	public void findBookings()
+	{
+		ArrayList<Booking> bookings = bookingsList(jText_Search.getText());
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new Object[]{"Bid", "DateIn", "DateOut", "Gid"});
+		Object[] row = new Object[4];
+		for (int i = 0; i < bookings.size(); i++)
+		{
+			row[0] = bookings.get(i).getBid();
+			row[1] = bookings.get(i).getdateIn();
+			row[2] = bookings.get(i).getdateOut();
+			row[3] = bookings.get(i).getGid();
+			model.addRow(row);
+		}
+		jTable_Users.setModel(model);
+	}
+
 	private void initComponents()
 	{
+		//UI component declaration
 		jPanel2 = new javax.swing.JPanel();
-
 		jButton_Search = new javax.swing.JButton();
 		jButton_Clear = new javax.swing.JButton();
 		jButton_Next =  new CommandJButton(new DoNothingCommand());
@@ -229,6 +231,7 @@ public class SearchView extends View
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTable_Users = new javax.swing.JTable();
 
+		//Jtable allowance of multi selection of rows
 		jTable_Users.setRowSelectionAllowed(true);
 		jTable_Users.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -250,6 +253,7 @@ public class SearchView extends View
 
 		this.add(jPanel2);
 
+		//For updating JTable on what to display
 		jButton_Search.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -258,6 +262,7 @@ public class SearchView extends View
 			}
 		});
 
+		//Wipes the Arraylist if something mistakenly selected.
 		jButton_Clear.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -265,7 +270,6 @@ public class SearchView extends View
 				selectedData.clear();
 			}
 		});
-
 
 		//Combobox Check (Guest or Booking)
 		jComboBox_Switch.addItemListener(new ItemListener()
@@ -305,11 +309,10 @@ public class SearchView extends View
 			}
 		});
 
-
-
 		jText_Search.setFont(new java.awt.Font("Tahoma", 1, 18));
 		jTable_Users.setFont(new java.awt.Font("Tahoma", 1, 14));
 
+		//Takes the Row selected, adding the data to an array, which is then passed to an array list to handle multiple selections at once
 		jTable_Users.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseClicked(java.awt.event.MouseEvent evt)
@@ -329,32 +332,7 @@ public class SearchView extends View
 		});
 	}
 
-	public void valueChanged(ListSelectionEvent e)
-	{
-		System.out.println("test");
-		ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-
-		int firstIndex= e.getFirstIndex();
-		int lastIndex= e.getLastIndex();
-		boolean isAdjusting =e.getValueIsAdjusting();
-
-		System.out.println("event for indexes "+ firstIndex+ " - "+ isAdjusting + "; selected indexes");
-
-		if(lsm.isSelectionEmpty())
-		{
-			System.out.println(" <none>");
-		}else
-		{
-			int minIndex=lsm.getMinSelectionIndex();
-			int maxIndex=lsm.getMaxSelectionIndex();
-
-			for(int i=minIndex; i<=maxIndex; i++)
-			{
-				System.out.print(" "+i);
-			}
-		}
-	}
-
+	//Sets the table to what is selected from combo box
 	private void jButton_SearchActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		if(jComboBox_Switch.getSelectedIndex()==0)
@@ -372,11 +350,4 @@ public class SearchView extends View
 			findRooms();
 		}
 	}
-
-	public ArrayList getSelectedData()
-	{
-		return selectedData;
-	}
-
-
 }

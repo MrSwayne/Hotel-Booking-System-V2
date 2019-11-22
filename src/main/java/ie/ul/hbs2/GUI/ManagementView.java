@@ -115,7 +115,7 @@ public class ManagementView extends View {
     private void showManagementDetails(final IEmployee e) {
         this.removeAll();
         final JPanel managementDetails = new JPanel(new GridLayout(6,2));
-        CommandJButton logout = new CommandJButton(new DoNothingCommand());
+        final CommandJButton logout = new CommandJButton(new DoNothingCommand());
 
         if (e.getManagementLevel() < 3) {
             System.out.println("Manager using system");
