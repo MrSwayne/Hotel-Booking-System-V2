@@ -23,6 +23,7 @@ public class SearchView extends View
 {
 	private javax.swing.JButton jButton_Search;
 	private javax.swing.JButton jButton_Clear;
+	private javax.swing.JButton jButton_Managment;
 	private CommandJButton jButton_Next;
 	private javax.swing.JComboBox jComboBox_Switch;
 	private javax.swing.JPanel jPanel2;
@@ -217,6 +218,7 @@ public class SearchView extends View
 		jText_Search.setColumns(30);
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTable_Users = new javax.swing.JTable();
+		jButton_Managment = new javax.swing.JButton();
 
 		//Jtable allowance of multi selection of rows
 		jTable_Users.setRowSelectionAllowed(true);
@@ -237,6 +239,7 @@ public class SearchView extends View
 		jPanel2.add(jButton_Clear,BorderLayout.EAST);
 		jPanel2.add(jScrollPane1,BorderLayout.CENTER);
 		jPanel2.add(jButton_Next,BorderLayout.SOUTH);
+		jPanel2.add(jButton_Managment,BorderLayout.SOUTH);
 
 		this.add(jPanel2);
 
