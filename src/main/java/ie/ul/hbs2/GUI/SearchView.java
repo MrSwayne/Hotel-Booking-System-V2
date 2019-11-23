@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,6 +28,9 @@ public class SearchView extends View
 	private CommandJButton jButton_Next;
 	private javax.swing.JComboBox jComboBox_Switch;
 	private javax.swing.JPanel jPanel2;
+	private javax.swing.JPanel j1;
+	private javax.swing.JPanel j2;
+	private javax.swing.JPanel j3;
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTable jTable_Users;
 	private javax.swing.JTextField jText_Search;
@@ -208,7 +212,7 @@ public class SearchView extends View
 	private void initComponents()
 	{
 		//UI component declaration
-		jPanel2 = new javax.swing.JPanel();
+		jPanel2 = new javax.swing.JPanel(new BorderLayout());
 		jButton_Search = new javax.swing.JButton();
 		jButton_Clear = new javax.swing.JButton();
 		jButton_Next =  new CommandJButton(new DoNothingCommand());
@@ -227,19 +231,27 @@ public class SearchView extends View
 		jButton_Clear.setText("Clear");
 		jButton_Next.setText("Next");
 		jButton_Search.setText("Search");
+		jButton_Managment.setText("Management");
 
 		jScrollPane1.setViewportView(jTable_Users);
 
+		j1 = new JPanel();
+			j1.add(jComboBox_Switch);
+			j1.add(jText_Search);
+			j1.add(jButton_Search);
+			j1.add(jButton_Clear);
+		j2 = new JPanel();
+			j2.add(jScrollPane1);
+		j3 = new JPanel();
+			j3.add(jButton_Next);
+			j3.add(jButton_Managment);
+
+		jPanel2.add(j1, BorderLayout.NORTH);
+		jPanel2.add(j2, BorderLayout.CENTER);
+		jPanel2.add(j3, BorderLayout.SOUTH);
+
 		//Default combo box to "Guests"
 		jComboBox_Switch.setSelectedIndex(0);
-
-		jPanel2.add(jComboBox_Switch, BorderLayout.NORTH);
-		jPanel2.add(jText_Search,BorderLayout.NORTH);
-		jPanel2.add(jButton_Search,BorderLayout.NORTH);
-		jPanel2.add(jButton_Clear,BorderLayout.EAST);
-		jPanel2.add(jScrollPane1,BorderLayout.CENTER);
-		jPanel2.add(jButton_Next,BorderLayout.SOUTH);
-		jPanel2.add(jButton_Managment,BorderLayout.SOUTH);
 
 		this.add(jPanel2);
 
