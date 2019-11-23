@@ -35,8 +35,6 @@ public class BookingManager implements IPaymentCallback {
     }
 
     public boolean dateValidation(String dateIn, String dateOut) {
-        // System.out.println(dateIn);
-        // System.out.println(dateOut);
         if (dateIn == null || dateOut == null) {
             System.out.println("Null Dates");
             return false;
@@ -80,17 +78,16 @@ public class BookingManager implements IPaymentCallback {
     //WIP
     public void addBooking(String dateIn, String dateOut) throws ParseException {
         PreparedStatement st;
-        String addQuery = "INSERT INTO `bookings`(`Bid`, `dateIn`, `dateOut`, `Gid`, `Rid`) VALUES (?,?,?,?,?)";
+        String addQuery = "INSERT INTO `bookings`(`dateIn`, `dateOut`, `Gid`) VALUES (?,?,?)";
 
         //DatabaseHelper db = DatabaseHelper.getInstance();
         try {
             st = db.conn().prepareStatement(addQuery);
             Timestamp test = convertDates(dateIn);
-            st.setInt(1, getNewBID());
-            st.setTimestamp(2, convertDates(dateIn));
-            st.setTimestamp(3, convertDates(dateOut));
-            st.setInt(4, 201);
-            st.setInt(5, 4);
+            //st.setInt(1, getNewBID());
+            st.setTimestamp(1, convertDates(dateIn));
+            st.setTimestamp(2, convertDates(dateOut));
+            st.setInt(3, getNewGID());
             //st.executeUpdate();
             st.executeUpdate();
 
@@ -103,7 +100,7 @@ public class BookingManager implements IPaymentCallback {
     //WIP
     public void updateGuest(String firstName, String lastName, double totalSpent, int membershipLvl) throws ParseException {
         PreparedStatement st;
-        String addQuery = "UPDATE `guests` SET (`totalSpent` = ?, membershipLevel = ?) WHERE (`Gid` = ?) VALUES (?,?,?)";
+        String addQuery = "UPDATE `guests` SET `totalSpent` = ?, membershipLevel = ? WHERE (`Gid` = ?)";
         int GID = getSpecificGID(firstName, lastName);
 
         try {
@@ -123,7 +120,7 @@ public class BookingManager implements IPaymentCallback {
     public void addGuest(String firstName, String lastName, String memberSince) throws ParseException {
         PreparedStatement st;
         String addQuery = "INSERT INTO `guests`(`Gid`, `firstName`, `lastName`, `memberSince`, `totalSpent`,membershipLevel) VALUES (?,?,?,?,?,?)";
-        if (checkGuest(firstName, lastName)) {
+
             try {
                 st = db.conn().prepareStatement(addQuery);
                 // System.out.println(st);
@@ -138,24 +135,19 @@ public class BookingManager implements IPaymentCallback {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("guest exists in the database");
-        }
-
     }
 
-    //WIP
     public void addPayment(double price,int BID)throws ParseException{
         PreparedStatement st;
-        String addQuery = "INSERT INTO `payments`(`Pid`, `IsPaid`, `TotalPrice`, `Bid`) VALUES (?,?,?,?)";
+        String addQuery = "INSERT INTO `payments`(`IsPaid`, `TotalPrice`,`Bid`) VALUES (?,?,?)";
 
             try {
                 st = db.conn().prepareStatement(addQuery);
                 // System.out.println(st);
-                st.setInt(1, getPID(BID));
-                st.setInt(2, 0);
-                st.setDouble(3, price);
-                st.setInt(4,BID);
+                //st.setInt(1, getPID(BID));
+                st.setInt(1, 0);
+                st.setDouble(2, price);
+                st.setInt(3,BID);
                 st.executeUpdate();
 
             } catch (SQLException e) {
@@ -165,12 +157,44 @@ public class BookingManager implements IPaymentCallback {
     }
 
     //WIP
-    public void updatePayment(int paid,int BID){
+    public void updatePayment(int PID){
+        PreparedStatement st;
+        String addQuery = "UPDATE `payments` SET `IsPaid` = ? WHERE (`Pid` = ?)";
+
+        try {
+            st = db.conn().prepareStatement(addQuery);
+            st.setDouble(1, 1);
+            st.setInt(2, PID);
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateRooms(int[] rid, int bid){
+        PreparedStatement st;
+        String addQuery = "UPDATE `rooms` SET `available` = ?, `Bid` = ?  WHERE (`Rid` = ?)";
+        System.out.println(rid.length);
+        for(int i = 0; i<rid.length;i++)
+        {
+            int temp = rid[i];
+            try {
+                st = db.conn().prepareStatement(addQuery);
+                st.setNull(1,Types.INTEGER);
+                st.setInt(2,bid);
+                st.setInt(3, temp);
+                st.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
 
-    private boolean checkGuest(String firstName, String lastName) {
+    public boolean checkGuest(String firstName, String lastName) {
         Query query = db.executeQuery("SELECT * FROM `guests` WHERE firstName = '" + firstName + "' AND lastName = '" + lastName + "'");
         if (query.size() == 0) {
             return true;
@@ -181,10 +205,10 @@ public class BookingManager implements IPaymentCallback {
     public int getNewBID() {
         Query query = db.executeQuery("SELECT * FROM bookings ORDER BY BID DESC LIMIT 1");
         int BID = 0;
-        for (int i = 0; i < query.size(); i++) {
-            BID = Integer.parseInt(query.get(i).get("BID"));
-        }
-        return BID +1;
+            for (int i = 0; i < query.size(); i++) {
+                BID = Integer.parseInt(query.get(i).get("Bid"));
+            }
+        return BID;
     }
 
     public int getNewGID() {
@@ -254,5 +278,6 @@ public class BookingManager implements IPaymentCallback {
     @Override
     public void workDone(boolean successful) {
         System.out.println("Payment was " + successful);
+        updatePayment(getPID(book.getBID()));
     }
 }

@@ -1,32 +1,24 @@
 package ie.ul.hbs2.booking;
 
-import ie.ul.hbs2.GUI.BookingSummaryView;
-import ie.ul.hbs2.GUI.Frame;
-import ie.ul.hbs2.payments.IPaymentCallback;
-import ie.ul.hbs2.rewards.RewardFactory;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Booking  {
     private final static String dateFormat = "dd/MM/yy";
     private String firstName,lastName,dateIn,dateOut;
     private int memLvl,BID;
     private Object [] rmType;
     private Object [] rmCost;
+    private Object [] roomsID;
 
     private double totalSpent;
 
 
-    public Booking(String firstName, String lastName, String dateIn, String dateOut,Object[] rmCost,Object [] rmtype) {
+    public Booking(String firstName, String lastName, String dateIn, String dateOut,Object[] rmCost,Object [] rmtype,Object [] roomsID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateIn = dateIn;
         this.dateOut = dateOut;
         this.rmCost = rmCost;
         this.rmType = rmtype;
-
+        this.roomsID = roomsID;
     }
 
     public Booking() {
@@ -80,6 +72,13 @@ public class Booking  {
         return cost;
     }
 
-
+    public int[] getRID(){
+        int [] rid = new int[roomsID.length];
+        for (int i = 0; i< rid.length;i++)
+        {
+            rid[i] = Integer.parseInt(roomsID[i].toString());
+        }
+        return rid;
+    }
 }
 

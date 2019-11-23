@@ -26,6 +26,7 @@ public class MainBookingView extends View implements ActionListener{
     private static JTextArea roomsTypeList;
     private Object [] tempRooms;
     private Object [] costRooms;
+    private Object [] roomdIDs;
     private JPanel mementoPanel = new JPanel(new GridLayout(2,1));
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
@@ -140,12 +141,18 @@ public class MainBookingView extends View implements ActionListener{
                 dateIn = dateFormat.format(selectedDateIn);
                 dateOut = dateFormat.format(selectedDateOut);
             }
+            if(fnameField.getText().isEmpty() || lnameField.getText().isEmpty())
+            {
+                System.out.println("Please enter name and last name");
+            }
+            else {
 
-            Booking  book = new Booking(fnameField.getText(),lnameField.getText(),
-                    dateIn,dateOut,costRooms,tempRooms);//last one need to be modified when search is done
-            CareTaker.getInstance().add(new Memento(mementoPanel));
-            nextBtn.setCommand(new NextCommand(book,parent));
-            nextBtn.execute();
+                Booking book = new Booking(fnameField.getText(), lnameField.getText(),
+                        dateIn, dateOut, costRooms, tempRooms, roomdIDs);
+                CareTaker.getInstance().add(new Memento(mementoPanel));
+                nextBtn.setCommand(new NextCommand(book, parent));
+                nextBtn.execute();
+            }
 
         }  else if(button == backBtn) {
             backBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
@@ -159,8 +166,10 @@ public class MainBookingView extends View implements ActionListener{
 
             String rmType = "";
             String cost = "";
+            int RID = 0;
             tempRooms = new Object[object.size()];
             costRooms = new Object[object.size()];
+            roomdIDs = new Object[object.size()];
             for(int i=0;i<object.size();i++)
             {
                 Object[] temp = object.get(i);
@@ -170,11 +179,15 @@ public class MainBookingView extends View implements ActionListener{
                 for(int j =0;j<temp.length;j++){
                     rmType = temp[2].toString();
                     cost = temp[4].toString();
+                    RID = Integer.parseInt(temp[0].toString());
+
 
                   //  System.out.println(temp[j]);
                 }
                 tempRooms[i] = rmType;
                 costRooms[i] = cost;
+                roomdIDs[i] = RID;
+                System.out.println(RID);
 
                 roomsTypeList = new JTextArea();
                 roomsTypeList.setText(tempRooms[i].toString());

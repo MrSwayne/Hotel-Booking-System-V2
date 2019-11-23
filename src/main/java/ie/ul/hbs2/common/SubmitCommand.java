@@ -26,11 +26,15 @@ public class SubmitCommand implements Command {
     public void execute() {
         try {
             BookingManager manager = new BookingManager();
-            //book.addBooking(book.getDateIn(),book.getDateOut());
-            manager.addGuest(book.getFirstName(), book.getLastName(), book.getDateIn());
-            //manager.updateGuest(book.getFirstName(),book.getLastName(),book.getTotalSpent(),book.getMemLvl());
-            // manager.addPayment(book.getTotalSpent(),book.getBID());
-
+            manager.addBooking(book.getDateIn(),book.getDateOut());
+            if(manager.checkGuest(book.getFirstName(),book.getLastName()))
+            {
+                manager.addGuest(book.getFirstName(), book.getLastName(), book.getDateIn());
+            }else{
+                manager.updateGuest(book.getFirstName(),book.getLastName(),book.getTotalSpent(),book.getMemLvl());
+            }
+            manager.addPayment(book.getTotalSpent(),book.getBID());
+            manager.updateRooms(book.getRID(),book.getBID());
 
         } catch (ParseException ex) {
             ex.printStackTrace();
