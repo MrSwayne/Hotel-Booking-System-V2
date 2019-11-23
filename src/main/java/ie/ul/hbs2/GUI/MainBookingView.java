@@ -146,18 +146,19 @@ public class MainBookingView extends View implements ActionListener{
         if(fnameField.getText().isEmpty() || lnameField.getText().isEmpty())
         {
             System.out.println("Please enter name and last name");
-        }
+        }else {
 
-        Booking book = new Booking(fnameField.getText(), lnameField.getText(),
-                dateIn, dateOut, costRooms, tempRooms, roomdIDs);
-        nextBtn.setCommand(new NextCommand(book, parent));
-        backBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
+            Booking book = new Booking(fnameField.getText(), lnameField.getText(),
+                    dateIn, dateOut, costRooms, tempRooms, roomdIDs);
+            nextBtn.setCommand(new NextCommand(book, parent));
+            backBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
 
-        if (button == nextBtn) {
+            if (button == nextBtn) {
                 CareTaker.getInstance().add(new Memento(mementoPanel));
                 nextBtn.execute();
-        }  else if(button == backBtn) {
-            backBtn.execute();
+            } else if (button == backBtn) {
+                backBtn.execute();
+            }
         }
     }
 
