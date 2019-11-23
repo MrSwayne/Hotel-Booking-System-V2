@@ -119,43 +119,44 @@ public class MainBookingView extends View implements ActionListener{
         this.setVisible(true);
 
 
+
+
+
+
         //all the buttons you want to add.
         nextBtn.addActionListener(this );
         backBtn.addActionListener(this);
+
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton)e.getSource();
+        selectedDateIn = (Date) checkInDatePicker.getModel().getValue();
+        selectedDateOut =  (Date) checkOutDatePicker.getModel().getValue();
+        if(selectedDateIn == null || selectedDateOut == null)
+        {
+            dateIn = "";
+            dateOut = "";
+        }else{
+            dateIn = dateFormat.format(selectedDateIn);
+            dateOut = dateFormat.format(selectedDateOut);
+        }
+        if(fnameField.getText().isEmpty() || lnameField.getText().isEmpty())
+        {
+            System.out.println("Please enter name and last name");
+        }
 
+        Booking book = new Booking(fnameField.getText(), lnameField.getText(),
+                dateIn, dateOut, costRooms, tempRooms, roomdIDs);
+        nextBtn.setCommand(new NextCommand(book, parent));
+        backBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
 
         if (button == nextBtn) {
-            selectedDateIn = (Date) checkInDatePicker.getModel().getValue();
-            selectedDateOut =  (Date) checkOutDatePicker.getModel().getValue();
-            if(selectedDateIn == null || selectedDateOut == null)
-            {
-                dateIn = "";
-                dateOut = "";
-            }else{
-                dateIn = dateFormat.format(selectedDateIn);
-                dateOut = dateFormat.format(selectedDateOut);
-            }
-            if(fnameField.getText().isEmpty() || lnameField.getText().isEmpty())
-            {
-                System.out.println("Please enter name and last name");
-            }
-            else {
-
-                Booking book = new Booking(fnameField.getText(), lnameField.getText(),
-                        dateIn, dateOut, costRooms, tempRooms, roomdIDs);
                 CareTaker.getInstance().add(new Memento(mementoPanel));
-                nextBtn.setCommand(new NextCommand(book, parent));
                 nextBtn.execute();
-            }
-
         }  else if(button == backBtn) {
-            backBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
             backBtn.execute();
         }
     }

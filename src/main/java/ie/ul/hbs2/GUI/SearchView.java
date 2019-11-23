@@ -253,6 +253,7 @@ public class SearchView extends View
 
 		//Default combo box to "Guests"
 		jComboBox_Switch.setSelectedIndex(0);
+		jButton_Managment.setCommand(new ManagementCommand(parent));
 
 		this.add(jPanel2);
 
@@ -307,7 +308,6 @@ public class SearchView extends View
 			public void actionPerformed(ActionEvent e)
 			{
 				CareTaker.getInstance().add(new Memento(jPanel2));
-				jButton_Next.setCommand(new NextCommand(selectedData,parent));
 				jButton_Next.execute();
 			}
 		});
@@ -316,7 +316,7 @@ public class SearchView extends View
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CareTaker.getInstance().add(new Memento(jPanel2));
-				jButton_Managment.setCommand(new ManagementCommand(parent));
+
 				jButton_Managment.execute();
 			}
 		});
@@ -338,7 +338,7 @@ public class SearchView extends View
 					rowData[i] = jTable_Users.getValueAt(selection, i);
 				}
 				selectedData.add(rowData);
-
+				jButton_Next.setCommand(new NextCommand(selectedData,parent));
 					System.out.println(Arrays.deepToString(selectedData.toArray()));
 			}
 		});

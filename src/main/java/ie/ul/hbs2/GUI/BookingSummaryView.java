@@ -93,8 +93,9 @@ public class BookingSummaryView extends View implements ActionListener {
         this.add(mainPanel2,1);
 
         //all the buttons you want to add.
+        submitBtn.setCommand(new SubmitCommand(this.callback,book,parent));
         submitBtn.addActionListener(this);
-
+        cancelBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1),parent));
         cancelBtn.addActionListener(this);
 
     }
@@ -106,14 +107,10 @@ public class BookingSummaryView extends View implements ActionListener {
 
         if (button == submitBtn) {
             System.out.println("Processing payment now");
-            //Code to call Adam's method in payment view
-            submitBtn.setCommand(new SubmitCommand(this.callback,book,parent));
             submitBtn.execute();
 
         } else if (button == cancelBtn) {
-            cancelBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1),parent));
             cancelBtn.execute();
-
         }
     }
 

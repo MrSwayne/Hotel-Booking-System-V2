@@ -99,7 +99,7 @@ public class ManagementView extends View {
         this.removeAll();
         final JPanel managementDetails = new JPanel(new GridLayout(6,2));
         final CommandJButton logout = new CommandJButton(new DoNothingCommand());
-
+        logout.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
         if (e.getManagementLevel() < 3) {
             System.out.println("Manager using system");
             JButton showEmployees = new JButton("Show Employees");
@@ -137,7 +137,6 @@ public class ManagementView extends View {
                     context.setLogoutTime(new Timestamp(System.currentTimeMillis()));
                     System.out.println(context.getLogoutTime());
                     interceptor.postLogoutReply(context);
-                    logout.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
                     logout.execute();
                 }
             });
