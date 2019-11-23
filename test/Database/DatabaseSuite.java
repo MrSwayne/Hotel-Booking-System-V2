@@ -1,4 +1,4 @@
-package Booking;
+package Database;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -8,8 +8,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({BookingTest.class,BookingManagerTest.class})
-public class BookingSuite {
+@Suite.SuiteClasses({DBTester.class})
+public class DatabaseSuite {
     @BeforeClass
     public static void setUpClass() throws Exception{
 

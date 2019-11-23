@@ -1,5 +1,8 @@
-package Booking;
 
+import Booking.BookingSuite;
+import Database.DatabaseSuite;
+import Memento.MementoSuite;
+import View.ViewSuite;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -8,8 +11,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({BookingTest.class,BookingManagerTest.class})
-public class BookingSuite {
+@Suite.SuiteClasses({BookingSuite.class, DatabaseSuite.class, ViewSuite.class, MementoSuite.class})
+public class TestAllSuite {
+
     @BeforeClass
     public static void setUpClass() throws Exception{
 

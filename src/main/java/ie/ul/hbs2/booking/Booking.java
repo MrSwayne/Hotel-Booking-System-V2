@@ -29,6 +29,10 @@ public class Booking  {
 
     }
 
+    public Booking() {
+
+    }
+
     public void setTotalSpent(double spent){
         this.totalSpent = spent;
     }

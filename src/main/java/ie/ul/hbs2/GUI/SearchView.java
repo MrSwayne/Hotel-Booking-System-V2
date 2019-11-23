@@ -1,6 +1,7 @@
 package ie.ul.hbs2.GUI;
 
 import ie.ul.hbs2.common.DoNothingCommand;
+import ie.ul.hbs2.common.ManagementCommand;
 import ie.ul.hbs2.common.NextCommand;
 import ie.ul.hbs2.database.DatabaseHelper;
 import ie.ul.hbs2.memento.CareTaker;
@@ -24,7 +25,7 @@ public class SearchView extends View
 {
 	private javax.swing.JButton jButton_Search;
 	private javax.swing.JButton jButton_Clear;
-	private javax.swing.JButton jButton_Managment;
+	private CommandJButton jButton_Managment;
 	private CommandJButton jButton_Next;
 	private javax.swing.JComboBox jComboBox_Switch;
 	private javax.swing.JPanel jPanel2;
@@ -222,7 +223,7 @@ public class SearchView extends View
 		jText_Search.setColumns(30);
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTable_Users = new javax.swing.JTable();
-		jButton_Managment = new javax.swing.JButton();
+		jButton_Managment = new CommandJButton(new DoNothingCommand());
 
 		//Jtable allowance of multi selection of rows
 		jTable_Users.setRowSelectionAllowed(true);
@@ -308,6 +309,15 @@ public class SearchView extends View
 				CareTaker.getInstance().add(new Memento(jPanel2));
 				jButton_Next.setCommand(new NextCommand(selectedData,parent));
 				jButton_Next.execute();
+			}
+		});
+
+		jButton_Managment.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CareTaker.getInstance().add(new Memento(jPanel2));
+				jButton_Managment.setCommand(new ManagementCommand(parent));
+				jButton_Managment.execute();
 			}
 		});
 

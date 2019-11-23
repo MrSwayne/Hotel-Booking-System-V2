@@ -1,15 +1,12 @@
-package Booking;
+package View;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({BookingTest.class,BookingManagerTest.class})
-public class BookingSuite {
+@Suite.SuiteClasses({BookingViewTest.class,ManagementViewTest.class,SearchViewTest.class,PaymentViewTest.class})
+public class ViewSuite {
     @BeforeClass
     public static void setUpClass() throws Exception{
 
@@ -29,4 +26,5 @@ public class BookingSuite {
     public void tearDown() throws Exception{
 
     }
+
 }

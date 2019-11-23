@@ -1,5 +1,7 @@
 package Booking;
 
+import ie.ul.hbs2.booking.Booking;
+import ie.ul.hbs2.booking.BookingManager;
 import org.junit.*;
 
 import javax.swing.*;
@@ -25,7 +27,13 @@ public class BookingManagerTest {
     public void tearDown() {
     }
 
-    public void somethingBookingManagerTest(){
-
+    @Test
+    public void DateBookingManagerTest(){
+        System.out.println("Checking date validation");
+        String dateIn = "30/08/20";
+        String dateOut = "15/09/20";
+        BookingManager manager = new BookingManager();
+        boolean test = manager.dateValidation(dateIn,dateOut);
+        assert(test);
     }
 }

@@ -34,7 +34,7 @@ public class BookingManager implements IPaymentCallback {
         }
     }
 
-    private boolean dateValidation(String dateIn, String dateOut) {
+    public boolean dateValidation(String dateIn, String dateOut) {
         // System.out.println(dateIn);
         // System.out.println(dateOut);
         if (dateIn == null || dateOut == null) {
