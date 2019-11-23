@@ -1,12 +1,13 @@
 package ie.ul.hbs2.GUI;
 
+import ie.ul.hbs2.common.BackCommand;
 import ie.ul.hbs2.common.DoNothingCommand;
-import ie.ul.hbs2.common.LogoutCommand;
 import ie.ul.hbs2.database.DatabaseHelper;
 import ie.ul.hbs2.database.Query;
 import ie.ul.hbs2.logging.ContextObject;
 import ie.ul.hbs2.logging.interceptors.LoggingInterceptor;
 import ie.ul.hbs2.management.*;
+import ie.ul.hbs2.memento.CareTaker;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -84,7 +85,7 @@ public class ManagementView extends View {
                     showManagementDetails(e);
                 }
                 else {
-                    showErrorDetails();
+                    System.out.println("Input given does not exist in the database or does not match");
                 }
             }
         });
@@ -92,24 +93,6 @@ public class ManagementView extends View {
         details.add(new JLabel(""),6);
         details.add(button, 7);
         this.add(details);
-    }
-
-    private void showErrorDetails() {
-        this.removeAll();
-        JPanel errorDetails = new JPanel(new GridLayout(2,2));
-        JButton backButton = new JButton("Go back");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                //TODO go back to previous panel etc
-            }
-        });
-        errorDetails.add(new JLabel("Input given does not exist in the database or does not match"),0);
-        errorDetails.add(backButton,1);
-
-        this.add(errorDetails);
-        this.revalidate();
-        this.repaint();
     }
 
     private void showManagementDetails(final IEmployee e) {
@@ -154,7 +137,7 @@ public class ManagementView extends View {
                     context.setLogoutTime(new Timestamp(System.currentTimeMillis()));
                     System.out.println(context.getLogoutTime());
                     interceptor.postLogoutReply(context);
-                    logout.setCommand(new LogoutCommand(parent));
+                    logout.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
                     logout.execute();
                 }
             });
@@ -181,6 +164,7 @@ public class ManagementView extends View {
         final JTextField firstName = new JTextField("", 20);
         final JTextField lastName = new JTextField("", 20);
         JButton actionButton = new JButton(action);
+        JButton backButton = new JButton("Back");
         actionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -210,26 +194,31 @@ public class ManagementView extends View {
                             }
                         }
                         if(notFound) {
-                            showErrorDetails();
+                            System.out.println("Input given does not exist in the database or employee list");
                         } else {
                             showManagementDetails(e);
                         }
                     } else {
                         System.out.println("First name exists but last name does not match");
-                        showErrorDetails();
                     }
                 }
                 else {
                     System.out.println("This employee does not exist in the database");
-                    showErrorDetails();
                 }
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                showManagementDetails(e);
             }
         });
         addRemoveDetails.add(new JLabel("First Name"),0);
         addRemoveDetails.add(firstName, 1);
         addRemoveDetails.add(new JLabel("Last Name"),2);
         addRemoveDetails.add(lastName, 3);
-        addRemoveDetails.add(actionButton, 4);
+        addRemoveDetails.add(backButton, 4);
+        addRemoveDetails.add(actionButton, 5);
 
         this.add(addRemoveDetails);
         this.revalidate();
