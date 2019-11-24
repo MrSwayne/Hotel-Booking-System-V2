@@ -62,7 +62,7 @@ public class StripePayment implements IPaymentMethod {
 		//}
 		Map<String, Object> params = new HashMap<>();
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
-		chargeParams.put("amount", "" + context.getCharge());
+		chargeParams.put("amount", (int)context.getCharge());
 		chargeParams.put("currency", "eur");
 		chargeParams.put("description", "Charge for " + context.getCustomerName());
 		chargeParams.put("source", "tok_visa");
