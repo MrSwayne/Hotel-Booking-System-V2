@@ -13,8 +13,6 @@ import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 public class ManagementView extends View {
@@ -41,52 +39,49 @@ public class ManagementView extends View {
         details.add(password,5);
 
         JButton button = new JButton("OK");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Button OK pressed");
-                String inputFN = firstName.getText();
-                String inputLN = lastName.getText();
-                String inputP = password.getText();
-                Query query = db.executeQuery("select * from users where FirstName='" + inputFN +  "' and LastName='" + inputLN + "';");
-                IEmployee e;
-                System.out.println(query.toString());
-                if(query.size() > 0 && query.get(0).get("Password").equals(inputP)) {
-                    System.out.println("Password matches in database");
-                    Iterator<String> o = query.get(0).getColNames();
-                    while (o.hasNext()){
-                        System.out.println(o.next());
-                    }
-                    System.out.println("Management level: " + query.get(0).get("ManagementLevel"));
-                    switch(Integer.parseInt(query.get(0).get("ManagementLevel"))){
-                        case 1:
-                            System.out.println("User is a hotel manager. Creating Hotel manager instance.");
-                            e = new HotelManager(query.get(0).get("FirstName"),query.get(0).get("LastName"),
-                                    query.get(0).get("Password"),Integer.parseInt(query.get(0).get("Wages")));
-                            break;
-                        case 2:
-                            System.out.println("User is a general manager. Creating General manager instance.");
-                            e = new GeneralManager(query.get(0).get("FirstName"),query.get(0).get("LastName"),
-                                    query.get(0).get("Password"),Integer.parseInt(query.get(0).get("Wages")));
-                            break;
-                        case 3:
-                            System.out.println("User is an employee. Creating Employee instance.");
-                            e = new Employee(query.get(0).get("FirstName"),query.get(0).get("LastName"),
-                                    query.get(0).get("Password"),Integer.parseInt(query.get(0).get("Wages")));
-                            break;
-                        default:
-                            throw new IllegalStateException("Unexpected value: " + query.get(0).get("ManagementLevel"));
-                    }
-                    System.out.println("Showing management details.");
-                    //details.removeAll();
-                    context = new ContextObject(e.getFirstName(), e.getLastName(), new Timestamp(System.currentTimeMillis()));
-                    System.out.println(context.getLoginTime());
-                    interceptor.preLoginReply(context);
-                    showManagementDetails(e);
+        button.addActionListener(actionEvent -> {
+            System.out.println("Button OK pressed");
+            String inputFN = firstName.getText();
+            String inputLN = lastName.getText();
+            String inputP = password.getText();
+            Query query = db.executeQuery("select * from users where FirstName='" + inputFN +  "' and LastName='" + inputLN + "';");
+            IEmployee e;
+            System.out.println(query.toString());
+            if(query.size() > 0 && query.get(0).get("Password").equals(inputP)) {
+                System.out.println("Password matches in database");
+                Iterator<String> o = query.get(0).getColNames();
+                while (o.hasNext()){
+                    System.out.println(o.next());
                 }
-                else {
-                    System.out.println("Input given does not exist in the database or does not match");
+                System.out.println("Management level: " + query.get(0).get("ManagementLevel"));
+                switch(Integer.parseInt(query.get(0).get("ManagementLevel"))){
+                    case 1:
+                        System.out.println("User is a hotel manager. Creating Hotel manager instance.");
+                        e = new HotelManager(query.get(0).get("FirstName"),query.get(0).get("LastName"),
+                                query.get(0).get("Password"),Integer.parseInt(query.get(0).get("Wages")));
+                        break;
+                    case 2:
+                        System.out.println("User is a general manager. Creating General manager instance.");
+                        e = new GeneralManager(query.get(0).get("FirstName"),query.get(0).get("LastName"),
+                                query.get(0).get("Password"),Integer.parseInt(query.get(0).get("Wages")));
+                        break;
+                    case 3:
+                        System.out.println("User is an employee. Creating Employee instance.");
+                        e = new Employee(query.get(0).get("FirstName"),query.get(0).get("LastName"),
+                                query.get(0).get("Password"),Integer.parseInt(query.get(0).get("Wages")));
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + query.get(0).get("ManagementLevel"));
                 }
+                System.out.println("Showing management details.");
+                //details.removeAll();
+                context = new ContextObject(e.getFirstName(), e.getLastName(), new Timestamp(System.currentTimeMillis()));
+                System.out.println(context.getLoginTime());
+                interceptor.preLoginReply(context);
+                showManagementDetails(e);
+            }
+            else {
+                System.out.println("Input given does not exist in the database or does not match");
             }
         });
 
@@ -103,42 +98,19 @@ public class ManagementView extends View {
         if (e.getManagementLevel() < 3) {
             System.out.println("Manager using system");
             JButton showEmployees = new JButton("Show Employees");
-            showEmployees.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    showEmployees(e);
-                }
-            });
+            showEmployees.addActionListener(actionEvent -> showEmployees(e));
             JButton showTotalWages = new JButton("Show Total Wages");
-            showTotalWages.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    showTotalWages(e);
-                }
-            });
+            showTotalWages.addActionListener(actionEvent -> showTotalWages(e));
             final JButton addEmployee = new JButton("Add Employee");
-            addEmployee.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    addRemoveEmployee(e, "Add");
-                }
-            });
+            addEmployee.addActionListener(actionEvent -> addRemoveEmployee(e, "Add"));
             JButton removeEmployee = new JButton("Remove Employee");
-            removeEmployee.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    addRemoveEmployee(e, "Remove");
-                }
-            });
+            removeEmployee.addActionListener(actionEvent -> addRemoveEmployee(e, "Remove"));
             logout.setText("Logout");
-            logout.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    context.setLogoutTime(new Timestamp(System.currentTimeMillis()));
-                    System.out.println(context.getLogoutTime());
-                    interceptor.postLogoutReply(context);
-                    logout.execute();
-                }
+            logout.addActionListener(actionEvent -> {
+                context.setLogoutTime(new Timestamp(System.currentTimeMillis()));
+                System.out.println(context.getLogoutTime());
+                interceptor.postLogoutReply(context);
+                logout.execute();
             });
             managementDetails.add(showEmployees, 0);
             managementDetails.add(showTotalWages, 1);
@@ -148,7 +120,16 @@ public class ManagementView extends View {
         } else {
             System.out.println("Employee using system");
             JButton showWages = new JButton("Show Wages");
+            showWages.addActionListener(actionEvent -> showTotalWages(e));
+            logout.setText("Logout");
+            logout.addActionListener(actionEvent -> {
+                context.setLogoutTime(new Timestamp(System.currentTimeMillis()));
+                System.out.println(context.getLogoutTime());
+                interceptor.postLogoutReply(context);
+                logout.execute();
+            });
             managementDetails.add(showWages,0);
+            managementDetails.add(logout, 1);
         }
         this.add(managementDetails);
         this.revalidate();
@@ -164,54 +145,46 @@ public class ManagementView extends View {
         final JTextField lastName = new JTextField("", 20);
         JButton actionButton = new JButton(action);
         JButton backButton = new JButton("Back");
-        actionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                String inputFN = firstName.getText();
-                String inputLN = lastName.getText();
-                boolean notFound = true;
-                Query q = db.executeQuery("select * from users where FirstName='" + inputFN + "';");
-                if(q.size() != 0) {
-                    if(q.get(0).get("LastName").equals(inputLN)){
-                        if(action.equals("Add")) {
-                            e.addEmployee(new Employee(inputFN, inputLN, q.get(0).get("Password"), Integer.parseInt(q.get(0).get("Wages"))));
-                            notFound = false;
-                            System.out.println("Employee added");
-                        }
-                        else if(action.equals("Remove")) {
-                            List<IEmployee> currentEmployeeList = e.accept(employeeListVisitor);
-                            Employee toBeRemoved = null;
-                            for (int i = 0; i < currentEmployeeList.size() && notFound; i++) {
-                                if (q.get(0).get("FirstName").equals(currentEmployeeList.get(i).getFirstName()) && q.get(0).get("LastName").equals(currentEmployeeList.get(i).getLastName())) {
-                                    toBeRemoved = (Employee) currentEmployeeList.get(i);
-                                    notFound = false;
-                                }
-                            }
-                            if (!notFound) {
-                                e.removeEmployee(toBeRemoved);
-                                System.out.println("Employee removed");
-                            }
-                        }
-                        if(notFound) {
-                            System.out.println("Input given does not exist in the database or employee list");
-                        } else {
-                            showManagementDetails(e);
-                        }
-                    } else {
-                        System.out.println("First name exists but last name does not match");
+        actionButton.addActionListener(actionEvent -> {
+            String inputFN = firstName.getText();
+            String inputLN = lastName.getText();
+            boolean notFound = true;
+            Query q = db.executeQuery("select * from users where FirstName='" + inputFN + "';");
+            if(q.size() != 0) {
+                if(q.get(0).get("LastName").equals(inputLN)){
+                    if(action.equals("Add")) {
+                        e.addEmployee(new Employee(inputFN, inputLN, q.get(0).get("Password"), Integer.parseInt(q.get(0).get("Wages"))));
+                        notFound = false;
+                        System.out.println("Employee added");
                     }
-                }
-                else {
-                    System.out.println("This employee does not exist in the database");
+                    else if(action.equals("Remove")) {
+                        List<IEmployee> currentEmployeeList = e.accept(employeeListVisitor);
+                        Employee toBeRemoved = null;
+                        for (int i = 0; i < currentEmployeeList.size() && notFound; i++) {
+                            if (q.get(0).get("FirstName").equals(currentEmployeeList.get(i).getFirstName()) && q.get(0).get("LastName").equals(currentEmployeeList.get(i).getLastName())) {
+                                toBeRemoved = (Employee) currentEmployeeList.get(i);
+                                notFound = false;
+                            }
+                        }
+                        if (!notFound) {
+                            e.removeEmployee(toBeRemoved);
+                            System.out.println("Employee removed");
+                        }
+                    }
+                    if(notFound) {
+                        System.out.println("Input given does not exist in the database or employee list");
+                    } else {
+                        showManagementDetails(e);
+                    }
+                } else {
+                    System.out.println("First name exists but last name does not match");
                 }
             }
-        });
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                showManagementDetails(e);
+            else {
+                System.out.println("This employee does not exist in the database");
             }
         });
+        backButton.addActionListener(actionEvent -> showManagementDetails(e));
         addRemoveDetails.add(new JLabel("First Name"),0);
         addRemoveDetails.add(firstName, 1);
         addRemoveDetails.add(new JLabel("Last Name"),2);
@@ -230,12 +203,7 @@ public class ManagementView extends View {
         List<IEmployee> employeeList = e.accept(employeeListVisitor);
         JPanel showEmployeeDetails = new JPanel(new GridLayout(employeeList.size(), 2));
         JButton goBackButton = new JButton("Return to Management menu");
-        goBackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                showManagementDetails(e);
-            }
-        });
+        goBackButton.addActionListener(actionEvent -> showManagementDetails(e));
         showEmployeeDetails.add(new JLabel("Employee list for " + e.getFirstName() + " " + e.getLastName()),0);
         System.out.println("Employee list size: " + employeeList.size());
         for (int i = 0; i < employeeList.size(); i++) {
@@ -252,14 +220,15 @@ public class ManagementView extends View {
         this.removeAll();
         JPanel showTotalWagesDetails = new JPanel(new GridLayout(2, 2));
         JButton goBackButton = new JButton("Return to Management menu");
-        goBackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                showManagementDetails(e);
-            }
-        });
-        int totalWages = e.accept(totalWagesVisitor);
-        showTotalWagesDetails.add(new JLabel("Total wages: " + totalWages),0);
+        goBackButton.addActionListener(actionEvent -> showManagementDetails(e));
+        if(e.getManagementLevel() < 3 ) {
+            int totalWages = e.accept(totalWagesVisitor);
+            showTotalWagesDetails.add(new JLabel("Total wages: " + totalWages),0);
+        } else {
+            int wages = e.getWages();
+            showTotalWagesDetails.add(new JLabel("Wages: " + wages), 0);
+        }
+
         showTotalWagesDetails.add(goBackButton, 1);
 
         this.add(showTotalWagesDetails);

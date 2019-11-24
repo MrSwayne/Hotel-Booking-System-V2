@@ -26,7 +26,7 @@ public class MainBookingView extends View implements ActionListener{
     private static JTextArea roomsTypeList;
     private Object [] tempRooms;
     private Object [] costRooms;
-    private Object [] roomdIDs;
+    private Object [] roomIDs;
     private JPanel mementoPanel = new JPanel(new GridLayout(2,1));
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
@@ -149,7 +149,7 @@ public class MainBookingView extends View implements ActionListener{
         }else {
 
             Booking book = new Booking(fnameField.getText(), lnameField.getText(),
-                    dateIn, dateOut, costRooms, tempRooms, roomdIDs);
+                    dateIn, dateOut, costRooms, tempRooms, roomIDs);
             nextBtn.setCommand(new NextCommand(book, parent));
             backBtn.setCommand(new BackCommand(CareTaker.getInstance().get(1), parent));
 
@@ -171,7 +171,7 @@ public class MainBookingView extends View implements ActionListener{
             int RID = 0;
             tempRooms = new Object[object.size()];
             costRooms = new Object[object.size()];
-            roomdIDs = new Object[object.size()];
+            roomIDs = new Object[object.size()];
             for(int i=0;i<object.size();i++)
             {
                 Object[] temp = object.get(i);
@@ -188,7 +188,7 @@ public class MainBookingView extends View implements ActionListener{
                 }
                 tempRooms[i] = rmType;
                 costRooms[i] = cost;
-                roomdIDs[i] = RID;
+                roomIDs[i] = RID;
                 System.out.println(RID);
 
                 roomsTypeList = new JTextArea();
